@@ -93,3 +93,285 @@ Route::group(['prefix' => 'users', 'as' => 'users::'], function() {
             'uses'  => 'userController@updatePass'
         ]);
 });
+
+
+Route::group(['prefix' => 'soils', 'as' => 'soils::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'soilController@index'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'soilController@addSoil'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'soilController@createSoil'
+    ]);
+    Route::get('/edit/{soil}',[
+        'as'    => 'edit',
+        'uses'  => 'soilController@modifySoil'
+    ]);
+    Route::put( '/edit/{soil}',[
+        'as'    => 'update',
+        'uses'  => 'soilController@updateSoil'
+    ]);
+    Route::delete('/delete/{soil}',[
+        'as'    => 'delete',
+        'uses'  => 'soilController@deleteSoil'
+    ]);
+    Route::get('/undelete/{trashed_soil}',[
+        'as'    => 'undelete',
+        'uses'  => 'soilController@undeleteSoil'
+    ]);
+});
+
+
+Route::group(['prefix' => 'bmps', 'as' => 'bmps::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'BmpController@index'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'BmpController@addBmp'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'BmpController@createBmp'
+    ]);
+    Route::get('/edit/{bmp}',[
+        'as'    => 'edit',
+        'uses'  => 'BmpController@modifyBmp'
+    ]);
+    Route::put( '/edit/{bmp}',[
+        'as'    => 'update',
+        'uses'  => 'BmpController@updateBmp'
+    ]);
+    Route::delete('/delete/{bmp}',[
+        'as'    => 'delete',
+        'uses'  => 'BmpController@deleteBmp'
+    ]);
+    Route::get('/undelete/{trashed_bmp}',[
+        'as'    => 'undelete',
+        'uses'  => 'BmpController@undeleteBmp'
+    ]);
+});
+
+Route::group(['prefix' => 'responsibilities', 'as' => 'responsibilities::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'ResponsibilitiesController@index'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'ResponsibilitiesController@addResponsibilities'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'ResponsibilitiesController@createResponsibilities'
+    ]);
+    Route::get('/edit/{res}',[
+        'as'    => 'edit',
+        'uses'  => 'ResponsibilitiesController@modifyResponsibilities'
+    ]);
+    Route::put( '/edit/{res}',[
+        'as'    => 'update',
+        'uses'  => 'ResponsibilitiesController@updateResponsibilities'
+    ]);
+    Route::delete('/delete/{res}',[
+        'as'    => 'delete',
+        'uses'  => 'ResponsibilitiesController@deleteResponsibilities'
+    ]);
+    Route::get('/undelete/{trashed_res}',[
+        'as'    => 'undelete',
+        'uses'  => 'ResponsibilitiesController@undeleteResponsibilities'
+    ]);
+});
+
+
+Route::group(['prefix' => 'waterquality', 'as' => 'waterquality::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'WaterQualityController@index'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'WaterQualityController@addWaterQuality'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'WaterQualityController@createWaterQuality'
+    ]);
+    Route::get('/edit/{quality}',[
+        'as'    => 'edit',
+        'uses'  => 'WaterQualityController@modifyWaterQuality'
+    ]);
+    Route::put( '/edit/{quality}',[
+        'as'    => 'update',
+        'uses'  => 'WaterQualityController@updateWaterQuality'
+    ]);
+    Route::delete('/delete/{quality}',[
+        'as'    => 'delete',
+        'uses'  => 'WaterQualityController@deleteWaterQuality'
+    ]);
+    Route::get('/undelete/{trashed_quality}',[
+        'as'    => 'undelete',
+        'uses'  => 'WaterQualityController@undeleteWaterQuality'
+    ]);
+});
+
+
+Route::group(['prefix' => 'county', 'as' => 'county::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'CountyController@index'
+    ]);
+    Route::get('/view/{county}',[
+        'as'    => 'view',
+        'uses'  => 'CountyController@viewCounty'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'CountyController@addCounty'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'CountyController@createCounty'
+    ]);
+    Route::get('/edit/{county}',[
+        'as'    => 'edit',
+        'uses'  => 'CountyController@modifyCounty'
+    ]);
+    Route::put( '/edit/{county}',[
+        'as'    => 'update',
+        'uses'  => 'CountyController@updateCounty'
+    ]);
+    Route::delete('/delete/{county}',[
+        'as'    => 'delete',
+        'uses'  => 'CountyController@deleteCounty'
+    ]);
+    Route::get('/undelete/{trashed_county}',[
+        'as'    => 'undelete',
+        'uses'  => 'CountyController@undeleteCounty'
+    ]);
+});
+
+Route::group(['prefix' => 'endangeredspecies', 'as' => 'species::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'EndangeredSpeciesController@index'
+    ]);
+    Route::get('/view/{species}',[
+        'as'    => 'view',
+        'uses'  => 'EndangeredSpeciesController@viewSpecies'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'EndangeredSpeciesController@addSpecies'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'EndangeredSpeciesController@createSpecies'
+    ]);
+    Route::get('/edit/{species}',[
+        'as'    => 'edit',
+        'uses'  => 'EndangeredSpeciesController@modifySpecies'
+    ]);
+    Route::put( '/edit/{species}',[
+        'as'    => 'update',
+        'uses'  => 'EndangeredSpeciesController@updateSpecies'
+    ]);
+    Route::delete('/delete/{species}',[
+        'as'    => 'delete',
+        'uses'  => 'EndangeredSpeciesController@deleteSpecies'
+    ]);
+    Route::get('/undelete/{trashed_species}',[
+        'as'    => 'undelete',
+        'uses'  => 'EndangeredSpeciesController@undeleteSpecies'
+    ]);
+    Route::get('/addCounty/{species}/{county}',[
+        'as'    => 'addCounty',
+        'uses'  => 'EndangeredSpeciesController@addCounty'
+    ]);
+});
+
+
+Route::group(['prefix' => 'company', 'as' => 'company::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'CompanyController@index'
+    ]);
+    Route::get('/view/{company}',[
+        'as'    => 'view',
+        'uses'  => 'CompanyController@viewCompany'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'CompanyController@addCompany'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'CompanyController@createCompany'
+    ]);
+    Route::get('/edit/{company}',[
+        'as'    => 'edit',
+        'uses'  => 'CompanyController@modifyCompany'
+    ]);
+    Route::put( '/edit/{company}',[
+        'as'    => 'update',
+        'uses'  => 'CompanyController@updateCompany'
+    ]);
+    Route::delete('/delete/{company}',[
+        'as'    => 'delete',
+        'uses'  => 'CompanyController@deleteCompany'
+    ]);
+    Route::get('/undelete/{trashed_company}',[
+        'as'    => 'undelete',
+        'uses'  => 'CompanyController@undeleteCompany'
+    ]);
+    Route::get('/addCounty/{company}/{county}',[
+        'as'    => 'addCounty',
+        'uses'  => 'CompanyController@addCounty'
+    ]);
+});
+
+
+Route::group(['prefix' => 'ms4', 'as' => 'municipal::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'MunicipalController@index'
+    ]);
+    Route::get('/view/{municipal}',[
+        'as'    => 'view',
+        'uses'  => 'MunicipalController@viewMunicipal'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'MunicipalController@addMunicipal'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'MunicipalController@createMunicipal'
+    ]);
+    Route::get('/edit/{municipal}',[
+        'as'    => 'edit',
+        'uses'  => 'MunicipalController@modifyMunicipal'
+    ]);
+    Route::put( '/edit/{municipal}',[
+        'as'    => 'update',
+        'uses'  => 'MunicipalController@updateMunicipal'
+    ]);
+    Route::delete('/delete/{municipal}',[
+        'as'    => 'delete',
+        'uses'  => 'MunicipalController@deleteMunicipal'
+    ]);
+    Route::get('/undelete/{trashed_species}',[
+        'as'    => 'undelete',
+        'uses'  => 'MunicipalController@undeleteMunicipal'
+    ]);
+    Route::get('/addCounty/{municipal}/{county}',[
+        'as'    => 'addCounty',
+        'uses'  => 'MunicipalController@addCounty'
+    ]);
+});

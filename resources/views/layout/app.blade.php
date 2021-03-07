@@ -54,8 +54,25 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#"><i class="fas fa-briefcase"></i> Projects</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-cogs"></i> Configurations</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-cogs"></i> Configurations
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route("company::index") }}">Companies</a>
+                                <a class="dropdown-item" href="#">Contacts</a>
+                                <a class="dropdown-item" href="{{ route("county::index") }}">Counties</a>
+                                <a class="dropdown-item" href="{{ route("municipal::index") }}">MS4 Contacts</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route("bmps::index") }}">BMPs</a>
+                                <a class="dropdown-item" href="{{ route("species::index") }}">Endangered Species</a>
+                                <a class="dropdown-item" href="#">Inspection Schedules</a>
+                                <a class="dropdown-item" href="{{ route("responsibilities::index") }}">Responsibilities</a>
+                                <a class="dropdown-item" href="{{ route("soils::index") }}">Soils</a>
+                                <a class="dropdown-item" href="{{ route("waterquality::index") }}">Water Quality</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Workflows</a>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ Route("users::index") }}"><i class="fas fa-users"></i> Accounts</a>

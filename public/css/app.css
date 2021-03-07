@@ -10336,3 +10336,11 @@ form.form-search:before {
   margin-top: 25px;
   margin-bottom: 25px;
 }
+
+form .row {
+  margin-top: 15px;
+}
+
+.select-info {
+  display: none;
+}
