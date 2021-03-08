@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use App\Models\County;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,15 +29,15 @@ class CompanyController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $species_list = EndangeredSpecies::all();
+            $companies = Company::all();
 
-            return view('endangeredspecies.index', compact('species_list'));
+            return view('company.index', compact('companies'));
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to view endangered species');
+            Log::info(Auth::user()->username . ' was denied access to view companies');
             throw new AuthorizationException;
 
         }
@@ -51,16 +50,15 @@ class CompanyController extends Controller
      *
      * @return (view)
     */
-    public function viewSpecies(EndangeredSpecies $species)
+    public function viewCompany(Company $company)
     {
 
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $species = $species->load("counties");
-            $counties = County::all()->diff($species->counties);
+            $company->contacts = [];
 
-            return view('endangeredspecies.view', compact('species', 'counties'));
+            return view('company.view', compact('company'));
 
         }
         else
@@ -79,13 +77,14 @@ class CompanyController extends Controller
      *
      * @return (view)
     */
-    public function addSpecies()
+    public function addCompany()
     {
 
         if (Auth::user()->hasRole('Owner'))
         {
 
-            return view('endangeredspecies.add');
+            $states = $this->states;
+            return view('company.add', compact('states'));
 
         }
         else
@@ -104,7 +103,7 @@ class CompanyController extends Controller
      *
      * @return (redirect)
     */
-    public function createSpecies(Request $request)
+    public function createCompany(Request $request)
     {
 
         if (Auth::user()->hasRole("Owner"))
@@ -112,39 +111,51 @@ class CompanyController extends Controller
 
             $this->validate($request,
                 [
-                    'common_name'       => 'required|string|min:5|max:255|unique:endangered_species',
-                    'scientific_name'   => 'required|string',
-                    'group'             => 'string',
-                    'state_status'      => 'string',
-                    'federal_status'    => 'string',
-                    'species_info'      => 'string',
+                    'name'              => 'required|string|min:5|max:255|unique:companies',
+                    'legal_name'        => 'nullable|string',
+                    'also_known_as'     => 'nullable|string',
+                    'phone'             => 'required|string',
+                    'fax'               => 'nullable|string',
+                    'address'           => 'required|string',
+                    'city'              => 'required|string',
+                    'state'             => 'required|string',
+                    'zipcode'           => 'required|string',
+                    'website'           => 'nullable|string',
+                    'type'              => 'nullable|string',
+                    'division'          => 'nullable|string',
+                    'num_of_employees'  => 'nullable|integer',
+                    'federal_tax_Id'    => 'nullable|string',
+                    'state_tax_id'      => 'nullable|string',
+                    'sos'               => 'nullable|string',
+                    'cn'                => 'nullable|string',
+                    'sic'               => 'nullable|string',
 
                 ]
             );
 
-            $species = new EndangeredSpecies($request->all());
+            $company = new Company($request->all());
 
-            if ($species->save()) {
+            if ($company->save()) {
 
-                Session::flash('success', $species->common_name . ' has been created successfully.');
-                Log::info('User ' . $species->common_name . ' has been created successfully by ' . Auth::user()->username);
+                Session::flash('success', $company->name . ' has been created successfully.');
+                Log::info('Company ' . $company->name . ' has been created successfully by ' . Auth::user()->username);
 
             }
             else
             {
 
-                Session::flash('error', 'There has been an error while trying to create ' . $species->common_name . '.');
-                Log::info(Auth::user()->username . ' received an error while creating species ' . $species->common_name);
+                Session::flash('error', 'There has been an error while trying to create company ' . $company->name . '.');
+                Log::info(Auth::user()->username . ' received an error while creating company ' . $company->name);
 
             }
 
-            return redirect()->route('species::view', $species->id);
+            return redirect()->route('company::view', $company->id);
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to create species ' . $request->common_name);
+            Log::info(Auth::user()->username . ' was denied access to create company ' . $request->name);
             throw new AuthorizationException;
 
         }
@@ -160,17 +171,20 @@ class CompanyController extends Controller
      *
      * @return (view)
     */
-    public function modifySpecies(EndangeredSpecies $species)
+    public function modifyCompany(Company $company)
     {
 
         if (Auth::user()->hasRole("Owner"))
         {
-            return view('endangeredspecies.edit', compact('species'));
+
+            $states = $this->states;
+
+            return view('company.edit', compact('company', 'states'));
 
         }
         else
         {
-            Log::info(Auth::user()->username . ' was denied access to edit species ' . $species->common_name);
+            Log::info(Auth::user()->username . ' was denied access to edit species ' . $company->name);
             throw new AuthorizationException;
         }
     }
@@ -185,7 +199,7 @@ class CompanyController extends Controller
      *
      * @return (view)
     */
-    public function updateSpecies(Request $request, EndangeredSpecies $species)
+    public function updateCompany(Request $request, Company $company)
     {
 
         if (Auth::user()->hasRole("Owner"))
@@ -194,47 +208,71 @@ class CompanyController extends Controller
 
             $this->validate($request,
                 [
-                    'common_name'       => 'required|string|min:5|max:255|unique:endangered_species',
-                    'scientific_name'   => 'required|string',
-                    'group'             => 'string',
-                    'state_status'      => 'string',
-                    'federal_status'    => 'string',
-                    'species_info'      => 'string',
+                    'name'              => 'required|string|min:5|max:255|unique:companies',
+                    'legal_name'        => 'nullable|string',
+                    'also_known_as'     => 'nullable|string',
+                    'phone'             => 'required|string',
+                    'fax'               => 'nullable|string',
+                    'address'           => 'required|string',
+                    'city'              => 'required|string',
+                    'state'             => 'required|string',
+                    'zipcode'           => 'required|string',
+                    'website'           => 'nullable|string',
+                    'type'              => 'nullable|string',
+                    'division'          => 'nullable|string',
+                    'num_of_employees'  => 'nullable|integer',
+                    'federal_tax_Id'    => 'nullable|string',
+                    'state_tax_id'      => 'nullable|string',
+                    'sos'               => 'nullable|string',
+                    'cn'                => 'nullable|string',
+                    'sic'               => 'nullable|string',
                 ]
             );
 
             //SET VALUES TO MODEL
-            $species->common_name           = $request->common_name;
-            $species->scientific_name       = $request->scientific_name;
-            $species->group                 = $request->group;
-            $species->state_status          = $request->state_status;
-            $species->federal_status        = $request->federal_status;
-            $species->species_info          = $request->species_info;
+            $company->name              = $request->name;
+            $company->legal_name        = $request->legal_name;
+            $company->also_known_as     = $request->also_known_as;
+            $company->phone             = $request->phone;
+            $company->fax               = $request->fax;
+            $company->address           = $request->address;
+            $company->city              = $request->city;
+            $company->state             = $request->state;
+            $company->zipcode           = $request->zipcode;
+            $company->type              = $request->type;
+            $company->divison           = $request->divison;
+            $company->num_of_employees  = $request->num_of_employees;
+            $company->federal_tax_id    = $request->federal_tax_id;
+            $company->state_tax_id      = $request->state_tax_id;
+            $company->sos               = $request->sos;
+            $company->cn                = $request->cn;
+            $company->sic               = $request->sic;
+            $company->website           = $request->website;
 
             //SAVE MODEL
-            if ($species->save())
+            if ($company->save())
             {
 
-                Session::flash('success', $species->common_name . ' has been updated successfully.');
-                Log::info('EndangeredSpecies ' . $species->common_name . ' has been updated successfully by ' . Auth::user()->username);
+                Session::flash('success', $company->name . ' has been updated successfully.');
+                Log::info('Company ' . $company->name . ' has been updated successfully by ' . Auth::user()->username);
 
             }
             else
             {
 
-                Session::flash('error', 'There has been an error while trying to update ' . $species->common_name . '.');
-                Log::info(Auth::user()->username . ' received an error while updating species ' . $species->common_name);
+                Session::flash('error', 'There has been an error while trying to update company ' . $company->name . '.');
+                Log::info(Auth::user()->username . ' received an error while updating company ' . $company->name);
 
             }
 
             return redirect()
-                ->route('species::view', $species->id);
+                ->route('company::view', $company->id);
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to edit species ' . $species->common_name);
+            Log::info(Auth::user()->username . ' was denied access to edit company ' . $company->name);
             throw new AuthorizationException;
 
         }
@@ -249,95 +287,62 @@ class CompanyController extends Controller
      * @user (User) Id number of the user as an integer
      * @return (view)
     */
-    public function deleteSpecies(EndangeredSpecies $species)
+    public function deleteCompany(Company $company)
     {
 
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $name = $species->common_name;
+            $name = $company->name;
 
-            if ($species->delete())
+            if ($company->delete())
             {
                 Session::flash('success', $name . ' has been deleted successfully.');
-                Log::info('EndangeredSpecies ' . $name . ' has been deleted successfully by ' . Auth::user()->username);
+                Log::info('Company ' . $name . ' has been deleted successfully by ' . Auth::user()->username);
                 $this->index();
             }
 
-            Session::flash('error', 'There has been an error while trying to delete ' . $species->common_name . '.');
-            Log::info(Auth::user()->username . ' received an error while deleting species ' . $species->common_name);
+            Session::flash('error', 'There has been an error while trying to delete ' . $company->name . '.');
+            Log::info(Auth::user()->username . ' received an error while deleting company ' . $company->name);
             $this->index();
 
         }
 
-        Log::info(Auth::user()->username . ' was denied access to delete species ' . $species->common_name);
+        Log::info(Auth::user()->username . ' was denied access to delete species ' . $company->name);
         throw new AuthorizationException;
 
     }
 
-    public function undeleteSpecies($trashed_species)
+    public function undeleteCompany($trashed_company)
     {
 
-        $user = User::onlyTrashed()->where('id', $trashed_species)->first();
+        $company = Company::onlyTrashed()->where('id', $trashed_company)->first();
 
-        if (Auth::user()
-            ->can('users.edit'))
-        {
-
-            $name = $user->name;
-
-            if ($user->restore())
-            {
-                Session::flash('success', $name . ' has been restored successfully.');
-                Log::info('User ' . $name . ' has been restored successfully by ' . Auth::user()->username);
-            }
-            else
-            {
-                Session::flash('error', 'There has been an error while trying to restore ' . $user->name . '.');
-                Log::info(Auth::user()->username . ' received an error while restoring user ' . $user->name);
-            }
-
-            return redirect()
-                ->route('users::view', $user->id);
-
-        }
-        else
-        {
-
-            Log::info(Auth::user()->username . ' was denied access to restore user ' . $user->name);
-            throw new AuthorizationException;
-
-        }
-    }
-
-    public function addCounty(EndangeredSpecies $species, County $county) {
         if (Auth::user()->hasRole("Owner"))
         {
 
-            if ($species->counties()->save($county)) {
-
-                Session::flash('success', "County " . $county->name . " has been successfully added to " .$species->common_name . '.');
-                Log::info("County " . $county->name . " has been successfully added to " .$species->common_name . " by " . Auth::user()->username);
-
-
+            if ($company->restore())
+            {
+                Session::flash('success', $company->name . ' has been restored successfully.');
+                Log::info('Company ' . $company->name . ' has been restored successfully by ' . Auth::user()->username);
             }
             else
             {
-
-                Session::flash('error', 'There has been an error while add county ' . $county->name . ' to species ' . $species->common_name . '.');
-                Log::info(Auth::user()->username . ' received an error while adding county ' . $county->name . ' to species ' . $species->common_name);
-
+                Session::flash('error', 'There has been an error while trying to restore ' . $company->name . '.');
+                Log::info(Auth::user()->username . ' received an error while restoring company ' . $company->name);
             }
 
-            return redirect()->back();
+            return redirect()
+                ->route('company::view', $company->id);
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to add county " . $county->name . " to species ' . $species->common_name);
+            Log::info(Auth::user()->username . ' was denied access to restore company ' . $company->name);
             throw new AuthorizationException;
 
         }
     }
+
 }

@@ -10,6 +10,9 @@ class Company extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['name', 'legal_name', 'also_known_as', 'phone', 'fax', 'address', 'city', 'state', 'website',
+        'zipcode', 'type', 'division', 'num_of_employees', 'federal_tax_id', 'state_tax_id', 'sos', 'cn', 'sic'];
+
     public function counties() {
         return $this->belongsToMany(County::class);
     }

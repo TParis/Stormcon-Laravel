@@ -62,7 +62,7 @@
                                 <a class="dropdown-item" href="{{ route("company::index") }}">Companies</a>
                                 <a class="dropdown-item" href="#">Contacts</a>
                                 <a class="dropdown-item" href="{{ route("county::index") }}">Counties</a>
-                                <a class="dropdown-item" href="{{ route("municipal::index") }}">MS4 Contacts</a>
+                                <a class="dropdown-item" href="{{ route("municipal::index") }}">Municipal S4s</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route("bmps::index") }}">BMPs</a>
                                 <a class="dropdown-item" href="{{ route("species::index") }}">Endangered Species</a>
