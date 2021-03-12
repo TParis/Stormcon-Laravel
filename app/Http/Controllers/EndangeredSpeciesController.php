@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\County;
 use App\Models\EndangeredSpecies;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class EndangeredSpeciesController extends Controller
 {
@@ -194,7 +198,7 @@ class EndangeredSpeciesController extends Controller
 
             $this->validate($request,
                 [
-                    'common_name'       => 'required|string|min:5|max:255|unique:endangered_species',
+                    'common_name'       => ['required','string','min:5','max:255',Rule::unique("endangered_species")->ignore($species->id)],
                     'scientific_name'   => 'required|string',
                     'group'             => 'string',
                     'state_status'      => 'string',
@@ -338,6 +342,41 @@ class EndangeredSpeciesController extends Controller
             Log::info(Auth::user()->username . ' was denied access to add county " . $county->name . " to species ' . $species->common_name);
             throw new AuthorizationException;
 
+        }
+    }
+
+    public static function loadEndangeredSpeciesFromState() {
+
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('GET', 'https://tpwd.texas.gov/ris.net/rtest/Services/wsESData.asmx/getAllCountiesByAllSpecies', [
+            'headers' => ['Accept' => 'application/xml'], 'timeout' => 240])->getBody()->getContents();
+        $responseXml = simplexml_load_string($response);
+        $responseXml = str_replace("'", "\"", $responseXml);
+        $data = json_decode($responseXml);
+
+        foreach ($data->Results as $species) {
+
+            //Find or fail creating species
+            $species_obj = EndangeredSpecies::updateOrCreate(
+                [
+                    'scientific_name'   => Str::ucfirst($species->SName)
+                ],
+                [
+                    'common_name'       => Str::ucfirst($species->CName),
+                    'group'             => $species->Taxon,
+                    'species_info'      => $species->Description,
+                    'state_status'     => $species->SPROT,
+                    'federal_status'    => $species->USESA
+                ]
+            );
+            //Find or fail creating counties
+            $county = County::firstOrCreate(['name' => $species->CountyName]);
+            //Add county to species
+            try {
+                $species_obj->counties()->save($county);
+            } catch (QueryException $e) {
+                echo "Error " . $e->getMessage() . "\n";
+            }
         }
     }
 }

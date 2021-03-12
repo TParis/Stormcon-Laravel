@@ -43,8 +43,8 @@
                         <option SELECTED>Add Species</option>
                         @foreach ($endangered_species_list as $species_key => $species_group)
                             <optgroup label="{{ $species_key }}">
-                                @foreach ($species_group as $new_species)
-                                    <option value="{{ $new_species->id }}">{{ $new_species->common_name }}</option>
+                                @foreach ($species_group->sortBy("scientific_name") as $new_species)
+                                    <option value="{{ $new_species->id }}">{{ $new_species->scientific_name }} ({{ $new_species->common_name }})</option>
                         @endforeach
                         @endforeach
                     </select>
@@ -70,8 +70,8 @@
                         <option SELECTED>Add Species</option>
                         @foreach ($endangered_species_list as $species_key => $species_group)
                             <optgroup label="{{ $species_key }}">
-                                @foreach ($species_group as $new_species)
-                                    <option value="{{ $new_species->id }}">{{ $new_species->common_name }}</option>
+                                @foreach ($species_group->sortBy("scientific_name") as $new_species)
+                                    <option value="{{ $new_species->id }}">{{ $new_species->scientific_name }} ({{ $new_species->common_name }})</option>
                         @endforeach
                         @endforeach
                     </select>

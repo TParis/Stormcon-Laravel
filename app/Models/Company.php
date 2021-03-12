@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Contact;
 
 class Company extends Model
 {
@@ -15,5 +16,9 @@ class Company extends Model
 
     public function counties() {
         return $this->belongsToMany(County::class);
+    }
+
+    public function contacts() {
+        return $this->morphMany(Contact::class, "employer");
     }
 }

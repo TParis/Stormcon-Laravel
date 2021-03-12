@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class InspectionScheduleController extends Controller
 {
@@ -38,31 +39,6 @@ class InspectionScheduleController extends Controller
         {
 
             Log::info(Auth::user()->username . ' was denied access to view schedules');
-            throw new AuthorizationException;
-
-        }
-    }
-
-    /*
-     * View
-     *
-     * Returns an index of users
-     *
-     * @return (view)
-    */
-    public function viewInspectionSchedule(InspectionSchedule $schedule)
-    {
-
-        if (Auth::user()->hasRole("Owner"))
-        {
-
-            return view('schedule.view', compact('schedule'));
-
-        }
-        else
-        {
-
-            Log::info(Auth::user()->username . ' was denied access to view inspection schedule ' . $schedule->name);
             throw new AuthorizationException;
 
         }
@@ -108,8 +84,8 @@ class InspectionScheduleController extends Controller
 
             $this->validate($request,
                 [
-                    'name'              => 'required|string|min:5|max:255|unique:inspection_schedules',
-                    'description'       => 'required|string',
+                    'Name'              => 'required|string|min:5|max:255|unique:inspection_schedules',
+                    'Description'       => 'required|string',
 
                 ]
             );
@@ -118,25 +94,25 @@ class InspectionScheduleController extends Controller
 
             if ($schedule->save()) {
 
-                Session::flash('success', $schedule->name . ' has been created successfully.');
-                Log::info('Inspection Schedule ' . $schedule->name . ' has been created successfully by ' . Auth::user()->username);
+                Session::flash('success', $schedule->Name . ' has been created successfully.');
+                Log::info('Inspection Schedule ' . $schedule->Name . ' has been created successfully by ' . Auth::user()->username);
 
             }
             else
             {
 
-                Session::flash('error', 'There has been an error while trying to create schedule ' . $schedule->name . '.');
-                Log::info(Auth::user()->username . ' received an error while creating schedule ' . $schedule->name);
+                Session::flash('error', 'There has been an error while trying to create schedule ' . $schedule->Name . '.');
+                Log::info(Auth::user()->username . ' received an error while creating schedule ' . $schedule->Name);
 
             }
 
-            return redirect()->route('schedule::view', $schedule->id);
+            return redirect()->route('schedule::index');
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to create schedule ' . $request->name);
+            Log::info(Auth::user()->username . ' was denied access to create schedule ' . $request->Name);
             throw new AuthorizationException;
 
         }
@@ -163,7 +139,7 @@ class InspectionScheduleController extends Controller
         }
         else
         {
-            Log::info(Auth::user()->username . ' was denied access to edit schedule ' . $schedule->name);
+            Log::info(Auth::user()->username . ' was denied access to edit schedule ' . $schedule->Name);
             throw new AuthorizationException;
         }
     }
@@ -187,39 +163,38 @@ class InspectionScheduleController extends Controller
 
             $this->validate($request,
                 [
-                    'name'              => 'required|string|min:5|max:255|unique:inspection_schedules',
-                    'description'       => 'required|string',
+                    'Name'              => ['required','string','min:5','max:255',Rule::unique("inspection_schedules")->ignore($schedule->id)],
+                    'Description'       => 'required|string',
                 ]
             );
 
             //SET VALUES TO MODEL
-            $schedule->name              = $request->name;
-            $schedule->description       = $request->description;
+            $schedule->Name              = $request->Name;
+            $schedule->Description       = $request->Description;
 
             //SAVE MODEL
             if ($schedule->save())
             {
 
-                Session::flash('success', $schedule->name . ' has been updated successfully.');
-                Log::info('Inspection Schedule ' . $schedule->name . ' has been updated successfully by ' . Auth::user()->username);
+                Session::flash('success', $schedule->Name . ' has been updated successfully.');
+                Log::info('Inspection Schedule ' . $schedule->Name . ' has been updated successfully by ' . Auth::user()->username);
 
             }
             else
             {
 
-                Session::flash('error', 'There has been an error while trying to update schedule ' . $schedule->name . '.');
-                Log::info(Auth::user()->username . ' received an error while updating schedule ' . $schedule->name);
+                Session::flash('error', 'There has been an error while trying to update schedule ' . $schedule->Name . '.');
+                Log::info(Auth::user()->username . ' received an error while updating schedule ' . $schedule->Name);
 
             }
 
-            return redirect()
-                ->route('schedule::view', $schedule->id);
+            return redirect()->route('schedule::index');
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to edit schedule ' . $schedule->name);
+            Log::info(Auth::user()->username . ' was denied access to edit schedule ' . $schedule->Name);
             throw new AuthorizationException;
 
         }
@@ -240,7 +215,7 @@ class InspectionScheduleController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $name = $schedule->name;
+            $name = $schedule->Name;
 
             if ($schedule->delete())
             {
@@ -249,13 +224,13 @@ class InspectionScheduleController extends Controller
                 $this->index();
             }
 
-            Session::flash('error', 'There has been an error while trying to delete ' . $schedule->name . '.');
-            Log::info(Auth::user()->username . ' received an error while deleting schedule ' . $schedule->name);
+            Session::flash('error', 'There has been an error while trying to delete ' . $schedule->Name . '.');
+            Log::info(Auth::user()->username . ' received an error while deleting schedule ' . $schedule->Name);
             $this->index();
 
         }
 
-        Log::info(Auth::user()->username . ' was denied access to delete schedule ' . $schedule->name);
+        Log::info(Auth::user()->username . ' was denied access to delete schedule ' . $schedule->Name);
         throw new AuthorizationException;
 
     }
@@ -270,23 +245,23 @@ class InspectionScheduleController extends Controller
 
             if ($schedule->restore())
             {
-                Session::flash('success', $schedule->name . ' has been restored successfully.');
-                Log::info('Inspection Schedule ' . $schedule->name . ' has been restored successfully by ' . Auth::user()->username);
+                Session::flash('success', $schedule->Name . ' has been restored successfully.');
+                Log::info('Inspection Schedule ' . $schedule->Name . ' has been restored successfully by ' . Auth::user()->username);
             }
             else
             {
-                Session::flash('error', 'There has been an error while trying to restore ' . $schedule->name . '.');
-                Log::info(Auth::user()->username . ' received an error while restoring schedule ' . $schedule->name);
+                Session::flash('error', 'There has been an error while trying to restore ' . $schedule->Name . '.');
+                Log::info(Auth::user()->username . ' received an error while restoring schedule ' . $schedule->Name);
             }
 
             return redirect()
-                ->route('schedule::view', $schedule->id);
+                ->route('schedule::index');
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to restore schedule ' . $schedule->name);
+            Log::info(Auth::user()->username . ' was denied access to restore schedule ' . $schedule->Name);
             throw new AuthorizationException;
 
         }

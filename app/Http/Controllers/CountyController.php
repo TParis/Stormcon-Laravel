@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class CountyController extends Controller
 {
@@ -190,7 +191,7 @@ class CountyController extends Controller
 
             $this->validate($request,
                 [
-                    'name'                  => 'required|min:5|max:255|unique:counties',
+                    'name' => ['required','string','min:5','max:255',Rule::unique("counties")->ignore($county->id)],
                 ]
             );
 

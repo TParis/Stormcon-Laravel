@@ -375,3 +375,34 @@ Route::group(['prefix' => 'ms4', 'as' => 'municipal::'], function() {
         'uses'  => 'MunicipalController@addCounty'
     ]);
 });
+
+Route::group(['prefix' => 'inspectionschedule', 'as' => 'schedule::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'InspectionScheduleController@index'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'InspectionScheduleController@addInspectionSchedule'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'InspectionScheduleController@createInspectionSchedule'
+    ]);
+    Route::get('/edit/{schedule}',[
+        'as'    => 'edit',
+        'uses'  => 'InspectionScheduleController@modifyInspectionSchedule'
+    ]);
+    Route::put( '/edit/{schedule}',[
+        'as'    => 'update',
+        'uses'  => 'InspectionScheduleController@updateInspectionSchedule'
+    ]);
+    Route::delete('/delete/{schedule}',[
+        'as'    => 'delete',
+        'uses'  => 'InspectionScheduleController@deleteInspectionSchedule'
+    ]);
+    Route::get('/undelete/{trashed_schedule}',[
+        'as'    => 'undelete',
+        'uses'  => 'InspectionScheduleController@undeleteInspectionSchedule'
+    ]);
+});

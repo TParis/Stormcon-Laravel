@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class CompanyController extends Controller
 {
@@ -56,7 +57,7 @@ class CompanyController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $company->contacts = [];
+            $company->load("contacts");
 
             return view('company.view', compact('company'));
 
@@ -208,7 +209,7 @@ class CompanyController extends Controller
 
             $this->validate($request,
                 [
-                    'name'              => 'required|string|min:5|max:255|unique:companies',
+                    'name'              => ['required','string','min:5','max:255',Rule::unique("companies")->ignore($company->id)],
                     'legal_name'        => 'nullable|string',
                     'also_known_as'     => 'nullable|string',
                     'phone'             => 'required|string',

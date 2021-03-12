@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class ResponsibilitiesController extends Controller
 {
@@ -159,7 +160,7 @@ class ResponsibilitiesController extends Controller
 
             $this->validate($request,
                 [
-                    'narrative'  => 'required|string|unique:responsibilities',
+                    'narrative'  => ['required','string','min:5','max:255',Rule::unique("responsibilities")->ignore($res->id)],
                 ]
             );
 

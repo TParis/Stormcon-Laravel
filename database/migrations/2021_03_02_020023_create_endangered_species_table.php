@@ -20,7 +20,7 @@ class CreateEndangeredSpeciesTable extends Migration
             $table->string("group")->nullable();
             $table->string("state_status")->nullable();
             $table->string("federal_status")->nullable();
-            $table->string("species_info")->nullable();
+            $table->string("species_info", 2048)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

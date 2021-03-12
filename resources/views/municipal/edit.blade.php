@@ -24,12 +24,12 @@
     <div class="container-fluid">
         <div class="card ml-auto mr-auto w-50">
             <div class="card-body">
-                <h5 class="card-title">Edit County</h5>
+                <h5 class="card-title">Edit Municipal</h5>
                 {{ Form::open(array('route' => array('municipal::update', $municipal->id), 'method' => 'put', 'class'	=> 'form-horizontal')) }}
                 <div class="form-group row">
                     {{ Form::label('name', 'Name', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('name', $municipal->name, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Gas R Us')) }}
+                        {{ Form::text('name', $municipal->name, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Austin')) }}
                     </div>
                 </div>
                 <div class="form-group row">
@@ -47,7 +47,7 @@
                 <div class="form-group row">
                     {{ Form::label('city', 'City', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('city', $municipal->city, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Dallas')) }}
+                        {{ Form::text('city', $municipal->city, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Austin')) }}
                     </div>
                 </div>
                 <div class="form-group row">

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class BmpController extends Controller
 {
@@ -165,7 +166,7 @@ class BmpController extends Controller
 
             $this->validate($request,
                 [
-                    'name'                  => 'required|min:5|max:255|unique:bmps',
+                    'name'                  => ['required','min:5','max:255',Rule::unique("bmps")->ignore($bmp->id)],
                     'description'           => 'string',
                     'uses'                  => 'string',
                     'inspection_schedule'   => 'string',

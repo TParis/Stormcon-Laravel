@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class WaterQualityController extends Controller
 {
@@ -160,8 +161,8 @@ class WaterQualityController extends Controller
 
             $this->validate($request,
                 [
-                    'category'                  => 'required|string|min:5|max:255|unique:water_qualities',
-                    'description'                  => 'required|string|min:5',
+                    'category'      => ['required','string','min:5','max:255',Rule::unique("water_qualities")->ignore($quality->id)],
+                    'description'   => 'required|string|min:5',
                 ]
             );
 

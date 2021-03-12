@@ -20,13 +20,13 @@ class CreateCompaniesTable extends Migration
             $table->string("also_known_as")->nullable();
             $table->string("type")->nullable();
             $table->string("division")->nullable();
-            $table->integer("num_of_employees")->nullable();
+            $table->string("num_of_employees")->nullable();
             $table->string("address");
             $table->string("city");
             $table->string("state");
             $table->string("zipcode", 10);
-            $table->string("phone", 12);
-            $table->string("fax", 12)->nullable();
+            $table->string("phone", 25);
+            $table->string("fax", 25)->nullable();
             $table->string("website")->nullable();
             $table->string("federal_tax_id")->nullable();
             $table->string("state_tax_id")->nullable();

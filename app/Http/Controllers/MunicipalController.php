@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\Rule;
 
 class MunicipalController extends Controller
 {
@@ -196,7 +197,7 @@ class MunicipalController extends Controller
 
             $this->validate($request,
                 [
-                    'name'              => 'required|string|min:5|max:255|unique:municipals',
+                    'name'              => ['required','string','min:5','max:255',Rule::unique("municipals")->ignore($municipal->id)],
                     'phone'             => 'required|string',
                     'address'           => 'required|string',
                     'city'              => 'required|string',

@@ -91,6 +91,19 @@ return [
             'prefix_indexes' => true,
         ],
 
+	'old_sys' => [
+		'driver' => 'sqlsrv',
+		'url' => '',
+		'host' => 'stormcon.database.windows.net',
+		'port' => '1433',
+		'database' => 'Stormcon_SWPPP',
+		'username' => 'Stormcon',
+		'password' => 'Stormwater123',
+		'charset' => 'utf8',
+		'prefix' => '',
+		'prefix_indexes' => true,
+	],
+
     ],
 
     /*

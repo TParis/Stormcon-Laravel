@@ -17,8 +17,9 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.3",
         "laravelcollective/html": "^6.2",
-        "propaganistas/laravel-phone": "^4.3",
-        "spatie/laravel-permission": "^4.0"
+        "spatie/laravel-permission": "^4.0",
+        "ext-simplexml": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

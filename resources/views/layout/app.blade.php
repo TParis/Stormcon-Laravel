@@ -66,7 +66,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route("bmps::index") }}">BMPs</a>
                                 <a class="dropdown-item" href="{{ route("species::index") }}">Endangered Species</a>
-                                <a class="dropdown-item" href="#">Inspection Schedules</a>
+                                <a class="dropdown-item" href="{{ route("schedule::index")  }}">Inspection Schedules</a>
                                 <a class="dropdown-item" href="{{ route("responsibilities::index") }}">Responsibilities</a>
                                 <a class="dropdown-item" href="{{ route("soils::index") }}">Soils</a>
                                 <a class="dropdown-item" href="{{ route("waterquality::index") }}">Water Quality</a>

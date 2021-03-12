@@ -23,7 +23,7 @@
     <div class="container-fluid">
         <div class="card ml-auto mr-auto w-75">
             <div class="card-body">
-                <h5 class="card-title">Add County</h5>
+                <h5 class="card-title">Add Company</h5>
                 {{ Form::open(array('route' => array('company::create'), 'method' => 'post', 'class' => 'form-horizontal')) }}
                 <div class="form-group row">
                     {{ Form::label('name', 'Name', array('class' => 'col-4 text-right control-label required-field')) }}

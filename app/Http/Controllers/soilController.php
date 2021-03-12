@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class soilController extends Controller
 {
@@ -165,7 +166,7 @@ class soilController extends Controller
 
             $this->validate($request,
                 [
-                    'name'  => 'required|min:5|max:255|unique:soils',
+                    'name'  => ['required','string','min:5','max:255',Rule::unique("soils")->ignore($soil->id)],
                     'group' => 'required|alpha',
                     'k'     => 'required|numeric|min:0|max:100',
                     'sand'  => 'required|numeric|min:0|max:100',
