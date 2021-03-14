@@ -136,7 +136,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-4 p-2 text-center">
-                        <a type="button" onClick="deleteCounty({{ $company->id }}, '{{ $company->name }}')" class="btn btn-danger w-100">Delete</a>
+                        <a type="button" onClick="deleteCompany({{ $company->id }}, '{{ $company->name }}')" class="btn btn-danger w-100">Delete</a>
                     </div>
                     <div class="col-4 p-2 text-center">
                         <a href="{{ route("company::view", $company->id) }}" type="button" class="btn btn-primary w-100">Close</a>

@@ -346,4 +346,19 @@ class CompanyController extends Controller
         }
     }
 
+    public function addContact(Company $company) {
+        if (Auth::user()->hasRole("Owner")) {
+
+            return view("contact.add", compact("company"));
+
+        }
+        else
+        {
+
+            Log::info(Auth::user()->username . ' was denied access to restore company ' . $company->name);
+            throw new AuthorizationException;
+
+        }
+    }
+
 }

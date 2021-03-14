@@ -24,7 +24,7 @@
     </div>
     <div class="form-group row">
         <div class="col-4 p-2 text-center">
-            <a type="button" onClick="deleteBMP({{ $schedule->id }}, '{{ $schedule->name }}')" class="btn btn-danger w-100">Delete</a>
+            <a type="button" onClick="deleteSchedule({{ $schedule->id }}, '{{ $schedule->name }}')" class="btn btn-danger w-100">Delete</a>
         </div>
         <div class="col-4 p-2 text-center">
             <button type="button" class="btn btn-primary w-100" data-dismiss="modal">Close</button>

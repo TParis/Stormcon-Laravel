@@ -60,7 +60,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route("company::index") }}">Companies</a>
-                                <a class="dropdown-item" href="#">Contacts</a>
+                                <a class="dropdown-item" href="{{ route("contact::index") }}">Contacts</a>
                                 <a class="dropdown-item" href="{{ route("county::index") }}">Counties</a>
                                 <a class="dropdown-item" href="{{ route("municipal::index") }}">Municipal S4s</a>
                                 <div class="dropdown-divider"></div>
@@ -88,7 +88,9 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="#">Profile</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Logout</a>
+                                <form action="{{ route("logout") }}" method="POST">
+                                <input type="submit" class="dropdown-item" value="Logout" />
+                                </form>
                             </div>
                         </li>
                         @endauth

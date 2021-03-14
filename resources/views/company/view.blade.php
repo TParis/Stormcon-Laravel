@@ -95,6 +95,7 @@
         <div class="row">
             <div class="col-12">
                 <h3 align="center">Contacts</h3>
+                <button class="btn btn-info add-btn" data-action="add"><i class="glyphicon glyphicon-plus"></i> Add New Contact</button>
                 <div class="container-fixed">
                     <table id="contacts" class="table table-sortable table-bordered table-striped display">
                         <thead>
@@ -109,7 +110,7 @@
                         <tbody>
                         @foreach ($company->contacts as $contact)
                             <tr id="{{ $contact->id }}">
-                                <td><a href="{{ route("contact::view", $contact->id) }}">{{ $contact->first_name }} {{ $contact->last_name }}</a></td>
+                                <td>{{ $contact->first_name }} {{ $contact->last_name }}</td>
                                 <td>{{ $contact->title }}</td>
                                 <td>{{ $contact->division }}</td>
                                 <td>{{ $contact->phone }}</td>
@@ -121,22 +122,117 @@
                 </div>
             </div>
     </div>
+    <button class="btn btn-info add-btn" data-action="add"><i class="glyphicon glyphicon-plus"></i> Add New Contact</button>
+    <div class="modal fade" tabindex="-1" role="dialog" id="editcontacts">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Modal title</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div id="modal-errors" class="modal-body hide">
+                    <div class="alert alert-danger">
+                    </div>
+                </div>
+                <div id="modal-content" class="modal-body">
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 @endsection
 
 
-@section("scripts")
-    <script language="javascript" type="text/javascript">
-        window.onload = function () {
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        @section("scripts")
+            <script language="javascript" type="text/javascript">
+                window.onload = function () {
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $("#contacts").ready(function() {
+                        let mydatatable = $("#contacts").DataTable({
+                            select: "single"
+                        });
+
+                        //Datasheet button clicks/Modal
+                        mydatatable.on("select", popup_model);
+                        $(".add-btn").on("click", popup_model);
+
+                        function popup_model(e, target, type, indexes) {
+                            console.log()
+                            if (e.namespace == "dt") {
+                                var id = mydatatable.row(indexes[0]).id();
+                                var action = "edit";
+                            } else {
+                                var action = $(this).data("action");
+                            }
+
+                            let url = "/contact/" + action;
+
+                            if (action == "edit") {
+                                url += "/" + id;
+                            } else {
+                                url = "/company/contact/add/{{ $company->id}}"
+                            }
+
+                            // Add & Update
+
+                            $.ajax({
+                                url: url,
+                                type: "GET",
+                                success: function(data) {
+                                    $("#modal-content").html(data);
+                                    $(".modal-title").text(action.toUpperCase() + " Contacts");
+                                    $("#modal-errors").addClass("d-none");
+                                    $('#editcontacts').modal({
+                                        backdrop: 'static',
+                                        keyboard: false
+                                    });
+                                },
+                                error: function(data) {
+
+                                    // 401: Unauthorized
+                                    if (data.status === "401") {
+                                        location.href = "/";
+                                        // All other error codes
+                                    } else {
+                                        alert("An error has occured.  See log for details.");
+                                        console.log('Error:', data);
+                                    }
+                                }
+                            });
+                        };
+
+                        //Modal fixer
+                        $('#editcontacts').on('shown.bs.modal', function() {
+                            $('#myInput').focus();
+                        });
+
+                        $('#editcontacts').on('hidden.bs.modal', function() {
+                            $("#modal-errors").addClass("d-none");
+                            $(".modal-footer").unbind("click");
+                        });
+                    });
+                };
+
+                function deleteBMP(id, name) {
+                    if (confirm("Are you sure you want to delete " + name)) {
+                        $.ajax({
+                            url: '/contact/delete/' + id,
+                            type: 'DELETE',
+                            success: function(result) {
+                                window.location = "/contact";
+                            }
+                        });
+                    }
                 }
-            });
 
-            $("#contacts").ready(function () {
-                let mydatatable = $("#contacts").DataTable();
-            });
-        }
-    </script>
+            </script>
 @endsection

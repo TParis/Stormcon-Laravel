@@ -10,6 +10,9 @@ class Contact extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['first_name', 'last_name', 'er', 'phone', 'address', 'city', 'state', 'zipcode', 'email',
+        'title', 'division', 'cell', 'noi', 'inspector', 'qualifications'];
+
     public function employer() {
         return $this->morphTo();
     }

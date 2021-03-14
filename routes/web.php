@@ -334,6 +334,14 @@ Route::group(['prefix' => 'company', 'as' => 'company::'], function() {
         'as'    => 'addCounty',
         'uses'  => 'CompanyController@addCounty'
     ]);
+    Route::post('/contact/add/{company}', [
+        'as'    => 'createContact',
+        'uses'  => 'ContactController@createCompanyContact'
+    ]);
+    Route::get('/contact/add/{company}', [
+        'as'    => 'addContact',
+        'uses'  => 'CompanyController@addContact'
+    ]);
 });
 
 
@@ -374,6 +382,14 @@ Route::group(['prefix' => 'ms4', 'as' => 'municipal::'], function() {
         'as'    => 'addCounty',
         'uses'  => 'MunicipalController@addCounty'
     ]);
+    Route::post('/contact/add/{municipal}', [
+        'as'    => 'createContact',
+        'uses'  => 'ContactController@createMunicipalContact'
+    ]);
+    Route::get('/contact/add/{municipal}', [
+        'as'    => 'addContact',
+        'uses'  => 'MunicipalController@addMunicipalContact'
+    ]);
 });
 
 Route::group(['prefix' => 'inspectionschedule', 'as' => 'schedule::'], function() {
@@ -404,5 +420,37 @@ Route::group(['prefix' => 'inspectionschedule', 'as' => 'schedule::'], function(
     Route::get('/undelete/{trashed_schedule}',[
         'as'    => 'undelete',
         'uses'  => 'InspectionScheduleController@undeleteInspectionSchedule'
+    ]);
+});
+
+
+Route::group(['prefix' => 'contact', 'as' => 'contact::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'ContactController@index'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'ContactController@addContact'
+    ]);
+    Route::get('/view/{contact}',[
+        'as'    => 'view',
+        'uses'  => 'ContactController@viewContact'
+    ]);
+    Route::get('/edit/{contact}',[
+        'as'    => 'edit',
+        'uses'  => 'ContactController@modifyContact'
+    ]);
+    Route::put( '/edit/{contact}',[
+        'as'    => 'update',
+        'uses'  => 'ContactController@updateContact'
+    ]);
+    Route::delete('/delete/{contact}',[
+        'as'    => 'delete',
+        'uses'  => 'ContactController@deleteContact'
+    ]);
+    Route::get('/undelete/{trashed_contact}',[
+        'as'    => 'undelete',
+        'uses'  => 'ContactController@undeleteContact'
     ]);
 });

@@ -4,7 +4,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ Route("Home") }}">Home</a></li>
         <li class="breadcrumb-item">Configuration</li>
-        <li class="breadcrumb-item active" aria-current="page">Inspection Schedules</li>
+        <li class="breadcrumb-item active" aria-current="page">Contacts</li>
     </ol>
     @if(Session::has('success'))
         <div class="alert alert-success">{{ Session::get('success') }}</div>
@@ -20,26 +20,30 @@
         </div>
     @endif
     <div class="container-fixed">
-        <button class="btn btn-info add-btn" data-action="add"><i class="glyphicon glyphicon-plus"></i> Add New Schedule</button>
-        <table id="schedules" class="table table-sortable table-bordered table-striped display">
+        <table id="contacts" class="table table-sortable table-bordered table-striped display">
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Description</th>
+                <th>Employer</th>
+                <th>Title</th>
+                <th>Phone</th>
+                <th>Email</th>
             </tr>
             </thead>
             <tbody>
-            @foreach ($schedules as $schedule)
-                <tr id="{{ $schedule->id }}">
-                    <td>{{ $schedule->Name }}</td>
-                    <td>{{ \Illuminate\Support\Str::limit($schedule->Description, 120, $end='...') }}</td>
+            @foreach ($contacts as $contact)
+                <tr id="{{ $contact->id }}">
+                    <td>{{ $contact->first_name }} {{ $contact->last_name }}</td>
+                    <td>{{ $contact->employer->name }}</td>
+                    <td>{{ $contact->title }}</td>
+                    <td>{{ $contact->phone }}</td>
+                    <td>{{ $contact->email }}</td>
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
-    <button class="btn btn-info add-btn" data-action="add"><i class="glyphicon glyphicon-plus"></i> Add New Schedule</button>
-    <div class="modal fade" tabindex="-1" role="dialog" id="editschedules">
+    <div class="modal fade" tabindex="-1" role="dialog" id="editcontacts">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -71,14 +75,13 @@
                 }
             });
 
-            $("#schedules").ready(function() {
-                let mydatatable = $("#schedules").DataTable({
+            $("#contacts").ready(function() {
+                let mydatatable = $("#contacts").DataTable({
                     select: "single"
                 });
 
                 //Datasheet button clicks/Modal
                 mydatatable.on("select", popup_model);
-                $(".add-btn").on("click", popup_model);
 
                 function popup_model(e, target, type, indexes) {
                     console.log()
@@ -89,7 +92,7 @@
                         var action = $(this).data("action");
                     }
 
-                    let url = "/inspectionschedule/" + action;
+                    let url = "/contact/" + action;
                     if (action == "edit") {
                         url += "/" + id;
                     }
@@ -101,9 +104,9 @@
                         type: "GET",
                         success: function(data) {
                             $("#modal-content").html(data);
-                            $(".modal-title").text(action.toUpperCase() + " Inspection Schedule");
+                            $(".modal-title").text(action.toUpperCase() + " Contact");
                             $("#modal-errors").addClass("d-none");
-                            $('#editschedules').modal({
+                            $('#editcontacts').modal({
                                 backdrop: 'static',
                                 keyboard: false
                             });
@@ -123,24 +126,24 @@
                 };
 
                 //Modal fixer
-                $('#editschedules').on('shown.bs.modal', function() {
+                $('#editcontacts').on('shown.bs.modal', function() {
                     $('#myInput').focus();
                 });
 
-                $('#editschedules').on('hidden.bs.modal', function() {
+                $('#editcontacts').on('hidden.bs.modal', function() {
                     $("#modal-errors").addClass("d-none");
                     $(".modal-footer").unbind("click");
                 });
             });
         };
 
-        function deleteBMP(id, name) {
+        function deleteContact(id, name) {
             if (confirm("Are you sure you want to delete " + name)) {
                 $.ajax({
-                    url: '/inspectionschedule/delete/' + id,
+                    url: '/contact/delete/' + id,
                     type: 'DELETE',
                     success: function(result) {
-                        window.location = "/bmps";
+                        window.location = "/contact";
                     }
                 });
             }
@@ -148,3 +151,4 @@
 
     </script>
 @endsection
+

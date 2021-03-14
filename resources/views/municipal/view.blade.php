@@ -70,14 +70,20 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th>State Status</th>
-                            <th>Federal Status</th>
+                            <th>Title</th>
+                            <th>Division</th>
+                            <th>Phone</th>
+                            <th>Email</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($municipal->contacts as $contact)
-                            <tr id="{{ $species->id }}">
-                                <td><a href="{{ route("species::view", $contact->id) }}">{{ $contact->name }}</a></td>
+                            <tr id="{{ $contact->id }}">
+                                <td>{{ $contact->first_name }} {{ $contact->last_name }}</td>
+                                <td>{{ $contact->title }}</td>
+                                <td>{{ $contact->division }}</td>
+                                <td>{{ $contact->phone }}</td>
+                                <td>{{ $contact->email }}</td>
                             </tr>
                         @endforeach
                         </tbody>

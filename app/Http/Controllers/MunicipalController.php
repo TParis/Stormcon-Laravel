@@ -57,7 +57,7 @@ class MunicipalController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $municipal->contacts = [];
+            $municipal->load("contacts");
 
             return view('municipal.view', compact('municipal'));
 
