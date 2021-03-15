@@ -241,7 +241,7 @@ class CompanyController extends Controller
             $company->state             = $request->state;
             $company->zipcode           = $request->zipcode;
             $company->type              = $request->type;
-            $company->divison           = $request->divison;
+            $company->division           = $request->division;
             $company->num_of_employees  = $request->num_of_employees;
             $company->federal_tax_id    = $request->federal_tax_id;
             $company->state_tax_id      = $request->state_tax_id;

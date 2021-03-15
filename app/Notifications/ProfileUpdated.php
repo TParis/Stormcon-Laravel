@@ -41,16 +41,13 @@ class ProfileUpdated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject("Simplistic IT: Profile Updated")
+                    ->subject(env("app_name") . ": Profile Updated")
                     ->greeting('Hello!')
-                    ->line('Your profile has been updated on Simplistic IT\'s data system.  You are invited')
-                    ->line('to login to the system.  If you are a client, you\'ll have access to check on')
-                    ->line('your company\'s timesheets as well as change your notification preferences.')
+                    ->line('Your profile has been updated.  You are invited')
+                    ->line('to login to the system.  ')
                     ->action('Login Now', url('/'))
                     ->line('Thank you for using our application!')
-                    ->line('Please do not reply to this email, this is an unmonitored mailbox.  If you do')
-                    ->line('not wish to receive anymore email, you may either change the setting in your')
-                    ->line('preferences or email dan@simplisticit.com.');
+                    ->line('Please do not reply to this email, this is an unmonitored mailbox.');
     }
 
     /**

@@ -76,7 +76,7 @@
                 <hr>
                 <a href="#" class="w-100 d-block">Manage Workflows</a>
                 <hr>
-                <a href="#" class="w-100 d-block">Activity Log</a>
+                <a href="{{ route("ActivityLog") }}" class="w-100 d-block">Activity Log</a>
             </div>
         </div>
     </div>

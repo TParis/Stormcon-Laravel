@@ -113,8 +113,8 @@
                                 <td>{{ $contact->first_name }} {{ $contact->last_name }}</td>
                                 <td>{{ $contact->title }}</td>
                                 <td>{{ $contact->division }}</td>
-                                <td>{{ $contact->phone }}</td>
-                                <td>{{ $contact->email }}</td>
+                                <td><a href="tel:{{ $contact->phone }}">{{ $contact->phone }}</a></td>
+                                <td><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -222,7 +222,7 @@
                     });
                 };
 
-                function deleteBMP(id, name) {
+                function deleteContact(id, name) {
                     if (confirm("Are you sure you want to delete " + name)) {
                         $.ajax({
                             url: '/contact/delete/' + id,

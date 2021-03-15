@@ -41,16 +41,13 @@ class AccountCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject("Simplistic IT: Account Created")
+                    ->subject(env("app_name") . ": Account Created")
                     ->greeting('Hello!')
-                    ->line('An account has been created for you on Simplistic IT\'s data system.')
-                    ->line('You are invited to login to the system.  If you are a client, you\'ll have access to check on')
-                    ->line('your company\'s timesheets as well as change your notification preferences.')
+                    ->line('An account has been created for you.')
+                    ->line('You are invited to login to the system.')
                     ->line('Your new password is: ' . $notifiable->new_raw_password)
                     ->action('Login Now', url('/'))
-                    ->line('Thank you for using our application!')
-                    ->line('Please do not reply to this email, this is an unmonitored mailbox.  If you do not wish to receive')
-                    ->line('anymore email, you may either change the setting in your preferences or email dan@simplisticit.com.');
+                    ->line('Thank you for using our application!');
     }
 
     /**

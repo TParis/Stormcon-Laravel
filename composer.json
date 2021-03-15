@@ -9,6 +9,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
+        "ext-simplexml": "*",
         "barryvdh/laravel-ide-helper": "^2.9",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -17,9 +19,8 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.3",
         "laravelcollective/html": "^6.2",
-        "spatie/laravel-permission": "^4.0",
-        "ext-simplexml": "*",
-        "ext-json": "*"
+        "propaganistas/laravel-phone": "^4.3",
+        "spatie/laravel-permission": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

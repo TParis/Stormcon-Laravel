@@ -41,16 +41,14 @@ class PreferencesUpdated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject("Simplistic IT: Preferences Updated")
+                    ->subject(env("app_name") . ": Preferences Updated")
                     ->greeting('Hello!')
-                    ->line('Your preferences has been updated on Simplistic IT\'s data system.  You are')
-                    ->line('invited to login to the system.  If this was not you, you should notify')
-                    ->line('Simplistic IT immediately.')
+                    ->line('Your preferences has been updated.  You are')
+                    ->line('invited to login to the system.  If this was not you, you should notify ')
+                    ->line(env("app_name") . ' immediately.')
                     ->action('Login Now', url('/'))
                     ->line('Thank you for using our application!')
-                    ->line('Please do not reply to this email, this is an unmonitored mailbox.  If you')
-                    ->line('do not wish to receive anymore email, you may either change the setting in')
-                    ->line('your preferences or email dan@simplisticit.com.');
+                    ->line('Please do not reply to this email, this is an unmonitored mailbox.');
     }
 
     /**

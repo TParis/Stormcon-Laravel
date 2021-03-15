@@ -18,12 +18,12 @@ class CreateContactsTable extends Migration
             $table->string("first_name");
             $table->string("last_name");
             $table->string("er")->nullable();
-            $table->string("phone", 25)->nullable();
+            $table->string("phone", 30)->nullable();
             $table->string("email")->nullable();
             $table->string("title")->nullable();
             $table->string("division")->nullable();
             $table->string("epa")->nullable();
-            $table->string("cell", 25)->nullable();
+            $table->string("cell", 30)->nullable();
             $table->boolean("noi")->default(0);
             $table->boolean("inspector")->default(0);
             $table->string("qualifications")->nullable();

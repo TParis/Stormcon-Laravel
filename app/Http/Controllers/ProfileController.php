@@ -28,13 +28,10 @@ class ProfileController extends Controller
 	 */
     public function view() {
 
-		if (Auth::user()->can('profile.view')) {
+		if (true) {
 
-			$user = Auth::user()->load('company', 'roles');
+			$user = Auth::user();
 
-			if (is_null($user->company_id)) {
-				$user->company = $this->emptyCompany();
-			}
 
 			return view('profile.view', compact('user'));
 
@@ -64,7 +61,7 @@ class ProfileController extends Controller
 
 		} else {
 
-			Log::info(Auth::user()->name . ' was denied access to edit their profile');
+			Log::info(Auth::user()->username . ' was denied access to edit their profile');
 			throw new AuthorizationException;
 
 		}
@@ -82,39 +79,35 @@ class ProfileController extends Controller
 	 */
     public function update(Request $request) {
 
-		if (Auth::user()->can('profile.edit')) {
+		if (true) {
 
 			$user = Auth::user();
 
 			$this->validate($request, [
-				'name'			=>	'required|min:5|max:255|unique:users,name,' . $user->id,
-				'first_name'	=>	'required',
-				'last_name'		=>	'required',
-				'email'			=>	'required|email|unique:users,email,' . $user->id,
-				'phone_number'	=>	'phone:US',
-				'fax_number'	=>	'phone:US',
+				'email'			            =>	'required|email|unique:users,email,' . $user->id,
+				'phone'	                    =>	'phone:US',
+                'notifications'	            =>	'required|boolean',
+                'notifications_schedule'	=>	'required|in:instant,daily,weekly',
 			]);
 
-			$user->name = $request->name;
-			$user->first_name = $request->first_name;
-			$user->last_name = $request->last_name;
-			$user->email = $request->email;
-			$user->fax_number = $request->fax_number;
-			$user->phone_number = $request->phone_number;
+			$user->email                    = $request->email;
+            $user->phone                    = $request->phone;
+            $user->notifications            = $request->notifications;
+            $user->notifications_schedule   = $request->notifications_schedule;
 
 			if ($user->save()) {
 
 				if (!$user->hasRole('Record')) {
-					$user->notify(new ProfileUpdated());
+					//$user->notify(new ProfileUpdated());
 				}
 
 				Session::flash('success', 'You have updated your profile successfully.');
-				Log::info(Auth::user()->name . ' updated their profile successfully');
+				Log::info(Auth::user()->username . ' updated their profile successfully');
 
 			} else {
 
 				Session::flash('error', 'There has been an error while trying to update your profile.');
-				Log::info(Auth::user()->name . ' received an error while updating their profile');
+				Log::info(Auth::user()->username . ' received an error while updating their profile');
 
 			}
 
@@ -122,160 +115,11 @@ class ProfileController extends Controller
 
 		} else {
 
-			Log::info(Auth::user()->name . ' was denied access to edit their profile');
+			Log::info(Auth::user()->username . ' was denied access to edit their profile');
 			throw new AuthorizationException;
 
 		}
 
 	}
-
-	/*
-	 * prefs
-	 *
-	 * Returns a view of a user's preferences
-	 *
-	 * @return (view)
-	 */
-	public function prefs() {
-		if (Auth::user()->can('profile.edit')) {
-
-			$user = Auth::user();
-
-			$user->feeds = $this->displayRSSFeeds($user);
-
-			return view('profile.viewprefs', compact('user'));
-
-		} else {
-
-			Log::info(Auth::user()->name . ' was denied access to edit their preferences');
-			throw new AuthorizationException;
-
-		}
-	}
-
-	/*
-	 * updateprefs
-	 *
-	 * Validates the request and then updates the user proferences.  Returns a redirect to prefs()
-	 *
-	 * @request (Request) created automatically by laravel
-	 *
-	 * @return (redirect)
-	 */
-	public function updateprefs(Request $request) {
-
-		if (Auth::user()->can('profile.edit')) {
-
-			$user = Auth::user();
-
-			$validator = Validator::make($request->all(), [
-				'rcvAdminEmail'			=>	'boolean',
-				'rcvProfileEmail'		=>	'boolean',
-				'rcvTimeSheetEmail'		=>	'boolean',
-				'feeds'					=>	'string'
-			]);
-
-			$validator->after(function ($validator) {
-				$data = $validator->getData();
-			    if (!$this->checkFeedsFormat($data['feeds'])) {
-			        $validator->errors()->add('feeds', 'There is an invalid URL in the feeds list');
-			    }
-			});
-
-		    if ($validator->fails())
-		    {
-		        return redirect()->back()->withErrors($validator->errors());
-		    }
-
-
-			$user->rcvAdminEmail		= ($request->rcvAdminEmail) ? 1 : 0;
-			$user->rcvProfileEmail		= ($request->rcvProfileEmail) ? 1 : 0;
-			$user->rcvTimeSheetEmail	= ($request->rcvTimeSheetEmail) ? 1 : 0;
-
-			$feeds = str_replace(PHP_EOL, '|', $request->feeds);
-			$feeds = explode("|", $feeds);
-			$user->feeds 				= json_encode($feeds);
-
-			//Save was successful
-			if ($user->save()) {
-
-				//NOTIFY USER
-				if (!$user->hasRole('Record')) {
-					$user->notify(new PreferencesUpdated());
-				}
-
-				Session::flash('success', 'You have updated your profile successfully.');
-				Log::info(Auth::user()->name . ' updated their profile successfully');
-
-			} else {
-
-				Session::flash('error', 'There has been an error while trying to update your profile.');
-				Log::info(Auth::user()->name . ' received an error while updating their profile');
-
-			}
-
-			return redirect()->route('profile::prefs');
-
-		} else {
-
-			Log::info(Auth::user()->name . ' was denied access to edit their preferences');
-			throw new AuthorizationException;
-
-		}
-
-	}
-
-	/*
-	 * displayRSSFeeds
-	 *
-	 * Returns a newline delimited string of URLs for the RSS feed aggregator
-	 *
-	 * @user (User) Id number of the user as an integer
-	 *
-	 * @return (string)
-	 */
-	private function displayRSSFeeds(User $user) {
-
-		$feedlist = "";
-		$feeds = json_decode($user->feeds);
-
-		foreach ($feeds as $feed) {
-
-			$feedlist .= $feed;
-
-			if ($feed !== end($feeds)) {
-				$feedlist .= PHP_EOL;
-			}
-		}
-
-		return $feedlist;
-	}
-
-	/*
-	 * checkFeedsFormat
-	 *
-	 * Validates the format of the feeds and returns true if formatted correctly
-	 *
-	 * @feeds (String) Id number of the user as an integer
-	 *
-	 * @return (boolean)
-	 */
-	private function checkFeedsFormat(string $feeds) {
-
-			$feeds = str_replace(PHP_EOL, '|', $feeds);
-			$feeds = explode("|", $feeds);
-
-			foreach ($feeds as $feed) {
-				if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$feed)) {
-				  return false;
-				}
-			}
-
-			return true;
-	}
-
-        public function resetPassword($token) {
-		return View::make('resetPassword')->with('token', $token);
-        }
 
 }

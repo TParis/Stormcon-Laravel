@@ -17,6 +17,9 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name("Home");
 
+Route::get("/activitylog", "ActivityLogController@index")->name("ActivityLog");
+
+
 Route::group(['prefix' => 'profile', 'as' => 'profile::'], function() {
     Route::get('/', [
         'as'    => 'view',
@@ -37,13 +40,6 @@ Route::group(['prefix' => 'profile', 'as' => 'profile::'], function() {
     Route::put('/preferences', [
         'as'    => 'updateprefs',
         'uses'  => 'ProfileController@updateprefs'
-    ]);
-});
-
-Route::group(['prefix' => 'profile', 'as' => 'search::'], function() {
-    Route::post('/', [
-        'as'    => 'search',
-        'uses'  => 'SearchController@index'
     ]);
 });
 
@@ -388,7 +384,7 @@ Route::group(['prefix' => 'ms4', 'as' => 'municipal::'], function() {
     ]);
     Route::get('/contact/add/{municipal}', [
         'as'    => 'addContact',
-        'uses'  => 'MunicipalController@addMunicipalContact'
+        'uses'  => 'MunicipalController@addContact'
     ]);
 });
 

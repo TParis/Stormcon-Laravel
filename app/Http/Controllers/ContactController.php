@@ -32,7 +32,7 @@ class ContactController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $contacts = Contact::all();
+            $contacts = Contact::all()->load("employer");
 
             return view('contact.index', compact('contacts'));
 
@@ -41,33 +41,6 @@ class ContactController extends Controller
         {
 
             Log::info(Auth::user()->username . ' was denied access to view contacts');
-            throw new AuthorizationException;
-
-        }
-    }
-
-    /*
-     * View
-     *
-     * Returns an index of users
-     *
-     * @return (view)
-    */
-    public function viewContact(Contact $contact)
-    {
-
-        if (Auth::user()->hasRole("Owner"))
-        {
-
-            $contact->load("contacts");
-
-            return view('contact.view', compact('contact'));
-
-        }
-        else
-        {
-
-            Log::info(Auth::user()->username . ' was denied access to view endangered species ' . $contact->first_name . ' ' . $contact->last_name);
             throw new AuthorizationException;
 
         }

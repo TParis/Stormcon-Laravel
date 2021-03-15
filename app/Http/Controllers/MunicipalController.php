@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Municipal;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -305,6 +306,21 @@ class MunicipalController extends Controller
         {
 
             Log::info(Auth::user()->username . ' was denied access to restore municipal ' . $municipal->name);
+            throw new AuthorizationException;
+
+        }
+    }
+
+    public function addContact(Municipal $municipal) {
+        if (Auth::user()->hasRole("Owner")) {
+
+            return view("contact.add", compact("municipal"));
+
+        }
+        else
+        {
+
+            Log::info(Auth::user()->username . ' was denied access to restore company ' . $municipal->name);
             throw new AuthorizationException;
 
         }

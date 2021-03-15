@@ -8,6 +8,18 @@
         </ul>
     </div>
 @endif
+
+<div class="form-group row">
+    <div class="col-4 p-2 text-center">
+        <a href="mailto:{{ $contact->email }}" class="btn btn-primary w-100">Send Email</a>
+    </div>
+    <div class="col-4 p-2 text-center">
+        <a href="tel:{{ $contact->phone }}" class="btn btn-primary w-100">Call Office</a>
+    </div>
+    <div class="col-4 p-2 text-center">
+        <a href="tel:{{ $contact->cell }}" class="btn btn-primary w-100">Call Cell Phone</a>
+    </div>
+</div>
 <div class="container-fluid">
     {{ Form::open(array('route' => array('contact::update', $contact->id), 'method' => 'put', 'class'	=> 'form-horizontal')) }}
     <div class="form-group row">

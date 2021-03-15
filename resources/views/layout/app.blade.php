@@ -86,7 +86,7 @@
                                 <i class="fas fa-user-circle"></i> Profile
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="{{ route("profile::view") }}">Profile</a>
                                 <div class="dropdown-divider"></div>
                                 <form action="{{ route("logout") }}" method="POST">
                                 <input type="submit" class="dropdown-item" value="Logout" />

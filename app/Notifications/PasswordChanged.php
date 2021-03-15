@@ -41,16 +41,14 @@ class PasswordChanged extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject("Simplistic IT: Password Changed")
+                    ->subject(env("app_name") . ": Password Changed")
                     ->greeting('Hello!')
-                    ->line('Your password has been updated on Simplistic IT\'s data system.  You are invited')
-                    ->line('to login to the system.  If you didn\'t change your password, or you haven\'t')
-                    ->line('asked for it to be updated, then please notify Simplistic IT immediately.')
+                    ->line('Your password has been updated.  You are ')
+                    ->line('invited to login to the system.  If this was not you, you should notify ')
+                    ->line(env("app_name") . ' immediately.')
                     ->action('Login Now', url('/'))
                     ->line('Thank you for using our application!')
-                    ->line('Please do not reply to this email, this is an unmonitored mailbox.  If you do not')
-                    ->line('wish to receive anymore email, you may either change the setting in your preferences')
-                    ->line('or email dan@simplisticit.com.');
+                    ->line('Please do not reply to this email, this is an unmonitored mailbox.');
     }
 
     /**
