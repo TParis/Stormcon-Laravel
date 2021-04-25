@@ -450,3 +450,50 @@ Route::group(['prefix' => 'contact', 'as' => 'contact::'], function() {
         'uses'  => 'ContactController@undeleteContact'
     ]);
 });
+
+Route::group(['prefix' => 'projects', 'as' => 'project::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'ProjectController@index'
+    ]);
+    Route::get('/view/{project}',[
+        'as'    => 'view',
+        'uses'  => 'ProjectController@viewProject'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'ProjectController@addProject'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'ProjectController@createProject'
+    ]);
+    Route::get('/edit/{project}',[
+        'as'    => 'edit',
+        'uses'  => 'ProjectController@modifyProject'
+    ]);
+    Route::put( '/edit/{project}',[
+        'as'    => 'update',
+        'uses'  => 'ProjectController@updateProject'
+    ]);
+    Route::delete('/delete/{project}',[
+        'as'    => 'delete',
+        'uses'  => 'ProjectController@deleteProject'
+    ]);
+    Route::get('/undelete/{trashed_project}',[
+        'as'    => 'undelete',
+        'uses'  => 'ProjectController@undeleteProject'
+    ]);
+    Route::get('/getNewView/operator/{iter}',[
+        'as'    => 'getNewOperatorView',
+        'uses'  => 'ProjectController@getNewOperatorView'
+    ]);
+    Route::get('/getNewView/provider/{iter}',[
+        'as'    => 'getNewProviderView',
+        'uses'  => 'ProjectController@getNewProviderView'
+    ]);
+    Route::get('/getNewView/contractor/{iter}',[
+        'as'    => 'getNewContractorView',
+        'uses'  => 'ProjectController@getNewContractorView'
+    ]);
+});

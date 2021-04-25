@@ -84,7 +84,7 @@ class CompanyController extends Controller
         if (Auth::user()->hasRole('Owner'))
         {
 
-            $states = $this->states;
+            $states = Company::$states;
             return view('company.add', compact('states'));
 
         }
@@ -178,7 +178,7 @@ class CompanyController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $states = $this->states;
+            $states = Company::$states;
 
             return view('company.edit', compact('company', 'states'));
 

@@ -107,7 +107,7 @@
                 <div class="form-group row">
                     {{ Form::label('num_of_employees', 'Number of Employees', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::number('num_of_employees', $company->num_of_employeees, array('class' => 'form-control', 'placeholder' => '5')) }}
+                        {{ Form::number('num_of_employees', $company->num_of_employees, array('class' => 'form-control', 'placeholder' => '5')) }}
                     </div>
                 </div>
                 <div class="form-group row">

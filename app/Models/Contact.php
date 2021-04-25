@@ -16,4 +16,8 @@ class Contact extends Model
     public function employer() {
         return $this->morphTo();
     }
+
+    public function getFullNameAttribute() {
+        return $this->first_name . " " . $this->last_name;
+    }
 }

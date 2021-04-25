@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get("/company/{company}", function (Request $request, $company) {
+    $company = Company::where('name', $company)->firstOrFail();
+    return response()->json($company);
 });

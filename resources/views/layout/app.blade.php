@@ -14,7 +14,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://kit.fontawesome.com/5a7c86c63a.js" crossorigin="anonymous"></script>
 
     <!-- Fonts -->
@@ -52,7 +52,7 @@
                             <a class="nav-link" href="{{ Route("Home") }}"><i class="far fa-list-alt"></i> Dashboard <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-briefcase"></i> Projects</a>
+                            <a class="nav-link" href="{{ Route("project::index") }}"><i class="fas fa-briefcase"></i> Projects</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
