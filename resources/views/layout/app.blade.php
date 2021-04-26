@@ -71,7 +71,7 @@
                                 <a class="dropdown-item" href="{{ route("soils::index") }}">Soils</a>
                                 <a class="dropdown-item" href="{{ route("waterquality::index") }}">Water Quality</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Workflows</a>
+                                <a class="dropdown-item" href="{{ route("workflow_template::index") }}">Workflows</a>
                             </div>
                         </li>
                         <li class="nav-item">

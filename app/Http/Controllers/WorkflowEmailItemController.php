@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Workflow_Item;
+use App\Models\WorkflowEmailItem;
 use Illuminate\Http\Request;
 
-class WorkflowItemController extends Controller
+class WorkflowEmailItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,15 +35,16 @@ class WorkflowItemController extends Controller
      */
     public function store(Request $request)
     {
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Workflow_Item  $workflow_Item
+     * @param  \App\Models\WorkflowEmailItem  $workflowEmailItem
      * @return \Illuminate\Http\Response
      */
-    public function show(Workflow_Item $workflow_Item)
+    public function show(WorkflowEmailItem $workflowEmailItem)
     {
         //
     }
@@ -51,10 +52,10 @@ class WorkflowItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Workflow_Item  $workflow_Item
+     * @param  \App\Models\WorkflowEmailItem  $workflowEmailItem
      * @return \Illuminate\Http\Response
      */
-    public function edit(Workflow_Item $workflow_Item)
+    public function edit(WorkflowEmailItem $workflowEmailItem)
     {
         //
     }
@@ -63,10 +64,10 @@ class WorkflowItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Workflow_Item  $workflow_Item
+     * @param  \App\Models\WorkflowEmailItem  $workflowEmailItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Workflow_Item $workflow_Item)
+    public function update(Request $request, WorkflowEmailItem $workflowEmailItem)
     {
         //
     }
@@ -74,10 +75,10 @@ class WorkflowItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Workflow_Item  $workflow_Item
+     * @param  \App\Models\WorkflowEmailItem  $workflowEmailItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Workflow_Item $workflow_Item)
+    public function destroy(WorkflowEmailItem $workflowEmailItem)
     {
         //
     }

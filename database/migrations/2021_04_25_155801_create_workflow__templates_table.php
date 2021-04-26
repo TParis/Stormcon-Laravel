@@ -13,8 +13,10 @@ class CreateWorkflowTemplatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('workflow__templates', function (Blueprint $table) {
+        Schema::create('workflow_templates', function (Blueprint $table) {
             $table->id();
+            $table->string("name");
+            $table->integer("priority");
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateWorkflowTemplatesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('workflow__templates');
+        Schema::dropIfExists('workflow_templates');
     }
 }

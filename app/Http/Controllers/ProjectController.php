@@ -11,17 +11,24 @@ use App\Models\Project;
 use App\Models\Responsibilities;
 use App\Models\Soil;
 use App\Models\WaterQuality;
+use App\Models\Workflow;
+use App\Models\WorkflowTemplate;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProjectController extends Controller
 {
+
+    const STATUS_OPEN = 0;
+    const STATUS_CLOSE = 1;
+    const STATUS_HOLD = 2;
+
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -37,7 +44,7 @@ class ProjectController extends Controller
     public function index()
     {
 
-        if (Auth::user()->hasRole("Owner"))
+        if (Auth::user()->can("list projects"))
         {
 
             $projects = Project::all();
@@ -64,7 +71,7 @@ class ProjectController extends Controller
     public function viewProject(Project $project)
     {
 
-        if (Auth::user()->hasRole("Owner"))
+        if (Auth::user()->can("list projects"))
         {
 
             $bmps = bmp::all()->sortBy("name");
@@ -98,14 +105,15 @@ class ProjectController extends Controller
                 "roles",
                 "states",
                 "providers",
-                "contractors"
+                "contractors",
+                "contacts"
             ));
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to view endangered species ' . $species->common_name);
+            Log::info(Auth::user()->username . ' was denied access to view project ' . $project->name);
             throw new AuthorizationException;
 
         }
@@ -121,34 +129,11 @@ class ProjectController extends Controller
     public function addProject()
     {
 
-        if (Auth::user()->hasRole('Owner'))
+        if (Auth::user()->can('create project'))
         {
 
-            $bmps = bmp::all()->sortBy("name");
-            $soils = Soil::all()->sortBy("name");
-            $responsibilities = Responsibilities::all()->sortBy("name");
-            $water_qualities = WaterQuality::all()->sortBy("name");
-            $ms4s = Municipal::all()->sortBy("name");
-            $counties = County::with("endangered_species")->get()->sortBy("name");
-            $companies = Company::all()->sortBy("name");
-            $contacts = Contact::all();
-            $stormcon = Contact::whereHas('employer', function(Builder $query) {
-                $query->where("name", "like", "Stormcon%");
-            })->get()->sortBy("name");
-            $project = new Project;
-
-            return view('project.view', compact(
-                'project',
-                "bmps",
-                "soils",
-                "responsibilities",
-                "water_qualities",
-                "ms4s",
-                "counties",
-                "companies",
-                "stormcon",
-                "contacts"
-            ));
+            $workflow_templates = WorkflowTemplate::select("id", "name")->get()->pluck("name", "id");
+            return response()->view("project.add", compact("workflow_templates"));
 
         }
         else
@@ -185,9 +170,21 @@ class ProjectController extends Controller
                 ]
             );*/
 
-            $project = new Project($request->all());
+            $project = new Project(['name' => $request->name]);
 
-            if ($project->save()) {
+            $workflow_template = WorkflowTemplate::find($request->workflow_id);
+            $workflow = new Workflow([
+                'name' => $workflow_template->name,
+                'priority' => $workflow_template->priority,
+                'project_id' => $project->id,
+                'status'=> self::STATUS_OPEN,
+            ]);
+
+            foreach ($workflow_template->sub_items as $item) {
+                //Create steps here
+            }
+
+            if ($project->save() && $workflow->save()) {
 
                 Session::flash('success', $project->name . ' has been created successfully.');
                 Log::info('Project ' . $project->name . ' has been created successfully by ' . Auth::user()->username);

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Workflow_Item_Template;
+use App\Models\WorkflowItemTemplate;
+use App\Models\WorkflowTemplate;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 
 class WorkflowItemTemplateController extends Controller
 {
@@ -28,14 +30,16 @@ class WorkflowItemTemplateController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param WorkflowTemplate $template
+     * @return mixed
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request, WorkflowTemplate $template) {
+        if ( ! array_key_exists($request->type, WorkflowItemTemplate::acceptedTypes) ) throw new InvalidArgumentException("Invalid type");
+
+        $type = WorkflowItemTemplate::acceptedTypes[$request->type . "_controller"];
+        $obj = new $type;
+        return $obj->store($request, $template);
     }
 
     /**

@@ -15,6 +15,10 @@ class CreateWorkflowsTable extends Migration
     {
         Schema::create('workflows', function (Blueprint $table) {
             $table->id();
+            $table->string("name");
+            $table->integer("priority");
+            $table->integer("project_id");
+            $table->string("status")->default("0");
             $table->timestamps();
         });
     }

@@ -497,3 +497,53 @@ Route::group(['prefix' => 'projects', 'as' => 'project::'], function() {
         'uses'  => 'ProjectController@getNewContractorView'
     ]);
 });
+
+//Workflow Templates
+Route::group(['prefix' => 'workflow-template', 'as' => 'workflow_template::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'WorkflowTemplateController@index'
+    ]);
+    Route::get('/view/{template}',[
+        'as'    => 'show',
+        'uses'  => 'WorkflowTemplateController@show'
+    ]);
+    Route::get('/create/',[
+        'as'    => 'create',
+        'uses'  => 'WorkflowTemplateController@create'
+    ]);
+    Route::post('/create/',[
+        'as'    => 'store',
+        'uses'  => 'WorkflowTemplateController@store'
+    ]);
+    Route::get('/edit/{template}',[
+        'as'    => 'edit',
+        'uses'  => 'WorkflowTemplateController@edit'
+    ]);
+    Route::put( '/edit/{template}',[
+        'as'    => 'update',
+        'uses'  => 'WorkflowTemplateController@update'
+    ]);
+    Route::delete('/delete/{template}',[
+        'as'    => 'destroy',
+        'uses'  => 'WorkflowTemplateController@destroy'
+    ]);
+    Route::get('/undelete/{trashed_project}',[
+        'as'    => 'restore',
+        'uses'  => 'WorkflowTemplateController@restore'
+    ]);
+
+
+    Route::get('/todo/create',[
+        'as'    => 'todo::create',
+        'uses'  => 'WorkflowToDoItemTemplateController@create'
+    ]);
+    Route::get('/email/create',[
+        'as'    => 'email::create',
+        'uses'  => 'WorkflowEmailItemTemplateController@create'
+    ]);
+    Route::post('/{template}/item/create',[
+        'as'    => 'item::create',
+        'uses'  => 'WorkflowItemTemplateController@store'
+    ]);
+});
