@@ -59,8 +59,8 @@ class CountyController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $county = $county->load("endangered_species", "companies");
-            $endangered_species_list = Species::all()->diff($county->endangered_species)->groupBy("group");
+            $county = $county->load("species", "companies");
+            $endangered_species_list = Species::all()->diff($county->species)->groupBy("group");
             $companies_list = Company::all()->diff($county->companies)->groupBy("city");
 
             return view('counties.view', compact('county', 'endangered_species_list', 'companies_list'));

@@ -28,13 +28,13 @@
     @endif
     @if ($project->id != "")
         <div class="container workflow-timeline">
-            <div class="workflow-item">Start</div>
-            <div class="workflow-item">NOI</div>
-            <div class="workflow-item">Maps</div>
-            <div class="workflow-item active">Research</div>
-            <div class="workflow-item">Publish</div>
-            <div class="workflow-item">Inspect</div>
-            <div class="workflow-item">Close</div>
+            @foreach ($project->workflow->sub_items() as $step)
+                @if ($loop->index == $project->workflow->step)
+                    <div class="workflow-item active">{{ $step->name }}</div>
+                @else
+                    <div class="workflow-item">{{ $step->name }}</div>
+                @endif
+            @endforeach
         </div>
         <h1>{{ $project->name }} #{{ $project->id }}</h1>
     @else
@@ -51,7 +51,7 @@
                     <a href="#" class="w-100 d-block">Clear Blocker</a>
                     <hr>
                     <a href="#" class="w-100 d-block">Return to Previous Step</a>
-                    <a href="#" class="w-100 d-block">Complete Step</a>
+                    <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="w-100 d-block invisible">Complete Step</a>
                     @if (Auth::user()->hasRole("Owner"))
                         <a href="#" class="w-100 d-block">Skip to...</a>
                     @endif
@@ -60,25 +60,15 @@
                     <a href="#" class="w-100 d-block">Remove Hold</a>
                 </div>
                 <h3 align="right" class="project-block-header">To Do</h3>
-                <div class="container-fluid border project-block">
+                <div class="container-fluid border project-block" id="checklist-block">
+                    @foreach (preg_split('/\r\n|\r|\n/', $project->workflow->step()->checklist) as $task)
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="taska">
-                        <label class="form-check-label" for="taska">
-                            Default Task
+                        <input class="form-check-input" type="checkbox" value="" id="task{{ $loop->index }}">
+                        <label class="form-check-label" for="task{{ $loop->index }}">
+                            {{ $task }}
                         </label>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="taska">
-                        <label class="form-check-label" for="taska">
-                            Default Task
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="taska">
-                        <label class="form-check-label" for="taska">
-                            Default Task
-                        </label>
-                    </div>
+                    @endforeach
                 </div>
                 <h3 align="right" class="project-block-header">Files</h3>
                 <div class="container-fluid border project-block">
@@ -104,12 +94,6 @@
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#information" role="tab" aria-controls="home" aria-selected="true">Information</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#operators" role="tab" aria-controls="profile" aria-selected="false">Operators</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#providers" role="tab" aria-controls="contact" aria-selected="false">Providers</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contractors" role="tab" aria-controls="contact" aria-selected="false">Contractors</a>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -119,10 +103,18 @@
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#research" role="tab" aria-controls="contact" aria-selected="false">Research</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#bestpractices" role="tab" aria-controls="contact" aria-selected="false">Best Management Practices</a>
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#bestpractices" role="tab" aria-controls="contact" aria-selected="false">BMPs</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#stabilization" role="tab" aria-controls="contact" aria-selected="false">Stabilization</a>
+                    </li>
+                    @if (isset($project->county))
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#species" role="tab" aria-controls="contact" aria-selected="false">End. Species</a>
+                    </li>
+                    @endif
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="swppp-tab" data-toggle="tab" href="#swppp" role="tab" aria-controls="swppp" aria-selected="false">Export</a>
                     </li>
                 </ul>
                 @if ($project->id != "")
@@ -134,16 +126,6 @@
                     <div class="tab-pane fade show active" id="information" role="tabpanel" aria-labelledby="information-tab">
                         <div class="border border-top-0 p-5">
                             @include("project.information.view")
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="operators" role="tabpanel" aria-labelledby="operators-tab">
-                        <div class="border border-top-0 p-5">
-                            @include("project.operators.view")
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="providers" role="tabpanel" aria-labelledby="providers-tab">
-                        <div class="border border-top-0 p-5">
-                            @include("project.providers.view")
                         </div>
                     </div>
                     <div class="tab-pane fade" id="contractors" role="tabpanel" aria-labelledby="contractors-tab">
@@ -169,6 +151,16 @@
                     <div class="tab-pane fade" id="stabilization" role="tabpanel" aria-labelledby="stabilization-tab">
                         <div class="border border-top-0 p-5">
                             @include("project.stabilizations.view")
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="species" role="tabpanel" aria-labelledby="species-tab">
+                        <div class="border border-top-0 p-5">
+                            @include("project.endangeredspecies.view")
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="swppp" role="tabpanel" aria-labelledby="swppp-tab">
+                        <div class="border border-top-0 p-5">
+                            @include("project.swppp.view")
                         </div>
                     </div>
                 </div>
@@ -215,5 +207,17 @@
 
         })
     })
+
+    $("#checklist-block").on("change", ".form-check-input", function(el) {
+
+        anyUnchecked = false
+
+        $(el).parent().children().each(function(subel) {
+           if (!$(subel).checked) anyUnchecked = true;
+        })
+
+        if (!anyUnchecked) $("#complete-step").removeClass("invisible");
+
+    });
 </script>
 @endsection

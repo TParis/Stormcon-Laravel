@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\bmp;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\Contractor;
 use App\Models\County;
+use App\Models\EndangeredSpecies;
 use App\Models\Municipal;
 use App\Models\Project;
 use App\Models\Responsibilities;
@@ -13,6 +15,8 @@ use App\Models\Soil;
 use App\Models\WaterQuality;
 use App\Models\Workflow;
 use App\Models\WorkflowTemplate;
+use App\Models\WorkflowToDoItem;
+use App\Models\WorkflowEmailItem;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -27,6 +31,7 @@ class ProjectController extends Controller
     const STATUS_OPEN = 0;
     const STATUS_CLOSE = 1;
     const STATUS_HOLD = 2;
+    const STATUS_BLOCKED = 3;
 
 
     public function __construct()
@@ -47,7 +52,13 @@ class ProjectController extends Controller
         if (Auth::user()->can("list projects"))
         {
 
-            $projects = Project::all();
+            if (Auth::user()->hasRole("Owner")) {
+                $projects = Project::all();
+            } else {
+                $projects = Workflow::where("status", ProjectController::STATUS_OPEN)->get()->filter(function($workflow) {
+                    return Auth::user()->hasRole($workflow->step()->role);
+                });
+            }
 
             return view('project.index', compact('projects'));
 
@@ -74,22 +85,21 @@ class ProjectController extends Controller
         if (Auth::user()->can("list projects"))
         {
 
+            $project->load("county.endangered_species");
             $bmps = bmp::all()->sortBy("name");
             $soils = Soil::all()->sortBy("name");
             $responsibilities = Responsibilities::all()->sortBy("name");
             $water_qualities = WaterQuality::all()->sortBy("name");
             $ms4s = Municipal::all()->sortBy("name");
-            $counties = County::with("endangered_species")->get()->sortBy("name");
+            $counties = County::with("endangered_species")->get()->sortBy("name")->pluck("name", "id");
             $companies = Company::all()->sortBy("name")->pluck("name", "name");
             $contacts = Contact::all();
             $stormcon = Contact::whereHas('employer', function(Builder $query) {
                 $query->where("name", "like", "Stormcon%");
             })->get()->sortBy("name");
-            $operators = $this->convertListToCollection("operator", $project);
-            $providers = $this->convertListToCollection("provider", $project);
-            $contractors = $this->convertListToCollection("contractor", $project);
             $roles = Company::$roles;
             $states = Company::$states;
+            $endangered_status = EndangeredSpecies::ENDANGERED_STATUS;
 
             return view('project.view', compact(
                 'project',
@@ -101,12 +111,10 @@ class ProjectController extends Controller
                 "counties",
                 "companies",
                 "stormcon",
-                "operators",
                 "roles",
                 "states",
-                "providers",
-                "contractors",
-                "contacts"
+                "contacts",
+                "endangered_status"
             ));
 
         }
@@ -170,7 +178,11 @@ class ProjectController extends Controller
                 ]
             );*/
 
+            $errors = 0;
+
             $project = new Project(['name' => $request->name]);
+
+            if (!$project->save()) $errors++;
 
             $workflow_template = WorkflowTemplate::find($request->workflow_id);
             $workflow = new Workflow([
@@ -180,12 +192,19 @@ class ProjectController extends Controller
                 'status'=> self::STATUS_OPEN,
             ]);
 
-            foreach ($workflow_template->sub_items as $item) {
-                //Create steps here
+
+            if (!$workflow->save()) $errors++;
+
+            foreach ($workflow_template->sub_items() as $item) {
+                $class = str_replace("Template", "", class_basename($item));
+                if ($class == 'WorkflowToDoItem') $item = new WorkflowToDoItem($item->toArray());
+                if ($class == 'WorkflowEmailItem') $item = new WorkflowEmailItem($item->toArray());
+                $item->workflow_id = $workflow->id;
+                if (!$item->save()) $errors++;
             }
 
-            if ($project->save() && $workflow->save()) {
-
+            if (!$errors)
+            {
                 Session::flash('success', $project->name . ' has been created successfully.');
                 Log::info('Project ' . $project->name . ' has been created successfully by ' . Auth::user()->username);
 
@@ -273,7 +292,7 @@ class ProjectController extends Controller
             $project->city = $request->city;
             $project->state = $request->state;
             $project->zipcode = $request->zipcode;
-            $project->county = $request->county;
+            $project->county_id = $request->county_id;
             $project->directions = $request->directions;
             $project->nearest_city = $request->nearest_city;
             $project->local_official_ms4 = $request->local_official_ms4;
@@ -330,6 +349,7 @@ class ProjectController extends Controller
             $project->acres_disturbed = $request->acres_disturbed;
             $project->existing_system = $request->existing_system;
             $project->larger_plan = $request->larger_plan;
+            $project->bmps = $request->bmps;
             for ($i = 1; $i <= 7; $i++) {
                 $project->{"soil_" . $i . "_type"}       = $request->{"soil_" . $i . "_type"};
                 $project->{"soil_" . $i . "_hsg"}        = $request->{"soil_" . $i . "_hsg"};
@@ -339,6 +359,34 @@ class ProjectController extends Controller
             $project->erosivity = $request->erosivity;
             $project->pre_construction_coefficient = $request->pre_construction_coefficient;
             $project->post_construction_coefficient = $request->post_construction_coefficient;
+
+            foreach ($project->contractors as $contractor) {
+                if (isset($request->{"contractor_" . $contractor->id . "_name"}) && !blank($request->{"contractor_" . $contractor->id . "_name"})) {
+
+                    $contractor->role              = $request->{"contractor_" . $contractor->id . "_role"};
+                    $contractor->name              = $request->{"contractor_" . $contractor->id . "_name"};
+                    $contractor->legal_name        = $request->{"contractor_" . $contractor->id . "_legal_name"};
+                    $contractor->also_known_as     = $request->{"contractor_" . $contractor->id . "_also_known_as"};
+                    $contractor->type              = $request->{"contractor_" . $contractor->id . "_type"};
+                    $contractor->division          = $request->{"contractor_" . $contractor->id . "_division"};
+                    $contractor->num_of_employees  = $request->{"contractor_" . $contractor->id . "_num_of_employees"};
+                    $contractor->address           = $request->{"contractor_" . $contractor->id . "_address"};
+                    $contractor->city              = $request->{"contractor_" . $contractor->id . "_city"};
+                    $contractor->state             = $request->{"contractor_" . $contractor->id . "_state"};
+                    $contractor->zipcode           = $request->{"contractor_" . $contractor->id . "_zipcode"};
+                    $contractor->phone             = $request->{"contractor_" . $contractor->id . "_phone"};
+                    $contractor->fax               = $request->{"contractor_" . $contractor->id . "_fax"};
+                    $contractor->website           = $request->{"contractor_" . $contractor->id . "_website"};
+                    $contractor->federal_tax_id    = $request->{"contractor_" . $contractor->id . "_federal_tax_id"};
+                    $contractor->state_tax_id      = $request->{"contractor_" . $contractor->id . "_state_tax_id"};
+                    $contractor->sos               = $request->{"contractor_" . $contractor->id . "_sos"};
+                    $contractor->cn                = $request->{"contractor_" . $contractor->id . "_cn"};
+                    $contractor->sic               = $request->{"contractor_" . $contractor->id . "_sic"};
+                    $contractor->save();
+                }
+            }
+
+            /*  OLD FUNCTIONALITY when the contractors were on the projects table
             foreach (['operator', 'provider', 'contractor'] as $type) {
                 for ($i = 1; $i <= 7; $i++) {
                     if (isset($request->{$type . "_" . $i . "_name"}) && !blank($request->{$type . "_" . $i . "_name"})) {
@@ -364,7 +412,7 @@ class ProjectController extends Controller
                     }
                 }
             }
-
+            */
 
             //SAVE MODEL
             if ($project->save())
@@ -491,11 +539,12 @@ class ProjectController extends Controller
         return view("project.providers.forms.add", compact("iter", "roles", "states", "companies"));
     }
 
-    public function getNewContractorView(int $iter) {
+    public function getNewContractorView(Project $project) {
         $roles = Company::$roles;
         $states = Company::$states;
         $companies = Company::all()->sortBy("name")->pluck("name", "name");
-        return view("project.contractors.forms.add", compact("iter", "roles", "states", "companies"));
+        $contractor = $project->contractors()->save(new Contractor());
+        return view("project.contractors.forms.add", compact("contractor", "roles", "states", "companies"));
     }
 
     public static function convertListToCollection(string $name, Project $project): \Illuminate\Support\Collection
@@ -521,5 +570,29 @@ class ProjectController extends Controller
 
         //Resort
         return Collect($collection->values());
+    }
+
+    public function completeStep(Project $project) {
+        if (Auth::user()->hasRole("Owner") || Auth::user()->hasRole($project->workflow->step()->role)) {
+            $project->workflow->next_step();
+        }
+
+        Session::flash("success", "Project step has been completed");
+        return response()->redirectToRoute("project::index")        ;
+
+    }
+
+    public function export(Project $project) {
+        //This is the main document in  Template.docx file.
+        $file = public_path('testtemplate.docx');
+
+        $phpword = new \PhpOffice\PhpWord\TemplateProcessor($file);
+
+        foreach ($project->export() as $key => $value) {
+            $phpword->setValue($key, $value, 1);
+        }
+
+        $phpword->saveAs(storage_path() . '/edited.docx');
+        return response()->file(storage_path() . "/edited.docx");
     }
 }

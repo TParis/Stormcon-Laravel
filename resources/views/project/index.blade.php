@@ -38,7 +38,11 @@
 				<tr id="{{ $project->id }}">
                     <td><a href="{{ route("project::view", $project->id) }}">{{ $project->name }}</a></td>
                     <td>{{ $project->local_official_ms4 }}</td>
-                    <td>{{ $project->county }}</td>
+                    @if (isset($project->county) && $project->county)
+                    <td>{{ $project->county->name }}</td>
+                    @else
+                        <td></td>
+                    @endif
                     <td>{{ $project->city }}</td>
                     <td>{{ $project->state }}</td>
                     <td>{{ $project->zipcode }}</td>

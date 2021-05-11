@@ -12,6 +12,8 @@ class EndangeredSpecies extends Model
 
     protected $fillable = ['common_name', 'scientific_name', 'group', 'state_status', 'federal_status', 'species_info'];
 
+    const ENDANGERED_STATUS = ['LE', 'E'];
+
     function counties(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(County::class, 'county_endangered_species', 'species_id', 'county_id');

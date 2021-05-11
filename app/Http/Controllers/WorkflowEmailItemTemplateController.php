@@ -39,7 +39,11 @@ class WorkflowEmailItemTemplateController extends Controller
     public function store(Request $request, WorkflowTemplate $template)
     {
         $item = new WorkflowEmailItemTemplate($request->all());
+
+        $item->order = $template->sub_items()->max("order") + 1;
+
         $template->email_items()->save($item);
+
         return response()->redirectToRoute("workflow_template::show", $template->id)->with("message", "New Workflow Item added successfully");
     }
 

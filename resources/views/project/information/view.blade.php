@@ -36,9 +36,9 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('county', 'County', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('county_id', 'County', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::select('county', $counties->pluck("name"),  $project->county, array('class' => 'form-control')) }}
+        {{ Form::select('county_id', $counties,  $project->county_id, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">

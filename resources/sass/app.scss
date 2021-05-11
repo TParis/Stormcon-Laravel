@@ -158,17 +158,17 @@ form .row {
 }
 
 .workflow-item {
-    width: 75px;
-    height: 75px;
+    width: 100px;
+    height: 100px;
     text-align: center;
     vertical-align: middle;
-    border-radius: 75px;
+    border-radius: 100px;
     border: 1px solid #000;
-    line-height: 75px;
+    line-height: 100px;
     background-color: #FFF;
     font-weight: bold;
-    font-family: "Calibri";
-    font-size: 12pt;
+    font-family: "Calibri", sans-serif;
+    font-size: 8pt;
 }
 
 .workflow-item.active {

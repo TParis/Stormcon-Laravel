@@ -15,7 +15,7 @@ class CreateWorkflowToDoItemsTable extends Migration
     {
         Schema::create('workflow_to_do_items', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned()->index();
+            $table->bigInteger('user_id')->unsigned()->index()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('workflow_id')->unsigned()->index();
             $table->foreign('workflow_id')->references('id')->on('workflows')->onDelete('cascade');

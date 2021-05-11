@@ -57,7 +57,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($county->endangered_species as $species)
+                        @foreach ($county->species as $species)
                             <tr id="{{ $species->id }}">
                                 <td><a href="{{ route("species::view", $species->id) }}">{{ $species->common_name }}</a></td>
                                 <td>{{ $species->state_status }}</td>

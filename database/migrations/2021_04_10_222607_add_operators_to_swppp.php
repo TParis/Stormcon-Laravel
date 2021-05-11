@@ -48,27 +48,29 @@ class AddOperatorsToSwppp extends Migration
     public function down()
     {
         Schema::table('projects', function (Blueprint $table) {
-            for ($i = 1; $i <= 7; $i++) {
-                $table->dropColumn($type . "_" . $i . "_name");
-                $table->dropColumn($type . "_" . $i . "_role");
-                $table->dropColumn($type . "_" . $i . "_legal_name");
-                $table->dropColumn($type . "_" . $i . "_also_known_as");
-                $table->dropColumn($type . "_" . $i . "_type");
-                $table->dropColumn($type . "_" . $i . "_division");
-                $table->dropColumn($type . "_" . $i . "_num_of_employees");
-                $table->dropColumn($type . "_" . $i . "_address");
-                $table->dropColumn($type . "_" . $i . "_city");
-                $table->dropColumn($type . "_" . $i . "_state");
-                $table->dropColumn($type . "_" . $i . "_zipcode");
-                $table->dropColumn($type . "_" . $i . "_phone");
-                $table->dropColumn($type . "_" . $i . "_fax");
-                $table->dropColumn($type . "_" . $i . "_website");
-                $table->dropColumn($type . "_" . $i . "_federal_tax_id");
-                $table->dropColumn($type . "_" . $i . "_state_tax_id");
-                $table->dropColumn($type . "_" . $i . "_sos");
-                $table->dropColumn($type . "_" . $i . "_cn");
-                $table->dropColumn($type . "_" . $i . "_sic");
-            }
+            foreach (['operator', 'provider', 'contractor'] as $type) {
+                for ($i = 1; $i <= 7; $i++) {
+                    $table->dropColumn($type . "_" . $i . "_name");
+                    $table->dropColumn($type . "_" . $i . "_role");
+                    $table->dropColumn($type . "_" . $i . "_legal_name");
+                    $table->dropColumn($type . "_" . $i . "_also_known_as");
+                    $table->dropColumn($type . "_" . $i . "_type");
+                    $table->dropColumn($type . "_" . $i . "_division");
+                    $table->dropColumn($type . "_" . $i . "_num_of_employees");
+                    $table->dropColumn($type . "_" . $i . "_address");
+                    $table->dropColumn($type . "_" . $i . "_city");
+                    $table->dropColumn($type . "_" . $i . "_state");
+                    $table->dropColumn($type . "_" . $i . "_zipcode");
+                    $table->dropColumn($type . "_" . $i . "_phone");
+                    $table->dropColumn($type . "_" . $i . "_fax");
+                    $table->dropColumn($type . "_" . $i . "_website");
+                    $table->dropColumn($type . "_" . $i . "_federal_tax_id");
+                    $table->dropColumn($type . "_" . $i . "_state_tax_id");
+                    $table->dropColumn($type . "_" . $i . "_sos");
+                    $table->dropColumn($type . "_" . $i . "_cn");
+                    $table->dropColumn($type . "_" . $i . "_sic");
+                }
+            };
         });
     }
 }

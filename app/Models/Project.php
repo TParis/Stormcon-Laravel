@@ -10,6 +10,10 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $casts = [
+        'bmps' => 'array',
+    ];
+
     protected $fillable = [
         "name",
         "latitude",
@@ -17,7 +21,7 @@ class Project extends Model
         "city",
         "state",
         "zipcode",
-        "county",
+        "county_id",
         "directions",
         "nearest_city",
         "local_official_ms4",
@@ -105,6 +109,96 @@ class Project extends Model
         "erosivity",
         "pre_construction_coefficient",
         "post_construction_coefficient",
+        "bmps",
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function workflow(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Workflow::class);
+    }
+
+    public function county() {
+        return $this->belongsTo(County::class);
+    }
+
+    public function contractors() {
+        return $this->hasMany(Contractor::class);
+    }
+
+    public function export() {
+        $export = $this->toArray();
+
+        $i = 0;
+        foreach ($this->county->endangered_species as $species) {
+            $index = ++$i;
+            foreach($species->toArray() as $key => $value) {
+                $export["es_" . $index . "_" . $key] = $value;
+            }
+        }
+
+        $i = 0;
+        foreach ($this->contractors as $contractor) {
+            switch ($contractor->role) {
+                case "Developer":
+                    $prefix = "cont_dev_1";
+                    break;
+                case "Developer 2":
+                    $prefix = "cont_dev_2";
+                    break;
+                case "Operator":
+                    $prefix = "cont_op";
+                    break;
+                case "Contractor":
+                    $prefix = "cont_cont";
+                    break;
+                case "Electric Provider":
+                    $prefix = "cont_elec_prov";
+                    break;
+                case "Electric Contractor":
+                    $prefix = "cont_electic_cont";
+                    break;
+                case "Gas Provider":
+                    $prefix = "cont_gas_prov";
+                    break;
+                case "Gas Contractor":
+                    $prefix = "cont_gas_cont";
+                    break;
+                case "Owner":
+                    $prefix = "cont_owner";
+                    break;
+                case "General Contractor":
+                    $prefix = "cont_gen_cont";
+                    break;
+                case "Excavation":
+                    $prefix = "cont_exca";
+                    break;
+                case "Wet Utility":
+                    $prefix = "cont_wet_cont";
+                    break;
+                case "Dry Utility":
+                    $prefix = "cont_dry";
+                    break;
+                case "Paving":
+                    $prefix = "cont_pave";
+                    break;
+                default:
+                    $prefix = "cont";
+            }
+            foreach($contractor->toArray() as $key => $value) {
+                $export[$prefix . "_" . $key] = $value;
+            }
+        }
+
+        $export["bmps"] = implode(PHP_EOL, $this->bmps);
+
+        foreach ($export as $key => $value) {
+            if (is_array($value)) unset($export[$key]);
+        }
+
+        return $export;
+    }
 
 }

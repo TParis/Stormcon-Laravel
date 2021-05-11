@@ -6,8 +6,8 @@
             </div>
         </div>
     </div>
-    @foreach ($contractors as $contractor)
-        @includeWhen($contractor->{"contractor_" . $contractor->index . "_name"} != "", 'project.contractors.forms.edit', ["iter" => $loop->iteration])
+    @foreach ($project->contractors as $contractor)
+        @include('project.contractors.forms.edit', compact("contractor"))
     @endforeach
 </div>
 
@@ -23,7 +23,7 @@
 
         if (num < 7) {
             $.get({
-                url: "/projects/getNewView/contractor/" + num,
+                url: "/projects/getNewView/contractor/{{ $project->id }}",
                 success: function(data) {
                     $(".contractors").append(data);
                 }

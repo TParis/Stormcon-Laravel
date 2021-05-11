@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.3",
         "laravelcollective/html": "^6.2",
+        "phpoffice/phpword": "^0.18.1",
         "propaganistas/laravel-phone": "^4.3",
         "spatie/laravel-permission": "^4.0"
     },

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Workflow_Template;
 use App\Models\WorkflowTemplate;
+use App\Models\WorkflowToDoItemTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 
 class WorkflowTemplateController extends Controller
@@ -45,15 +47,27 @@ class WorkflowTemplateController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         $template = new WorkflowTemplate($request->all());
 
-        $template->save();
+        $initiator_task = new WorkflowToDoItemTemplate([
+           'name' => 'Initial Setup',
+           'role' => 'Initiator',
+           'checklist' => 'Complete initial information',
+           'order' => 1,
+           'days' => 1
+        ]);
 
-        return response()->redirectToRoute("workflow_template::show", $template->id);
+        if ($template->save() && $template->todo_items()->save($initiator_task)) {
+            Session::flash("success", "New workflow created successfully");
+            return response()->redirectToRoute("workflow_template::show", $template->id);
+        }
+
+        Session::flash("error", "Error encountered while creating new workflow");
+        return response()->redirectToRoute("workflow_template::add")->withInput();
     }
 
     /**

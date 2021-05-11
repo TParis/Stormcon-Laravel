@@ -492,9 +492,17 @@ Route::group(['prefix' => 'projects', 'as' => 'project::'], function() {
         'as'    => 'getNewProviderView',
         'uses'  => 'ProjectController@getNewProviderView'
     ]);
-    Route::get('/getNewView/contractor/{iter}',[
+    Route::get('/getNewView/contractor/{project}',[
         'as'    => 'getNewContractorView',
         'uses'  => 'ProjectController@getNewContractorView'
+    ]);
+    Route::get('/view/{project}/complete-step', [
+        'as'    => 'complete-step',
+        'uses'  => 'ProjectController@completeStep'
+    ]);
+    Route::get('/export/{project}', [
+        'as'    => 'export',
+        'uses'  => 'ProjectController@export'
     ]);
 });
 

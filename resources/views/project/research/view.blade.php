@@ -128,16 +128,3 @@
         {{ Form::text('constituent_3_tmdl', $project->constituent_3_tmdl, array('class' => 'form-control')) }}
     </div>
 </div>
-<h3>Endangered Species</h3>
-<div class="form-group row">
-    {{ Form::label('endangered_species_website', 'Website', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('endangered_species_website', $project->endangered_species_website, array('class' => 'form-control')) }}
-    </div>
-</div>
-<div class="form-group row">
-    {{ Form::label('endangered_species_county', 'County', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('endangered_species_county', $project->endangered_species_county, array('class' => 'form-control')) }}
-    </div>
-</div>

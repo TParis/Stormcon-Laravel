@@ -7,15 +7,27 @@
             <h2 align="right">Your Projects</h2>
             <table id="yourProjects" class="table">
                 <thead>
-                <tr>
-                    <th>Project Number</th>
-                    <th>State</th>
-                    <th>Team</th>
-                    <th>Assignee</th>
-                    <th>Days in Queue</th>
-                    <th>Days Active</th>
-                </tr>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>State</th>
+                        <th>Team</th>
+                        <th>Assignee</th>
+                        <th>Days in Queue</th>
+                        <th>Days Active</th>
+                    </tr>
                 </thead>
+                <tbody>
+                @foreach($your_projects as $project)
+                    <tr>
+                        <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                        <td>{{ $project->status }}</td>
+                        <td>{{ $project->step()->role }}</td>
+                        <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                        <td>{{ $project->days_in_queue }}</td>
+                        <td>{{ $project->days_active }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
             </table>
             @if (Auth::user()->hasRole("Owner"))
             <h2 align="right">Active Projects</h2>
@@ -30,6 +42,16 @@
                         <th>Days Active</th>
                     </tr>
                     </thead>
+                    @foreach($active_projects as $project)
+                        <tr>
+                            <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                            <td>{{ $project->status }}</td>
+                            <td>{{ $project->step()->role }}</td>
+                            <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                            <td>{{ $project->days_in_queue }}</td>
+                            <td>{{ $project->days_active }}</td>
+                        </tr>
+                    @endforeach
                 </table>
             <h2 align="right">Inspection Phase</h2>
                 <table id="inspectionPhase" class="table">
@@ -42,6 +64,16 @@
                         <th>Days in Queue</th>
                         <th>Days Active</th>
                     </tr>
+                    @foreach($inspection_projects as $project)
+                        <tr>
+                            <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                            <td>{{ $project->status }}</td>
+                            <td>{{ $project->step()->role }}</td>
+                            <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                            <td>{{ $project->days_in_queue }}</td>
+                            <td>{{ $project->days_active }}</td>
+                        </tr>
+                    @endforeach
                     </thead>
                 </table>
             <h2 align="right">Blocked Projects</h2>
@@ -56,6 +88,16 @@
                         <th>Days Active</th>
                     </tr>
                     </thead>
+                    @foreach($blocked_projects as $project)
+                        <tr>
+                            <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                            <td>{{ $project->status }}</td>
+                            <td>{{ $project->step()->role }}</td>
+                            <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                            <td>{{ $project->days_in_queue }}</td>
+                            <td>{{ $project->days_active }}</td>
+                        </tr>
+                    @endforeach
                 </table>
             @endif
         </div>

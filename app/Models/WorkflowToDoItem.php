@@ -9,7 +9,7 @@ class WorkflowToDoItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['workflow_template_id', 'name', 'checklist', 'role', 'order', 'days'];
+    protected $fillable = ['user_id', 'workflow_id', 'name', 'checklist', 'days', 'role', 'order'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

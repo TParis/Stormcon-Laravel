@@ -9,6 +9,8 @@ class WorkflowEmailItem extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['workflow_id', 'name', 'subject', 'message', 'order'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

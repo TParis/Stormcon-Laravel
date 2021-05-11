@@ -40,6 +40,9 @@ class WorkflowToDoItemTemplateController extends Controller
     public function store(Request $request, WorkflowTemplate $template)
     {
         $item = new WorkflowToDoItemTemplate($request->all());
+
+        $item->order = $template->sub_items()->max("order") + 1;
+
         $template->todo_items()->save($item);
         return response()->redirectToRoute("workflow_template::show", $template->id)->with("message", "New Workflow Item added successfully");
     }
