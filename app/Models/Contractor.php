@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Contractor extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        "name",
+        "project_id",
+        "role",
+        "legal_name",
+        "also_known_as",
+        "type",
+        "division",
+        "num_of_employees",
+        "address",
+        "city",
+        "state",
+        "zipcode",
+        "phone",
+        "fax",
+        "website",
+        "federal_tax_id",
+        "state_tax_id",
+        "sos",
+        "cn",
+        "sic",
+    ];
+
+    protected $casts = [
+        'responsibilities' => 'array',
+    ];
+}

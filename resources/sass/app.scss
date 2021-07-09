@@ -1,0 +1,236 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
+
+//Data Tables
+@import '~datatables.net-bs4/css/dataTables.bootstrap4.css';
+
+html, body {
+    font-family: Calibri;
+    font-size: 10pt;
+    background-color: #eee;
+    height: 100%;
+    margin: 0;
+
+}
+
+.box {
+    font-size: 10pt;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+header {
+    display: flex;
+    flex: 0 1 auto;
+    width: 100%;
+    height: 130px;
+}
+
+header img {
+    height: 130px;
+}
+article {
+    flex: 1 1 auto;
+    padding-top: 50px;
+    padding-bottom: 25px;
+    background-color: white;
+    box-shadow: 5px 5px 5px #aaaaaa, -2px -2px 5px #aaaaa
+}
+
+aside {
+    flex-direction: column;
+    flex: 0 1 100px;
+}
+
+footer {
+    flex: 0 1 100px;
+    background-color: #000;
+}
+
+nav.navbar {
+    flex: 0 0 50px;
+    width: 100%;
+    background: rgb(90,194,238);
+    background: -moz-linear-gradient(180deg, rgba(90,194,238,1) 0%, rgba(46,85,223,1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(90,194,238,1) 0%, rgba(46,85,223,1) 100%);
+    background: linear-gradient(180deg, rgba(90,194,238,1) 0%, rgba(46,85,223,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#5ac2ee",endColorstr="#2e55df",GradientType=1);
+}
+
+.navbar {
+    padding: 0px;
+    height: 50px;
+    font-size: 1.6rem;
+}
+
+.navbar > div, .navbar > div > div, .navbar > div > div > ul, .navbar > div > div > ul > li.nav-item {
+    height: 100%;
+    vertical-align: middle;
+}
+
+.navbar .nav-link {
+    color: #FFF !important;
+    padding: 0.8rem 1rem;
+}
+
+.navbar .nav-item:hover {
+    background: rgb(180,255,255);
+    background: -moz-linear-gradient(180deg, rgba(180,255,255,1) 0%, rgba(92,170,223,1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(180,255,255,1) 0%, rgba(92,170,223,1) 100%);
+    background: linear-gradient(180deg, rgba(180,255,255,1) 0%, rgba(92,170,223,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b4ffff",endColorstr="#5caadf",GradientType=1);
+}
+
+header input {
+    margin-top: 50px;
+    border-radius: 25px;
+}
+
+.navbar .nav-item {
+    padding-right: 15px;
+    padding-left: 15px;
+    font-size: 14pt;
+    border-left: 1px solid #000;
+}
+
+.navbar .nav-item:last-child {
+    border-right: 1px solid #000;
+}
+
+input.search-query {
+    font-size: 1rem;
+    padding-left:26px;
+}
+
+form.form-search {
+    position: relative;
+}
+
+form.form-search:before {
+    content:'';
+    display: block;
+    width: 14px;
+    height: 14px;
+    background-image: url(http://getbootstrap.com/2.3.2/assets/img/glyphicons-halflings.png);
+    background-position: -48px 0;
+    position: absolute;
+    top:55px;
+    left:10px;
+    opacity: .5;
+    z-index: 1000;
+}
+
+
+.card {
+    font-size: 14pt;
+}
+
+.dt-bootstrap4 {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+form .row {
+    margin-top: 15px;
+}
+
+.select-info {
+    display: none;
+}
+
+.project-block-header {
+    margin-top: 15px;
+}
+
+.workflow-timeline {
+    display: flex;
+    justify-content: space-between;
+    background-image: url("/images/bar.png");
+    background-repeat: repeat-x;
+}
+
+.workflow-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75px;
+    height: 75px;
+    border-radius: 75px;
+    border: 1px solid #000;
+    background-color: #FFF;
+    font-weight: bold;
+    font-family: "Calibri", sans-serif;
+    font-size: 8pt;
+}
+
+.workflow-item.active {
+    background-color: #C7F6B6;
+}
+
+.projects .tab-content h3 {
+    width: 100%;
+    background-color: #2D5070;
+    color: #FFF;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.soils:nth-child(8n),.soils:nth-child(8n + 1), .soils:nth-child(8n + 2), .soils:nth-child(8n+ 3) {
+    background-color: #95c5ed;
+}
+
+.add-item {
+    font-size: 16pt;
+    height: 40px;
+    line-height: 15px;
+    border-radius: 78px;
+    width: 40px;
+    margin-bottom: 10px;
+    background-color: greenyellow;
+}
+
+.add-item-container {
+    position: relative;
+    left: 140px;
+    margin-bottom: -65px;
+    top: -95px;
+}
+.delete-item-container {
+    position: relative;
+    left: 140px;
+    margin-bottom: -65px;
+    top: -10px;
+}
+.del-item {
+    font-size: 16pt;
+    height: 40px;
+    line-height: 15px;
+    border-radius: 78px;
+    width: 40px;
+    margin-bottom: 10px;
+    background-color: orangered;
+}
+
+.isDisabledLink {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.isDisabledLink > a {
+    color: currentColor;
+    display: inline-block;  /* For IE11/ MS Edge bug */
+    pointer-events: none;
+    text-decoration: none;
+}
+
+.dropzone {
+    border: none !important;
+    padding: 0px !important;
+}
