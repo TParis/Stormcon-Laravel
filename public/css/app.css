@@ -257,6 +257,7 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
 html {
   font-family: sans-serif;
   line-height: 1.15;
+  overflow-y: scroll;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -10259,7 +10260,7 @@ footer {
   background-color: #000;
 }
 
-nav.navbar {
+nav {
   flex: 0 0 50px;
   width: 100%;
   background: #5ac2ee;
@@ -10278,12 +10279,12 @@ nav.navbar {
   vertical-align: middle;
 }
 
-.navbar .nav-link {
+.nav-link {
   color: #FFF !important;
   padding: 0.8rem 1rem;
 }
 
-.navbar .nav-item:hover {
+.nav-item:hover {
   background: #b4ffff;
   background: linear-gradient(180deg, #b4ffff 0%, #5caadf 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b4ffff",endColorstr="#5caadf",GradientType=1);
@@ -10294,14 +10295,14 @@ header input {
   border-radius: 25px;
 }
 
-.navbar .nav-item {
+.nav-item {
   padding-right: 15px;
   padding-left: 15px;
   font-size: 14pt;
   border-left: 1px solid #000;
 }
 
-.navbar .nav-item:last-child {
+.nav-item:last-child {
   border-right: 1px solid #000;
 }
 
@@ -10344,6 +10345,7 @@ form .row {
 .select-info {
   display: none;
 }
+<<<<<<< HEAD
 
 .project-block-header {
   margin-top: 15px;
@@ -10446,3 +10448,5 @@ form .row {
 .redRow a {
   color: white;
 }
+=======
+>>>>>>> 9c4eddafe8de597865e41bdfe31e0a7d2fccf7c9

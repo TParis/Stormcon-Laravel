@@ -120,9 +120,9 @@
         </article>
         @if (Auth::user()->hasAnyPermission(['viewConfig', 'viewWorkflows']))
         @if (View::hasSection('right-aside'))
-        @endif
         <aside>
         </aside>
+        @endif
         @endif
         <footer>
             <div class="container-fluid">
