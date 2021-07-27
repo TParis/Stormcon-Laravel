@@ -2,84 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\ProjectController;
+use App\Models\Project;
 use App\Models\Workflow;
+use App\Notifications\ProjectAssigned;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Jobs\AssignPersonnel;
+use Illuminate\Support\Facades\Auth;
 
 class WorkflowController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function assign(Workflow $workflow, User $user) {
+        $workflow->step()->user_id = $user->id;
+        $user->notify(new ProjectAssigned($workflow->project));
+        if ($workflow->step()->save()) {
+            AssignPersonnel::dispatch(Auth::user(), $workflow->project);
+            return response()->json($user);
+        }
+        return response("Error", 500);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function block(Request $request, Workflow $workflow) {
+        $workflow->status = ProjectController::STATUS_BLOCKED;
+        $workflow->blocker = $request->message;
+        if ($workflow->save()) return response()->json($workflow);
+        return response("Error", 500);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Workflow  $workflow
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Workflow $workflow)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Workflow  $workflow
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Workflow $workflow)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Workflow  $workflow
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Workflow $workflow)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Workflow  $workflow
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Workflow $workflow)
-    {
-        //
+    public function unblock(Workflow $workflow) {
+        $workflow->status = ProjectController::STATUS_OPEN;
+        $workflow->blocker = "";
+        if ($workflow->save()) return response()->json($workflow);
+        return response("Error", 500);
     }
 }

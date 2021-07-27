@@ -458,31 +458,27 @@ Route::group(['prefix' => 'projects', 'as' => 'project::'], function() {
     ]);
     Route::get('/view/{project}',[
         'as'    => 'view',
-        'uses'  => 'ProjectController@viewProject'
+        'uses'  => 'ProjectController@show'
     ]);
     Route::get('/add/',[
         'as'    => 'add',
-        'uses'  => 'ProjectController@addProject'
+        'uses'  => 'ProjectController@create'
     ]);
     Route::post('/add/',[
         'as'    => 'create',
-        'uses'  => 'ProjectController@createProject'
-    ]);
-    Route::get('/edit/{project}',[
-        'as'    => 'edit',
-        'uses'  => 'ProjectController@modifyProject'
+        'uses'  => 'ProjectController@store'
     ]);
     Route::put( '/edit/{project}',[
         'as'    => 'update',
-        'uses'  => 'ProjectController@updateProject'
+        'uses'  => 'ProjectController@update'
     ]);
     Route::delete('/delete/{project}',[
         'as'    => 'delete',
-        'uses'  => 'ProjectController@deleteProject'
+        'uses'  => 'ProjectController@delete'
     ]);
     Route::get('/undelete/{trashed_project}',[
         'as'    => 'undelete',
-        'uses'  => 'ProjectController@undeleteProject'
+        'uses'  => 'ProjectController@restore'
     ]);
     Route::get('/getNewView/operator/{iter}',[
         'as'    => 'getNewOperatorView',
@@ -550,8 +546,45 @@ Route::group(['prefix' => 'workflow-template', 'as' => 'workflow_template::'], f
         'as'    => 'email::create',
         'uses'  => 'WorkflowEmailItemTemplateController@create'
     ]);
+    Route::get('/initial/create',[
+        'as'    => 'initial::create',
+        'uses'  => 'WorkflowInitialEmailItemTemplateController@create'
+    ]);
+    Route::get('/inspection/create',[
+        'as'    => 'inspection::create',
+        'uses'  => 'WorkflowInspectionItemTemplateController@create'
+    ]);
     Route::post('/{template}/item/create',[
         'as'    => 'item::create',
         'uses'  => 'WorkflowItemTemplateController@store'
     ]);
+    Route::get('/{template}/template/update',[
+        'as'    => 'template::update',
+        'uses'  => 'WorkflowTemplateController@updateTemplate'
+    ]);
 });
+//Workflow Templates
+Route::group(['prefix' => 'contractor', 'as' => 'contractor::'], function() {
+    Route::delete('/delete/{contractor}', [
+        'as' => 'delete',
+        'uses' => 'ContractorController@destroy'
+    ]);
+});
+
+//Workflow Templates
+Route::group(['prefix' => 'inspection', 'as' => 'inspection::'], function() {
+    Route::get('/schedule', [
+        'as' => 'schedule',
+        'uses' => 'InspectionController@schedule'
+    ]);
+});
+
+
+Route::get('/onedrive/request',[
+    'as'    => 'onedrive::create',
+    'uses'  => 'OneDriveController@getOAuthToken'
+]);
+
+Route::get('/auth',[
+    'uses'  => 'OneDriveController@captureOneDriveToken'
+]);

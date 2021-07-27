@@ -30,5 +30,16 @@ class Contractor extends Model
         "sos",
         "cn",
         "sic",
+        "responsibilities",
+        "noi_signer_name",
+        "noi_signer_title",
+        "noi_signed",
+        "not_signer_name",
+        "not_signer_title",
+        "not_signed",
+    ];
+
+    protected $casts = [
+        'responsibilities' => 'array',
     ];
 }

@@ -8,6 +8,7 @@ use App\Models\WorkflowToDoItemTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
+use App\Jobs\CreateInitialProjectSpace;
 
 class WorkflowTemplateController extends Controller
 {
@@ -62,6 +63,7 @@ class WorkflowTemplateController extends Controller
         ]);
 
         if ($template->save() && $template->todo_items()->save($initiator_task)) {
+
             Session::flash("success", "New workflow created successfully");
             return response()->redirectToRoute("workflow_template::show", $template->id);
         }
@@ -79,7 +81,10 @@ class WorkflowTemplateController extends Controller
     public function show(WorkflowTemplate $template)
     {
 
-        return response()->view("workflow.show", compact("template"));
+        $drive = Auth()->user()->getOneDrive();
+        $folders = collect($drive->listContents('/Templates'))->where('type', 'dir');
+
+        return response()->view("workflow.show", compact("template", "folders"));
     }
 
     /**
@@ -114,5 +119,10 @@ class WorkflowTemplateController extends Controller
     public function destroy(WorkflowTemplate $template)
     {
         //
+    }
+
+    public function updateTemplate(Request $request, WorkflowTemplate $template) {
+        $template->template = $request->template;
+        $template->save();
     }
 }

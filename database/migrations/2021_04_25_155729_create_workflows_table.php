@@ -19,6 +19,7 @@ class CreateWorkflowsTable extends Migration
             $table->integer("priority");
             $table->integer("project_id");
             $table->string("status")->default("0");
+            $table->string("blocker")->nullable();
             $table->integer("step")->default(0);
             $table->timestamps();
         });

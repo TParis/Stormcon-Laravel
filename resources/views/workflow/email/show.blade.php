@@ -12,6 +12,8 @@
             <div class="card-body">
                 <div>Type:</div>
                 <div class="pl-3">Email</div>
+                <div>Role:</div>
+                <div class="pl-3">{{ $item->role }}</div>
                 <div>Subject:</div>
                 <div class="pl-3">{{ $item->subject }}</div>
                 <div>Body:</div>

@@ -56,8 +56,8 @@ class InspectionScheduleController extends Controller
 
         if (Auth::user()->hasRole('Owner'))
         {
-
-            return view('schedule.add');
+            $days = ['7' => 'Weekly', '14' => 'Bi-Weekly', '30' => 'Monthly'];
+            return view('schedule.add', compact('days'));
 
         }
         else
@@ -134,7 +134,8 @@ class InspectionScheduleController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            return view('schedule.edit', compact('schedule'));
+            $days = ['7' => 'Weekly', '14' => 'Bi-Weekly', '30' => 'Monthly'];
+            return view('schedule.edit', compact('schedule', 'days'));
 
         }
         else
@@ -164,12 +165,14 @@ class InspectionScheduleController extends Controller
             $this->validate($request,
                 [
                     'Name'              => ['required','string','min:5','max:255',Rule::unique("inspection_schedules")->ignore($schedule->id)],
+                    'days'              => 'required|integer',
                     'Description'       => 'required|string',
                 ]
             );
 
             //SET VALUES TO MODEL
             $schedule->Name              = $request->Name;
+            $schedule->days              = $request->days;
             $schedule->Description       = $request->Description;
 
             //SAVE MODEL

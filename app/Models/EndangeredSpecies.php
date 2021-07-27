@@ -12,7 +12,7 @@ class EndangeredSpecies extends Model
 
     protected $fillable = ['common_name', 'scientific_name', 'group', 'state_status', 'federal_status', 'species_info'];
 
-    const ENDANGERED_STATUS = ['LE', 'E'];
+    const ENDANGERED_STATUS = ['LE'];
 
     function counties(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {

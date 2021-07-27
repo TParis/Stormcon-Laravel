@@ -25,6 +25,7 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th>Days</th>
                 <th>Description</th>
             </tr>
             </thead>
@@ -32,6 +33,7 @@
             @foreach ($schedules as $schedule)
                 <tr id="{{ $schedule->id }}">
                     <td>{{ $schedule->Name }}</td>
+                    <td>{{ $schedule->days }}</td>
                     <td>{{ \Illuminate\Support\Str::limit($schedule->Description, 120, $end='...') }}</td>
                 </tr>
             @endforeach

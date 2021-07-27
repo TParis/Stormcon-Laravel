@@ -110,6 +110,11 @@ class Project extends Model
         "pre_construction_coefficient",
         "post_construction_coefficient",
         "bmps",
+        'rdy_to_not',
+        'rdy_to_noi',
+        'inspection_format',
+        'inspection_cycle',
+        'inspector_id',
     ];
 
     /**
@@ -128,14 +133,24 @@ class Project extends Model
         return $this->hasMany(Contractor::class);
     }
 
+    public function notes() {
+        return $this->hasMany(Notes::class);
+    }
+
+    public function inspections() {
+        return $this->hasMany(Inspection::class);
+    }
+
     public function export() {
         $export = $this->toArray();
 
         $i = 0;
-        foreach ($this->county->endangered_species as $species) {
-            $index = ++$i;
-            foreach($species->toArray() as $key => $value) {
-                $export["es_" . $index . "_" . $key] = $value;
+        if (isset($this->county)) {
+            foreach ($this->county->endangered_species as $species) {
+                $index = ++$i;
+                foreach ($species->toArray() as $key => $value) {
+                    $export["es_" . $index . "_" . $key] = $value;
+                }
             }
         }
 
@@ -190,9 +205,12 @@ class Project extends Model
             foreach($contractor->toArray() as $key => $value) {
                 $export[$prefix . "_" . $key] = $value;
             }
+            $export[$prefix . "_" . "responsibilities"] = (isset($contractor->responsibilities)) ? implode(PHP_EOL, $contractor->responsibilities) : '';
         }
 
-        $export["bmps"] = implode(PHP_EOL, $this->bmps);
+        for ($i = 1; $i <= 10; $i++) {
+            $export['bmp_' . $i] = (isset($this->bmps[$i - 1])) ? $this->bmps[$i - 1] : '';
+        }
 
         foreach ($export as $key => $value) {
             if (is_array($value)) unset($export[$key]);

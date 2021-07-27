@@ -6,6 +6,7 @@ use App\Models\WorkflowEmailItemTemplate;
 use App\Models\WorkflowTemplate;
 use App\Models\WorkflowToDoItemTemplate;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class WorkflowEmailItemTemplateController extends Controller
 {
@@ -26,7 +27,8 @@ class WorkflowEmailItemTemplateController extends Controller
      */
     public function create()
     {
-        return response()->view("workflow.email.add");
+        $roles = Role::select("id", "name")->get()->pluck("name", "name");
+        return response()->view("workflow.email.add", compact("roles"));
     }
 
     /**

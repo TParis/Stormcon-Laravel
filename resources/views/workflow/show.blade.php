@@ -29,10 +29,8 @@
                     {{ Form::label('name', 'Step Name', array('class' => 'control-label required-field')) }}
                     {{ Form::text('name', '', array('class' => 'form-control')) }}
                     {{ Form::label('type', 'Type', array('class' => 'control-label required-field')) }}
-                    {{ Form::select('type', ['email' => "E-Mail", 'todo' => "To-Do List"], [],array('class' => 'form-control', 'placeholder' => 'Please select')) }}
+                    {{ Form::select('type', ['initial' => 'Email All Teams', 'inspection' => 'Inspection Phase', 'email' => "E-Mail", 'todo' => "To-Do List"], [],array('class' => 'form-control', 'placeholder' => 'Please select')) }}
                     <div id="options"></div>
-                    {{ Form::label('days', 'Est. Days', array('class' => 'control-label required-field')) }}
-                    {{ Form::text('days', '', array('class' => 'form-control')) }}
                     <button class="btn btn-success w-100 mt-3">Add Task</button>
                     {{ Form::close() }}
                 </div>
@@ -54,15 +52,18 @@
                 <h1 align="center">END</h1>
             </div>
             <div class="col-3 offset-1">
-                <h3 align="right">Files</h3>
+                <h3 align="right">Template</h3>
+                @if (Auth::user()->need_token())
+                    <h2>Please login to the Microsoft API (allow popups)</h2>
+                @else
                 <div class="container-fluid border project-block">
-                    <label class="form-check-label" for="taska">
-                        <div><input type="checkbox" name="maps"/> <i class="fas fa-folder"></i> Maps</div>
-                        <div><input type="checkbox" name="maps"/> <i class="fas fa-folder"></i> Folder</div>
-                        <div><input type="checkbox" name="maps"/> <i class="fas fa-file"></i> Research.docx</div>
-                        <div><input type="checkbox" name="maps"/> <i class="fas fa-file"></i> SWPPP.docx</div>
+                    <label class="form-check-label">
+                        @foreach ($folders as $folder)
+                            <div><input type="radio" {{ ($template->template == $folder["filename"]) ? "checked" : "" }} name="template" value="{{ $folder["filename"] }}"/> <i class="fas fa-folder"></i> {{ $folder["filename"] }}</div>
+                        @endforeach
                     </label>
                 </div>
+                @endif
 
             </div>
         </div>
@@ -74,8 +75,10 @@
 
     $("form #type").change(function(e) {
         val = $(e.target).val()
-        let url = '/workflow-template/todo/create'
-        if (val === 'email') url = '/workflow-template/email/create'
+        let url = '{{ route('workflow_template::todo::create') }}'
+        if (val === 'email') url = '{{ route('workflow_template::email::create') }}'
+        if (val === 'initial') url = '/workflow-template/initial/create'
+        if (val === 'inspection') url = '/workflow-template/inspection/create'
 
         $.get({
             url: url,
@@ -83,6 +86,16 @@
                 $("#options").html(data);
             }
         });
+    })
+
+    $("input[type='radio']").click(function(e) {
+        val = $(e.target).val()
+        $.get({
+            url: '{{ route('workflow_template::template::update', $template->id) }}',
+            data: {
+                template: val
+            }
+        })
     })
 
 </script>

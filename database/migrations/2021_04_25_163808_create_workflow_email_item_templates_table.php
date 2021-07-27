@@ -20,6 +20,7 @@ class CreateWorkflowEmailItemTemplatesTable extends Migration
             $table->string("name");
             $table->string("subject");
             $table->string("message");
+            $table->string("role");
             $table->integer("order")->default(100);
             $table->timestamps();
         });

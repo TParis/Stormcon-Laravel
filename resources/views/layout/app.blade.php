@@ -16,13 +16,14 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://kit.fontawesome.com/5a7c86c63a.js" crossorigin="anonymous"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
 </head>
 <body>
     <div class="box">
@@ -51,14 +52,23 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="{{ Route("Home") }}"><i class="far fa-list-alt"></i> Dashboard <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ Route("project::index") }}"><i class="fas fa-briefcase"></i> Projects</a>
-                        </li>
+                        @if (Auth::user()->can('viewProjects'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ Route("project::index") }}"><i class="fas fa-briefcase"></i> Projects</a>
+                            </li>
+                        @endif
+                        @if (Auth::user()->hasAnyPermission(['viewInspections', 'viewOwnInspections']))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ Route("inspection::schedule") }}"><i class="fas fa-search"></i> Inspections</a>
+                            </li>
+                        @endif
+                        @if (Auth::user()->hasAnyPermission(['viewConfig', 'viewWorkflows']))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-cogs"></i> Configurations
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @if (Auth::user()->can('viewConfig'))
                                 <a class="dropdown-item" href="{{ route("company::index") }}">Companies</a>
                                 <a class="dropdown-item" href="{{ route("contact::index") }}">Contacts</a>
                                 <a class="dropdown-item" href="{{ route("county::index") }}">Counties</a>
@@ -70,13 +80,20 @@
                                 <a class="dropdown-item" href="{{ route("responsibilities::index") }}">Responsibilities</a>
                                 <a class="dropdown-item" href="{{ route("soils::index") }}">Soils</a>
                                 <a class="dropdown-item" href="{{ route("waterquality::index") }}">Water Quality</a>
+
+                                @endif
                                 <div class="dropdown-divider"></div>
+                                @if (Auth::user()->can('viewWorkflows'))
                                 <a class="dropdown-item" href="{{ route("workflow_template::index") }}">Workflows</a>
+                                @endif
                             </div>
                         </li>
+                        @endif
+                        @if (Auth::user()->can('viewUsers'))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ Route("users::index") }}"><i class="fas fa-users"></i> Accounts</a>
                         </li>
+                        @endif
                         @endauth
                     </ul>
                     <ul class="navbar-nav ml-auto">
@@ -101,7 +118,9 @@
         <article class="container">
             @yield("content")
         </article>
+        @if (Auth::user()->hasAnyPermission(['viewConfig', 'viewWorkflows']))
         @if (View::hasSection('right-aside'))
+        @endif
         <aside>
         </aside>
         @endif
@@ -122,5 +141,13 @@
         </footer>
     </div>
     @yield('scripts')
+
+    @if (!Auth::guest() && Auth::user()->need_token() && Auth::user()->can('viewFiles'))
+    <script type="text/javascript">
+
+        window.open('{{ route('onedrive::create') }}');
+
+    </script>
+    @endif
 </body>
 </html>

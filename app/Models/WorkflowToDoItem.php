@@ -4,19 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
-class WorkflowToDoItem extends Model
+class WorkflowToDoItem extends WorkflowItem
 {
     use HasFactory;
 
     protected $fillable = ['user_id', 'workflow_id', 'name', 'checklist', 'days', 'role', 'order'];
+    public $type = "todo";
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function workflow(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Workflow::class);
+    public function assigned() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
 
 }

@@ -44,21 +44,29 @@
         <div class="row">
             @if ($project->id != "")
             <div class="col-3">
-                <div>Assigned: Unassigned</div>
+
+                @include("project.assigned.view")
+                @include("project.block.view")
+                <strong>NOIs Signed:</strong> {{ $project->contractors->sum('noi_signed') }} / {{ $project->contractors->count() }}<br />
+                <strong>NOTs Signed:</strong> {{ $project->contractors->sum('not_signed') }} / {{ $project->contractors->count() }}
+                @if (Auth::user()->hasRole($project->workflow->step()->role) ||
+                        Auth::user()->hasRole(['Owner', 'Admin', 'Sr Admin']))
                 <h3 align="right" class="project-block-header">Actions</h3>
                 <div class="container-fluid border project-block">
-                    <a href="#" class="w-100 d-block">Add Blocker</a>
-                    <a href="#" class="w-100 d-block">Clear Blocker</a>
+                    <a href="#" data-toggle="modal" data-target="#block-modal">Add Blocker</a>
+                    <a href="#" class="w-100 d-block" id="save-unblock">Clear Blocker</a>
                     <hr>
                     <a href="#" class="w-100 d-block">Return to Previous Step</a>
                     <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="w-100 d-block invisible">Complete Step</a>
-                    @if (Auth::user()->hasRole("Owner"))
+                    @if (Auth::user()->can('skipWorkflow'))
                         <a href="#" class="w-100 d-block">Skip to...</a>
                     @endif
                     <hr>
                     <a href="#" class="w-100 d-block">Add Hold</a>
                     <a href="#" class="w-100 d-block">Remove Hold</a>
                 </div>
+                @endif
+                @if (Auth::user()->hasRole($project->workflow->step()->role))
                 <h3 align="right" class="project-block-header">To Do</h3>
                 <div class="container-fluid border project-block" id="checklist-block">
                     @foreach (preg_split('/\r\n|\r|\n/', $project->workflow->step()->checklist) as $task)
@@ -70,20 +78,17 @@
                     </div>
                     @endforeach
                 </div>
+                @endif
                 <h3 align="right" class="project-block-header">Files</h3>
-                <div class="container-fluid border project-block">
-                    <label class="form-check-label" for="taska">
-                        <div><i class="fas fa-folder"></i> Maps</div>
-                        <div><i class="fas fa-folder"></i> Folder</div>
-                        <div><i class="fas fa-file"></i> Research.docx</div>
-                        <div><i class="fas fa-file"></i> SWPPP.docx</div>
-                    </label>
+                <div class="container-fluid border project-block" style="padding: 0px">
+                    @include("project.onedrive.view")
                 </div>
                 <div class="w-100 text-right"><a href="#">Upload File</a></div>
                 <h3 align="right" class="project-block-header">Notes</h3>
-                <div class="container-fluid border project-block h-25">
+                <div class="container-fluid border project-block h-25 p-0">
+                    @include("project.notes.view")
                 </div>
-                <div class="w-100 text-right"><a href="#">Add Note</a></div>
+                <div class="w-100 text-right"><a href="#" data-toggle="modal" data-target="#message-modal">Add Note</a></div>
             </div>
             <div class="col-9">
             @else
@@ -105,23 +110,21 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#bestpractices" role="tab" aria-controls="contact" aria-selected="false">BMPs</a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#stabilization" role="tab" aria-controls="contact" aria-selected="false">Stabilization</a>
-                    </li>
                     @if (isset($project->county))
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#species" role="tab" aria-controls="contact" aria-selected="false">End. Species</a>
+                    </li>
+                    @endif
+                    @if (Auth::user()->can('viewInspections'))
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="inspection-tab" data-toggle="tab" href="#inspections" role="tab" aria-controls="contact" aria-selected="false">Inspections</a>
                     </li>
                     @endif
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="swppp-tab" data-toggle="tab" href="#swppp" role="tab" aria-controls="swppp" aria-selected="false">Export</a>
                     </li>
                 </ul>
-                @if ($project->id != "")
                 {{ Form::open(array('route' => array('project::update', $project->id), 'method' => 'put', 'class'	=> 'form-horizontal')) }}
-                @else
-                {{ Form::open(array('route' => array('project::create'), 'method' => 'post', 'class'	=> 'form-horizontal')) }}
-                @endif
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="information" role="tabpanel" aria-labelledby="information-tab">
                         <div class="border border-top-0 p-5">
@@ -158,6 +161,13 @@
                             @include("project.endangeredspecies.view")
                         </div>
                     </div>
+                    @if (Auth::user()->can('viewInspections'))
+                    <div class="tab-pane fade" id="inspections" role="tabpanel" aria-labelledby="inspection-tab">
+                        <div class="border border-top-0 p-5">
+                            @include("project.inspection.view")
+                        </div>
+                    </div>
+                    @endif
                     <div class="tab-pane fade" id="swppp" role="tabpanel" aria-labelledby="swppp-tab">
                         <div class="border border-top-0 p-5">
                             @include("project.swppp.view")
@@ -174,8 +184,9 @@
 @endsection
 
 @section("scripts")
-
 <script language="javascript" type="text/javascript">
+
+    var contact_list = {!! $contacts->toJson() !!};
 
     $(".tab-content").on("change", ".company-select", function(e) {
         el = e.target;
@@ -186,23 +197,74 @@
                 'api_token': '{{ Auth::user()->api_token }}',
             },
             success: function(company) {
-                let key = $(this).attr("id").substr(0, $(this).attr("id").lastIndexOf("_")+1);
-                $("#" + key + "legal_name").val(company.legal_name);
-                $("#" + key + "also_known_as").val(company.also_known_as);
-                $("#" + key + "phone").val(company.phone);
-                $("#" + key + "fax").val(company.fax);
-                $("#" + key + "website").val(company.website);
-                $("#" + key + "address").val(company.address);
-                $("#" + key + "city").val(company.city);
-                $("#" + key + "state").val(company.state);
-                $("#" + key + "zipcode").val(company.zipcode);
-                $("#" + key + "federal_tax_id").val(company.federal_tax_id);
-                $("#" + key + "state_tax_id").val(company.state_tax_id);
-                $("#" + key + "type").val(company.type);
-                $("#" + key + "num_of_employees").val(company.num_of_employees);
-                $("#" + key + "sos").val(company.sos);
-                $("#" + key + "cn").val(company.cn);
-                $("#" + key + "sic").val(company.sic);
+
+                let prefix = $(this).attr("id").substr(0, $(this).attr("id").lastIndexOf("_")+1);
+
+                $("#" + prefix + "legal_name").val(company.legal_name);
+                $("#" + prefix + "also_known_as").val(company.also_known_as);
+                $("#" + prefix + "phone").val(company.phone);
+                $("#" + prefix + "fax").val(company.fax);
+                $("#" + prefix + "website").val(company.website);
+                $("#" + prefix + "address").val(company.address);
+                $("#" + prefix + "city").val(company.city);
+                $("#" + prefix + "state").val(company.state);
+                $("#" + prefix + "zipcode").val(company.zipcode);
+                $("#" + prefix + "federal_tax_id").val(company.federal_tax_id);
+                $("#" + prefix + "state_tax_id").val(company.state_tax_id);
+                $("#" + prefix + "type").val(company.type);
+                $("#" + prefix + "num_of_employees").val(company.num_of_employees);
+                $("#" + prefix + "sos").val(company.sos);
+                $("#" + prefix + "cn").val(company.cn);
+                $("#" + prefix + "sic").val(company.sic);
+
+                contacts = contact_list.filter(x => x.employer_id == company.id)
+
+                $("select[name='" + prefix + "contact_name']").empty()
+                $("[id^='" + prefix + "contact']").val("");
+                $("select[name='" + prefix + "contact_name']")
+                    .append($("<option></option>")
+                        .text("Please select"));
+
+                $.each(contacts, function(key, value) {
+                    $("select[name='" + prefix + "contact_name']")
+                        .append($("<option></option>")
+                            .attr("value", value.first_name + " " + value.last_name)
+                            .attr("id", value.id)
+                            .text(value.first_name + " " + value.last_name));
+                });
+
+                noi_signers = contact_list.filter(x => x.employer_id == company.id && x.noi == "1")
+
+                $("select[name='" + prefix + "noi_signer_name']").empty()
+                $("." + prefix + "noi_signer_title").val("");
+                $("select[name='" + prefix + "noi_signer_name']")
+                    .append($("<option></option>")
+                        .text("Please select"));
+
+                $.each(noi_signers, function(key, value) {
+                    $("select[name='" + prefix + "noi_signer_name']")
+                        .append($("<option></option>")
+                            .attr("value", value.first_name + " " + value.last_name)
+                            .attr("id", value.id)
+                            .text(value.first_name + " " + value.last_name));
+                });
+
+                not_signers = contact_list.filter(x => x.employer_id == company.id && x.noi == "1")
+
+                $("select[name='" + prefix + "not_signer_name']").empty()
+                $("." + prefix + "not_signer_title").val("");
+                $("select[name='" + prefix + "not_signer_name']")
+                    .append($("<option></option>")
+                        .text("Please select"));
+
+                $.each(not_signers, function(key, value) {
+                    $("select[name='" + prefix + "not_signer_name']")
+                        .append($("<option></option>")
+                            .attr("value", value.first_name + " " + value.last_name)
+                            .attr("id", value.id)
+                            .text(value.first_name + " " + value.last_name));
+                });
+
             }
 
         })
@@ -212,11 +274,12 @@
 
         anyUnchecked = false
 
-        $(el).parent().children().each(function(subel) {
-           if (!$(subel).checked) anyUnchecked = true;
+        $(el.target).parents("div.project-block").find("input").each(function(idx, subel) {
+           if (!subel.checked) anyUnchecked = true;
         })
 
         if (!anyUnchecked) $("#complete-step").removeClass("invisible");
+        if (anyUnchecked) $("#complete-step").addClass("invisible");
 
     });
 </script>

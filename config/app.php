@@ -179,6 +179,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+	// Custom Providers
+        Danhunsaker\Laravel\Flysystem\FlysystemOtherServiceProvider::class,
+
     ],
 
     /*

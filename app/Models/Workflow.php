@@ -6,7 +6,13 @@ use App\Http\Controllers\ProjectController;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Jobs\ProcessToNextStep;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class Workflow
+ * @package App\Models
+ */
 class Workflow extends Model
 {
     use HasFactory;
@@ -21,9 +27,21 @@ class Workflow extends Model
         return $this->hasMany(WorkflowToDoItem::class);
     }
 
+    public function initial_items() {
+        return $this->hasMany(WorkflowInitialEmailItem::class);
+    }
+
+    public function inspection_items() {
+        return $this->hasMany(WorkflowInspectionItem::class);
+    }
+
     public function sub_items()
     {
-        return $this->email_items->concat($this->todo_items)->sortBy("order");
+        return $this->email_items
+            ->concat($this->todo_items)
+            ->concat($this->initial_items)
+            ->concat($this->inspection_items)
+            ->sortBy("order");
     }
 
     public function project() {
@@ -44,11 +62,30 @@ class Workflow extends Model
 
     public function next_step() {
         if (isset($this->sub_items()->flatten()[$this->step + 1])) {
-            $this->step++;
+            $this->progressProject();
         } else {
-            $this->status == ProjectController::STATUS_CLOSE;
+            $this->closeProject();
         }
+    }
 
+    public function progressProject(): bool
+    {
+        //Copy Directory
+        ProcessToNextStep::dispatch(Auth::user(), $this);
+        //Step
+        $this->step++;
         $this->save();
+        $this->sub_items()->flatten()[$this->step]->executeAutomatedTasks();
+        return true;
+
+    }
+
+    public function closeProject(): bool
+    {
+
+        $this->status = ProjectController::STATUS_CLOSE;
+        if ($this->save()) return true;
+        return false;
+
     }
 }

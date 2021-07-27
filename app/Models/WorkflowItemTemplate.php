@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Http\Controllers\WorkflowEmailItemTemplateController;
+use App\Http\Controllers\WorkflowInitialEmailItemTemplateController;
+use App\Http\Controllers\WorkflowInspectionItemTemplateController;
 use App\Http\Controllers\WorkflowToDoItemTemplateController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,24 +13,21 @@ use Illuminate\Http\Client\Request;
 class WorkflowItemTemplate extends Model
 {
     use HasFactory;
+    protected $fillable = ['workflow_template_id', 'name', 'order'];
 
     const acceptedTypes = [
         'todo' => WorkflowToDoItemTemplate::class,
         'email' => WorkflowEmailItemTemplate::class,
+        'initial' => WorkflowInitialEmailItemTemplate::class,
+        'inspection' => WorkflowInspectionItemTemplate::class,
         'todo_controller' => WorkflowToDoItemTemplateController::class,
         'email_controller' => WorkflowEmailItemTemplateController::class,
+        'initial_controller' => WorkflowInitialEmailItemTemplateController::class,
+        'inspection_controller' => WorkflowInspectionItemTemplateController::class,
     ];
 
-    /**
-     * WorkflowItemTemplate constructor.
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
+    public function template(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        if ( ! array_key_exists($attributes["type"], $this->acceptedTypes) ) throw new InvalidArgumentException("Invalid type");
-
-        $type  = self::acceptedTypes[$attributes["type"]];
-        return new $type($attributes);
-
+        return $this->belongsTo(WorkflowTemplate::class);
     }
 }

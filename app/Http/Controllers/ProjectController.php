@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\bmp;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Contractor;
 use App\Models\County;
 use App\Models\EndangeredSpecies;
+use App\Models\InspectionSchedule;
 use App\Models\Municipal;
 use App\Models\Project;
 use App\Models\Responsibilities;
@@ -17,6 +19,9 @@ use App\Models\Workflow;
 use App\Models\WorkflowTemplate;
 use App\Models\WorkflowToDoItem;
 use App\Models\WorkflowEmailItem;
+use App\Models\WorkflowInitialEmailItem;
+use App\Models\WorkflowInspectionItem;
+use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -24,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Builder;
+use App\Jobs\CreateInitialProjectSpace;
 
 class ProjectController extends Controller
 {
@@ -33,10 +39,10 @@ class ProjectController extends Controller
     const STATUS_HOLD = 2;
     const STATUS_BLOCKED = 3;
 
-
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
     /*
@@ -49,14 +55,16 @@ class ProjectController extends Controller
     public function index()
     {
 
-        if (Auth::user()->can("list projects"))
+        if (Auth::user()->can("listProjects"))
         {
 
             if (Auth::user()->hasRole("Owner")) {
                 $projects = Project::all();
             } else {
                 $projects = Workflow::where("status", ProjectController::STATUS_OPEN)->get()->filter(function($workflow) {
-                    return Auth::user()->hasRole($workflow->step()->role);
+                    return $workflow->step()->role && Auth::user()->hasRole($workflow->step()->role);
+                })->map(function ($workflow) {
+                    return $workflow->project;
                 });
             }
 
@@ -79,11 +87,26 @@ class ProjectController extends Controller
      *
      * @return (view)
     */
-    public function viewProject(Project $project)
+    public function show(Project $project)
     {
 
-        if (Auth::user()->can("list projects"))
+        //If it's in inspection phase
+        if (get_class($project->workflow->step()) == 'App\Models\WorkflowInspectionItem') {
+            if (!Auth::user()->hasRole(['Owner', 'Admin', 'Inspector Supervisor', 'Inspector'])) {
+                //Users that aren't in the above list shouldn't be able to access
+                throw new Exception("Error: This project is in the inspection phase");
+            } else if (Auth::user()->hasRole('Inspector')) {
+                // Inspectors get inspection screen
+                $insp_cont = new InspectionController();
+                return $insp_cont->view($project);
+            }
+            //If they are in the above groups but not inspectors, they get through.
+        }
+
+        if (Auth::user()->can("viewProjects"))
         {
+
+            $this->authorize('view', $project);
 
             $project->load("county.endangered_species");
             $bmps = bmp::all()->sortBy("name");
@@ -92,8 +115,12 @@ class ProjectController extends Controller
             $water_qualities = WaterQuality::all()->sortBy("name");
             $ms4s = Municipal::all()->sortBy("name");
             $counties = County::with("endangered_species")->get()->sortBy("name")->pluck("name", "id");
-            $companies = Company::all()->sortBy("name")->pluck("name", "name");
+            $companies = Company::all()->sortBy("name");
             $contacts = Contact::all();
+            $inspectors = User::role('Inspector')->get()->pluck("fullName", "id");
+            $inspectors = $inspectors->put('', "Please select")->sortBy('fullName');
+            $inspection_schedules = InspectionSchedule::all();
+            $inspections = $project->inspections;
             $stormcon = Contact::whereHas('employer', function(Builder $query) {
                 $query->where("name", "like", "Stormcon%");
             })->get()->sortBy("name");
@@ -111,6 +138,8 @@ class ProjectController extends Controller
                 "counties",
                 "companies",
                 "stormcon",
+                "inspectors",
+                "inspection_schedules",
                 "roles",
                 "states",
                 "contacts",
@@ -134,8 +163,10 @@ class ProjectController extends Controller
      *
      * @return (view)
     */
-    public function addProject()
+    public function create()
     {
+
+        $this->authorize('create', $project);
 
         if (Auth::user()->can('create project'))
         {
@@ -160,8 +191,10 @@ class ProjectController extends Controller
      *
      * @return (redirect)
     */
-    public function createProject(Request $request)
+    public function store(Request $request)
     {
+
+        $this->authorize('create', $project);
 
         if (Auth::user()->hasRole("Owner"))
         {
@@ -199,12 +232,17 @@ class ProjectController extends Controller
                 $class = str_replace("Template", "", class_basename($item));
                 if ($class == 'WorkflowToDoItem') $item = new WorkflowToDoItem($item->toArray());
                 if ($class == 'WorkflowEmailItem') $item = new WorkflowEmailItem($item->toArray());
+                if ($class == 'WorkflowInitialEmailItem') $item = new WorkflowInitialEmailItem($item->toArray());
+                if ($class == 'WorkflowInspectionItem') $item = new WorkflowInspectionItem($item->toArray());
                 $item->workflow_id = $workflow->id;
                 if (!$item->save()) $errors++;
             }
 
             if (!$errors)
             {
+
+                CreateInitialProjectSpace::dispatch(Auth::user(), $project, $workflow_template);
+
                 Session::flash('success', $project->name . ' has been created successfully.');
                 Log::info('Project ' . $project->name . ' has been created successfully by ' . Auth::user()->username);
 
@@ -230,45 +268,16 @@ class ProjectController extends Controller
 
     }
 
-    /*
-     * modifyUser
-     *
-     * Returns a view of the edit user form
-     *
-     * @user (User) Id number of the user as an integer
-     *
-     * @return (view)
-    */
-    public function modifyMunicipal(Municipal $municipal)
+
+    /**
+     * @param Request $request
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws AuthorizationException
+     */
+    public function update(Request $request, Project $project)
     {
-
-        if (Auth::user()->hasRole("Owner"))
-        {
-
-            $states = $this->states;
-
-            return view('municipal.edit', compact('municipal', 'states'));
-
-        }
-        else
-        {
-            Log::info(Auth::user()->username . ' was denied access to edit species ' . $municipal->name);
-            throw new AuthorizationException;
-        }
-    }
-
-    /*
-     * updateUser
-     *
-     * Validates the request and then updates the record in the database.  Redirects to viewUser()
-     *
-     * @request (Request) created automatically by laravel
-     * @user (User) Id number of the user as an integer
-     *
-     * @return (view)
-    */
-    public function updateProject(Request $request, Project $project)
-    {
+        $this->authorize('update', $project);
 
         if (Auth::user()->hasRole("Owner"))
         {
@@ -359,6 +368,11 @@ class ProjectController extends Controller
             $project->erosivity = $request->erosivity;
             $project->pre_construction_coefficient = $request->pre_construction_coefficient;
             $project->post_construction_coefficient = $request->post_construction_coefficient;
+            $project->inspector_id = $request->inspector_id;
+            $project->inspection_cycle = $request->inspection_cycle;
+            $project->inspection_format = $request->inspection_format;
+            $project->rdy_to_noi = (isset($request->rdy_to_noi)) ? 1 : 0;
+            $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
 
             foreach ($project->contractors as $contractor) {
                 if (isset($request->{"contractor_" . $contractor->id . "_name"}) && !blank($request->{"contractor_" . $contractor->id . "_name"})) {
@@ -381,38 +395,21 @@ class ProjectController extends Controller
                     $contractor->state_tax_id      = $request->{"contractor_" . $contractor->id . "_state_tax_id"};
                     $contractor->sos               = $request->{"contractor_" . $contractor->id . "_sos"};
                     $contractor->cn                = $request->{"contractor_" . $contractor->id . "_cn"};
-                    $contractor->sic               = $request->{"contractor_" . $contractor->id . "_sic"};
+                    $contractor->responsibilities  = $request->{"contractor_" . $contractor->id . "_responsibilities"};
+                    $contractor->contact_name      = $request->{"contractor_" . $contractor->id . "_contact_name"};
+                    $contractor->contact_title     = $request->{"contractor_" . $contractor->id . "_contact_title"};
+                    $contractor->contact_phone     = $request->{"contractor_" . $contractor->id . "_contact_phone"};
+                    $contractor->contact_fax       = $request->{"contractor_" . $contractor->id . "_contact_fax"};
+                    $contractor->contact_email     = $request->{"contractor_" . $contractor->id . "_contact_email"};
+                    $contractor->noi_signer_name   = $request->{"contractor_" . $contractor->id . "_noi_signer_name"};
+                    $contractor->noi_signer_title  = $request->{"contractor_" . $contractor->id . "_noi_signer_title"};
+                    $contractor->noi_signed        = (isset($request->{"contractor_" . $contractor->id . "_noi_signed"})) ? 1 : 0;
+                    $contractor->not_signer_name   = $request->{"contractor_" . $contractor->id . "_not_signer_name"};
+                    $contractor->not_signer_title  = $request->{"contractor_" . $contractor->id . "_not_signer_title"};
+                    $contractor->not_signed        = (isset($request->{"contractor_" . $contractor->id . "_not_signed"})) ? 1 : 0;
                     $contractor->save();
                 }
             }
-
-            /*  OLD FUNCTIONALITY when the contractors were on the projects table
-            foreach (['operator', 'provider', 'contractor'] as $type) {
-                for ($i = 1; $i <= 7; $i++) {
-                    if (isset($request->{$type . "_" . $i . "_name"}) && !blank($request->{$type . "_" . $i . "_name"})) {
-                        $project->{$type . "_" . $i . "_role"}              = $request->{$type . "_" . $i . "_role"};
-                        $project->{$type . "_" . $i . "_name"}              = $request->{$type . "_" . $i . "_name"};
-                        $project->{$type . "_" . $i . "_legal_name"}        = $request->{$type . "_" . $i . "_legal_name"};
-                        $project->{$type . "_" . $i . "_also_known_as"}     = $request->{$type . "_" . $i . "_also_known_as"};
-                        $project->{$type . "_" . $i . "_type"}              = $request->{$type . "_" . $i . "_type"};
-                        $project->{$type . "_" . $i . "_division"}          = $request->{$type . "_" . $i . "_division"};
-                        $project->{$type . "_" . $i . "_num_of_employees"}  = $request->{$type . "_" . $i . "_num_of_employees"};
-                        $project->{$type . "_" . $i . "_address"}           = $request->{$type . "_" . $i . "_address"};
-                        $project->{$type . "_" . $i . "_city"}              = $request->{$type . "_" . $i . "_city"};
-                        $project->{$type . "_" . $i . "_state"}             = $request->{$type . "_" . $i . "_state"};
-                        $project->{$type . "_" . $i . "_zipcode"}           = $request->{$type . "_" . $i . "_zipcode"};
-                        $project->{$type . "_" . $i . "_phone"}             = $request->{$type . "_" . $i . "_phone"};
-                        $project->{$type . "_" . $i . "_fax"}               = $request->{$type . "_" . $i . "_fax"};
-                        $project->{$type . "_" . $i . "_website"}           = $request->{$type . "_" . $i . "_website"};
-                        $project->{$type . "_" . $i . "_federal_tax_id"}    = $request->{$type . "_" . $i . "_federal_tax_id"};
-                        $project->{$type . "_" . $i . "_state_tax_id"}      = $request->{$type . "_" . $i . "_state_tax_id"};
-                        $project->{$type . "_" . $i . "_sos"}               = $request->{$type . "_" . $i . "_sos"};
-                        $project->{$type . "_" . $i . "_cn"}                = $request->{$type . "_" . $i . "_cn"};
-                        $project->{$type . "_" . $i . "_sic"}               = $request->{$type . "_" . $i . "_sic"};
-                    }
-                }
-            }
-            */
 
             //SAVE MODEL
             if ($project->save())
@@ -442,72 +439,6 @@ class ProjectController extends Controller
 
         }
 
-    }
-
-    /*
-     * deleteEndangeredSpecies
-     *
-     * Validates that the authenticated user has permission, and then deletes the user from the database.  Redirects to index()
-     *
-     * @user (User) Id number of the user as an integer
-     * @return (view)
-    */
-    public function deleteMunicipal(Municipal $municipal)
-    {
-
-        if (Auth::user()->hasRole("Owner"))
-        {
-
-            $name = $municipal->name;
-
-            if ($municipal->delete())
-            {
-                Session::flash('success', $name . ' has been deleted successfully.');
-                Log::info('Municipal ' . $name . ' has been deleted successfully by ' . Auth::user()->username);
-                $this->index();
-            }
-
-            Session::flash('error', 'There has been an error while trying to delete ' . $municipal->name . '.');
-            Log::info(Auth::user()->username . ' received an error while deleting municipal ' . $municipal->name);
-            $this->index();
-
-        }
-
-        Log::info(Auth::user()->username . ' was denied access to delete species ' . $municipal->name);
-        throw new AuthorizationException;
-
-    }
-
-    public function undeleteMunicipal($trashed_municipal)
-    {
-
-        $municipal = Municipal::onlyTrashed()->where('id', $trashed_municipal)->first();
-
-        if (Auth::user()->hasRole("Owner"))
-        {
-
-            if ($municipal->restore())
-            {
-                Session::flash('success', $municipal->name . ' has been restored successfully.');
-                Log::info('Municipal ' . $municipal->name . ' has been restored successfully by ' . Auth::user()->username);
-            }
-            else
-            {
-                Session::flash('error', 'There has been an error while trying to restore ' . $municipal->name . '.');
-                Log::info(Auth::user()->username . ' received an error while restoring municipal ' . $municipal->name);
-            }
-
-            return redirect()
-                ->route('municipal::view', $municipal->id);
-
-        }
-        else
-        {
-
-            Log::info(Auth::user()->username . ' was denied access to restore municipal ' . $municipal->name);
-            throw new AuthorizationException;
-
-        }
     }
 
     public function addContact(Municipal $municipal) {
@@ -542,9 +473,12 @@ class ProjectController extends Controller
     public function getNewContractorView(Project $project) {
         $roles = Company::$roles;
         $states = Company::$states;
-        $companies = Company::all()->sortBy("name")->pluck("name", "name");
+        $companies = Company::all()->sortBy("name");
         $contractor = $project->contractors()->save(new Contractor());
-        return view("project.contractors.forms.add", compact("contractor", "roles", "states", "companies"));
+        $contractor->refresh();
+        $contacts = Contact::all();
+        $responsibilities = Responsibilities::all()->sortBy("name");
+        return view("project.contractors.forms.edit", compact("contractor", "responsibilities","roles", "states", "companies", "contacts"));
     }
 
     public static function convertListToCollection(string $name, Project $project): \Illuminate\Support\Collection
@@ -573,6 +507,9 @@ class ProjectController extends Controller
     }
 
     public function completeStep(Project $project) {
+
+        $this->authorize('progress', $project);
+
         if (Auth::user()->hasRole("Owner") || Auth::user()->hasRole($project->workflow->step()->role)) {
             $project->workflow->next_step();
         }
@@ -588,11 +525,22 @@ class ProjectController extends Controller
 
         $phpword = new \PhpOffice\PhpWord\TemplateProcessor($file);
 
-        foreach ($project->export() as $key => $value) {
-            $phpword->setValue($key, $value, 1);
-        }
+        $phpword->setValues($project->export());
 
         $phpword->saveAs(storage_path() . '/edited.docx');
         return response()->file(storage_path() . "/edited.docx");
+    }
+
+    public function getRoleUsers(Request $request, $role) {
+        $role = Role::where('name', $role)->first();
+        return response()->json($role->users->map(function ($user) {
+            return [
+                'name' => $user->fullName,
+                'id' => $user->id,
+                'projects' => $user->projects()->whereHas('workflow', function(Builder $query) {
+                                    $query->where('status', '!=', 3);
+                                })->count(),
+            ];
+        }));
     }
 }

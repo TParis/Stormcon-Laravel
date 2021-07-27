@@ -19,7 +19,19 @@ class WorkflowTemplate extends Model
         return $this->hasMany(WorkflowToDoItemTemplate::class);
     }
 
+    public function initial_items() {
+        return $this->hasMany(WorkflowInitialEmailItemTemplate::class);
+    }
+
+    public function inspection_items() {
+        return $this->hasMany(WorkflowInspectionItemTemplate::class);
+    }
+
     public function sub_items() {
-        return $this->email_items->concat($this->todo_items)->sortBy("order");
+        return $this->email_items
+            ->concat($this->todo_items)
+            ->concat($this->initial_items)
+            ->concat($this->inspection_items)
+            ->sortBy("order");
     }
 }

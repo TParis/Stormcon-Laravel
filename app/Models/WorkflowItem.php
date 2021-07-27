@@ -5,20 +5,24 @@ namespace App\Models;
 use \InvalidArgumentException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\ProjectController;
 
 class WorkflowItem extends Model
 {
     use HasFactory;
+    public $type = "Item";
+    protected $controller = ProjectController::class;
+    protected $fillable = ['workflow_id', 'name', 'order', 'priority'];
 
-    private $acceptedTypes = [
-        'todo' => WorkflowToDoItem::class,
-        'email' => WorkflowEmailItem::class,
-        ];
+    public function executeAutomatedTasks() {
+        return true;
+    }
 
-    public function __construct(array $attributes = [])
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function workflow(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        if ( ! in_array($attributes["type"], $this->acceptedTypes) ) throw new InvalidArgumentException("Invalid type");
-
-        return new $this->acceptedTypes[$attributes["type"]]($attributes);
+        return $this->belongsTo(Workflow::class);
     }
 }

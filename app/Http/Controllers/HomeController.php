@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Workflow;
 use App\Models\WorkflowTemplate;
 use Illuminate\Support\Facades\Auth;
+use Krizalys\Onedrive\Onedrive;
+
 
 class HomeController extends Controller
 {
@@ -26,7 +28,11 @@ class HomeController extends Controller
     public function index()
     {
 
-        $your_projects = Workflow::where("status", ProjectController::STATUS_OPEN)->get()->filter(function($workflow) {
+        $your_projects = Workflow::where("status", "!=", ProjectController::STATUS_CLOSE)->get()->filter(function($workflow) {
+            return $workflow->step()->user_id && $workflow->step()->user_id == Auth::user()->id;
+        });
+
+        $your_team_projects = Workflow::where("status", "!=", ProjectController::STATUS_CLOSE)->get()->filter(function($workflow) {
             return $workflow->step()->role && Auth::user()->hasRole($workflow->step()->role);
         });
 
@@ -38,9 +44,9 @@ class HomeController extends Controller
 
             $blocked_projects = Workflow::where("status", ProjectController::STATUS_BLOCKED)->with("project")->get();
 
-            return view('home', compact('your_projects', 'active_projects', 'inspection_projects', 'blocked_projects'));
+            return view('home', compact('your_projects','your_team_projects',  'active_projects', 'inspection_projects', 'blocked_projects'));
         }
 
-        return view('home', compact('your_projects'));
+        return view('home', compact('your_team_projects', 'your_projects'));
     }
 }
