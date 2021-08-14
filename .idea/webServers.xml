@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="8a130adf-58dc-44a1-9b76-6ef057bd63c3" name="Ubuntu" url="http://stormcon.sitedevbox.com/">
+        <fileTransfer accessType="SFTP" host="192.168.1.120" port="22" sshConfigId="64396e96-a9e3-4e32-97a4-1ac8c923071b" sshConfig="tparis@192.168.1.120:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

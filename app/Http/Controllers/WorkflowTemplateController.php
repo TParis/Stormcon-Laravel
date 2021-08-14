@@ -82,7 +82,7 @@ class WorkflowTemplateController extends Controller
     {
 
         $drive = Auth()->user()->getOneDrive();
-        $folders = collect($drive->listContents('/Templates'))->where('type', 'dir');
+        $folders = ($drive != null) ? collect($drive->listContents('/Templates'))->where('type', 'dir') : collect();
 
         return response()->view("workflow.show", compact("template", "folders"));
     }
@@ -124,5 +124,24 @@ class WorkflowTemplateController extends Controller
     public function updateTemplate(Request $request, WorkflowTemplate $template) {
         $template->template = $request->template;
         $template->save();
+    }
+
+    public function sort(WorkflowTemplate $template, $id, $action) {
+        $id++;
+        $item = $template->sub_items()->where("order", $id)->first();
+        if ($action == "delete") {
+            $item->delete();
+        } else {
+            $other = ($action == "up") ? $template->sub_items()->where("order", ($id - 1))->first() : $template->sub_items()->where("order", ($id + 1))->first();
+
+            $curr = $item->order;
+            $item->order = $other->order;
+            $other->order = $curr;
+
+            $item->save();
+            $other->save();
+        }
+        $template->refresh();
+        return response()->view("workflow.ajax", compact("template"));
     }
 }

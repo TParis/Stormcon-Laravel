@@ -118,7 +118,7 @@
         <article class="container">
             @yield("content")
         </article>
-        @if (Auth::user()->hasAnyPermission(['viewConfig', 'viewWorkflows']))
+        @if (!Auth::guest() && Auth::user()->hasAnyPermission(['viewConfig', 'viewWorkflows']))
         @if (View::hasSection('right-aside'))
         <aside>
         </aside>

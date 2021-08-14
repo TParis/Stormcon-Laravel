@@ -80,6 +80,30 @@ class Workflow extends Model
 
     }
 
+    public function prev_step(): bool
+    {
+        //Copy Directory
+        ProcessToNextStep::dispatch(Auth::user(), $this);
+        //Step
+        $this->step--;
+        $this->save();
+        $this->sub_items()->flatten()[$this->step]->executeAutomatedTasks();
+        return true;
+
+    }
+
+    public function skip_step($step): bool
+    {
+        //Copy Directory
+        ProcessToNextStep::dispatch(Auth::user(), $this);
+        //Step
+        $this->step = $step;
+        $this->save();
+        $this->sub_items()->flatten()[$this->step]->executeAutomatedTasks();
+        return true;
+
+    }
+
     public function closeProject(): bool
     {
 

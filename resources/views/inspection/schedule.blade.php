@@ -12,8 +12,6 @@
         <th>Status</th>
         <th class="d-none d-sm-none d-md-table-cell">Ready to NOT</th>
         <th class="d-none d-sm-none d-md-table-cell">NOT'd</th>
-        <th class="d-none d-sm-none d-md-table-cell">Ready to NOI</th>
-        <th class="d-none d-sm-none d-md-table-cell">NOI'd</th>
         <th>Project #</th>
         <th class="d-none d-sm-none d-md-table-cell">Project Title</th>
         <th>Address</th>
@@ -33,8 +31,6 @@
             <td class="d-none d-sm-none d-md-table-cell">{{ $inspection->project->rdy_to_noi }}</td>
             <td class="d-none d-sm-none d-md-table-cell"></td>
             <td class="d-none d-sm-none d-md-table-cell">{{ $inspection->project->rdy_to_not }}</td>
-            <td class="d-none d-sm-none d-md-table-cell">{{ $inspection->project->id }}</td>
-            <td>#{{ $inspection->project->id }}</td>
             <td class="d-none d-sm-none d-md-table-cell">{{ $inspection->project->name }}</td>
             <td><a href="https://www.google.com/maps/place/{{ $inspection->project->mailing_address_street_number }} {{ $inspection->project->mailing_address_street_name }}, {{ $inspection->project->city }}, {{ $inspection->project->state }}, {{ $inspection->project->zipcode }}" target="_blank">{{ $inspection->project->mailing_address_street_number }} {{ $inspection->project->mailing_address_street_name }}<br \>{{ $inspection->project->city }}, {{ $inspection->project->state }}, {{ $inspection->project->zipcode }}</td>
             <td>{{ $inspection->project->inspection_format }}</td>

@@ -166,20 +166,11 @@ class ProjectController extends Controller
     public function create()
     {
 
-        $this->authorize('create', $project);
+        $this->authorize('create', Project::class);
 
-        if (Auth::user()->can('create project'))
-        {
+        $workflow_templates = WorkflowTemplate::select("id", "name")->get()->pluck("name", "id");
+        return response()->view("project.add", compact("workflow_templates"));
 
-            $workflow_templates = WorkflowTemplate::select("id", "name")->get()->pluck("name", "id");
-            return response()->view("project.add", compact("workflow_templates"));
-
-        }
-        else
-        {
-            Log::info(Auth::user()->username . ' was denied access to create a project');
-            throw new AuthorizationException;
-        }
     }
 
     /*
@@ -194,77 +185,66 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
 
-        $this->authorize('create', $project);
+        $this->authorize('create', Project::class);
 
-        if (Auth::user()->hasRole("Owner"))
+        /*$this->validate($request,
+            [
+                'name'              => 'required|string|min:5|max:255|unique:municipals',
+                'phone'             => 'required|string',
+                'address'           => 'required|string',
+                'city'              => 'required|string',
+                'state'             => 'required|string',
+                'zipcode'           => 'required|string',
+
+            ]
+        );*/
+
+        $errors = 0;
+
+        $project = new Project(['name' => $request->name]);
+
+        if (!$project->save()) $errors++;
+
+        $workflow_template = WorkflowTemplate::find($request->workflow_id);
+        $workflow = new Workflow([
+            'name' => $workflow_template->name,
+            'priority' => $workflow_template->priority,
+            'project_id' => $project->id,
+            'status'=> self::STATUS_OPEN,
+        ]);
+
+
+        if (!$workflow->save()) $errors++;
+
+        foreach ($workflow_template->sub_items() as $item) {
+            $class = str_replace("Template", "", class_basename($item));
+            if ($class == 'WorkflowToDoItem') $item = new WorkflowToDoItem($item->toArray());
+            if ($class == 'WorkflowEmailItem') $item = new WorkflowEmailItem($item->toArray());
+            if ($class == 'WorkflowInitialEmailItem') $item = new WorkflowInitialEmailItem($item->toArray());
+            if ($class == 'WorkflowInspectionItem') $item = new WorkflowInspectionItem($item->toArray());
+            $item->workflow_id = $workflow->id;
+            if (!$item->save()) $errors++;
+        }
+
+        if (!$errors)
         {
 
-            /*$this->validate($request,
-                [
-                    'name'              => 'required|string|min:5|max:255|unique:municipals',
-                    'phone'             => 'required|string',
-                    'address'           => 'required|string',
-                    'city'              => 'required|string',
-                    'state'             => 'required|string',
-                    'zipcode'           => 'required|string',
+            CreateInitialProjectSpace::dispatch(Auth::user(), $project, $workflow_template);
 
-                ]
-            );*/
-
-            $errors = 0;
-
-            $project = new Project(['name' => $request->name]);
-
-            if (!$project->save()) $errors++;
-
-            $workflow_template = WorkflowTemplate::find($request->workflow_id);
-            $workflow = new Workflow([
-                'name' => $workflow_template->name,
-                'priority' => $workflow_template->priority,
-                'project_id' => $project->id,
-                'status'=> self::STATUS_OPEN,
-            ]);
-
-
-            if (!$workflow->save()) $errors++;
-
-            foreach ($workflow_template->sub_items() as $item) {
-                $class = str_replace("Template", "", class_basename($item));
-                if ($class == 'WorkflowToDoItem') $item = new WorkflowToDoItem($item->toArray());
-                if ($class == 'WorkflowEmailItem') $item = new WorkflowEmailItem($item->toArray());
-                if ($class == 'WorkflowInitialEmailItem') $item = new WorkflowInitialEmailItem($item->toArray());
-                if ($class == 'WorkflowInspectionItem') $item = new WorkflowInspectionItem($item->toArray());
-                $item->workflow_id = $workflow->id;
-                if (!$item->save()) $errors++;
-            }
-
-            if (!$errors)
-            {
-
-                CreateInitialProjectSpace::dispatch(Auth::user(), $project, $workflow_template);
-
-                Session::flash('success', $project->name . ' has been created successfully.');
-                Log::info('Project ' . $project->name . ' has been created successfully by ' . Auth::user()->username);
-
-            }
-            else
-            {
-
-                Session::flash('error', 'There has been an error while trying to create project ' . $project->name . '.');
-                Log::info(Auth::user()->username . ' received an error while creating project ' . $project->name);
-
-            }
-
-            return redirect()->route('project::view', $project->id);
+            Session::flash('success', $project->name . ' has been created successfully.');
+            Log::info('Project ' . $project->name . ' has been created successfully by ' . Auth::user()->username);
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to create municipal ' . $request->name);
-            throw new AuthorizationException;
+            Session::flash('error', 'There has been an error while trying to create project ' . $project->name . '.');
+            Log::info(Auth::user()->username . ' received an error while creating project ' . $project->name);
 
         }
+
+        return redirect()->route('project::view', $project->id);
+
 
     }
 
@@ -510,12 +490,31 @@ class ProjectController extends Controller
 
         $this->authorize('progress', $project);
 
-        if (Auth::user()->hasRole("Owner") || Auth::user()->hasRole($project->workflow->step()->role)) {
-            $project->workflow->next_step();
-        }
+        $project->workflow->next_step();
 
         Session::flash("success", "Project step has been completed");
-        return response()->redirectToRoute("project::index")        ;
+        return response()->redirectToRoute("project::index");
+
+    }
+
+    public function reverseStep(Project $project) {
+
+        $this->authorize('progress', $project);
+
+        $project->workflow->prev_step();
+
+        Session::flash("success", "Project step has been completed");
+        return response()->redirectToRoute("project::index");
+
+    }
+
+    public function skipStep(Request $request, Project $project) {
+        $this->authorize('progress', $project);
+
+        $project->workflow->skip_step($request->step);
+
+        Session::flash("success", "Project step has been completed");
+        return response()->json($request->step);
 
     }
 

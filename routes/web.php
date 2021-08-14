@@ -496,6 +496,10 @@ Route::group(['prefix' => 'projects', 'as' => 'project::'], function() {
         'as'    => 'complete-step',
         'uses'  => 'ProjectController@completeStep'
     ]);
+    Route::get('/view/{project}/previous-step', [
+        'as'    => 'reverse-step',
+        'uses'  => 'ProjectController@reverseStep'
+    ]);
     Route::get('/export/{project}', [
         'as'    => 'export',
         'uses'  => 'ProjectController@export'
@@ -562,8 +566,8 @@ Route::group(['prefix' => 'workflow-template', 'as' => 'workflow_template::'], f
         'as'    => 'template::update',
         'uses'  => 'WorkflowTemplateController@updateTemplate'
     ]);
-<<<<<<< HEAD
 });
+
 //Workflow Templates
 Route::group(['prefix' => 'contractor', 'as' => 'contractor::'], function() {
     Route::delete('/delete/{contractor}', [
@@ -577,14 +581,10 @@ Route::group(['prefix' => 'inspection', 'as' => 'inspection::'], function() {
     Route::get('/schedule', [
         'as' => 'schedule',
         'uses' => 'InspectionController@schedule'
-=======
-});
-//Workflow Templates
-Route::group(['prefix' => 'contractor', 'as' => 'contractor::'], function() {
-    Route::delete('/delete/{contractor}', [
-        'as' => 'delete',
-        'uses' => 'ContractorController@destroy'
->>>>>>> 9c4eddafe8de597865e41bdfe31e0a7d2fccf7c9
+    ]);
+    Route::get('/weekly', [
+        'as' => 'weekly',
+        'uses' => 'InspectionController@getWeeklySchedule'
     ]);
 });
 

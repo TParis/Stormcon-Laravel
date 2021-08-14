@@ -38,7 +38,7 @@
                 <a href="{{ route("workflow_template::index") }}" class="btn btn-info w-100 mt-3">Return to List</a>
 
             </div>
-            <div class="col-4 offset-1">
+            <div class="workflow-list col-4 offset-1">
                 <h1 align="center">START</h1>
                 @foreach ($template->sub_items() as $item)
                     <div class="flex text-center mt-1 mb-1"style="font-size: 26pt">
@@ -97,6 +97,24 @@
             }
         })
     })
+
+    $(".workflow-list").on("click", ".workflow-button", function(e) {
+       id = $(e.target.parentNode).data("id");
+       action = $(e.target.parentNode).data("action");
+       $.ajax({
+           url: "{{ route("workflow::template::item::sort", $template->id) }}/" + id + "/" + action,
+           method: "POST",
+           data: {
+               'api_token': '{{ Auth::user()->api_token }}',
+           },
+           success: function (data) {
+                $(".workflow-list").html(data);
+           },
+           error: function(data) {
+               alert("Could not update workflow list")
+           }
+       });
+    });
 
 </script>
 @endsection

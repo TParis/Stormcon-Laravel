@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Http\Controllers\ProjectController;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectPolicy
 {
@@ -61,7 +62,7 @@ class ProjectPolicy
     public function create(User $user)
     {
 
-        if ($user->hasRole($this->initiation_phase)) return true;
+        if ($user->can('createProject')) return true;
         return false;
 
     }
@@ -134,6 +135,12 @@ class ProjectPolicy
     public function forceDelete(User $user, Project $project)
     {
         if ($user->hasRole(['Sr Admin', 'Owner'])) return true;
+        return false;
+    }
+
+    public function progress(User $user, Project $project)
+    {
+        if ($user->hasRole([$project->workflow->step()->role, 'Admin', 'Sr Admin', 'Owner'])) return true;
         return false;
     }
 }

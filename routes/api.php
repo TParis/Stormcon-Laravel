@@ -89,3 +89,14 @@ Route::middleware('auth:api')->post('projects/files/upload/{project}', [
     'as' => 'file::upload',
     'uses' => 'OneDriveController@uploadFile'
 ]);
+
+Route::middleware('auth:api')->post('workflow/{template}/item/sort/{id?}/{action?}', [
+    'as' => 'workflow::template::item::sort',
+    'uses' => 'WorkflowTemplateController@sort'
+]);
+
+
+Route::middleware('auth:api')->get('/view/{project}/skip-step', [
+    'as'    => 'project::skip-step',
+    'uses'  => 'ProjectController@skipStep'
+]);

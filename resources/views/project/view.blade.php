@@ -27,7 +27,8 @@
         </div>
     @endif
     @if ($project->id != "")
-        <div class="container workflow-timeline">
+        <div class="container" style="overflow-x: scroll;">
+        <div class="workflow-timeline" style="min-width: 100%; width: {{ $project->workflow->sub_items()->count() * 120 }}px">
             @foreach ($project->workflow->sub_items() as $step)
                 @if ($loop->index == $project->workflow->step)
                     <div class="workflow-item active">{{ $step->name }}</div>
@@ -35,6 +36,7 @@
                     <div class="workflow-item">{{ $step->name }}</div>
                 @endif
             @endforeach
+            </div>
         </div>
         <h1>{{ $project->name }} #{{ $project->id }}</h1>
     @else
@@ -56,10 +58,10 @@
                     <a href="#" data-toggle="modal" data-target="#block-modal">Add Blocker</a>
                     <a href="#" class="w-100 d-block" id="save-unblock">Clear Blocker</a>
                     <hr>
-                    <a href="#" class="w-100 d-block">Return to Previous Step</a>
+                    <a href="{{ route("project::reverse-step", $project->id) }}" class="w-100 d-block">Return to Previous Step</a>
                     <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="w-100 d-block invisible">Complete Step</a>
                     @if (Auth::user()->can('skipWorkflow'))
-                        <a href="#" class="w-100 d-block">Skip to...</a>
+                    <a href="#" data-toggle="modal" data-target="#skip-modal">Skip to...</a>
                     @endif
                     <hr>
                     <a href="#" class="w-100 d-block">Add Hold</a>
@@ -181,6 +183,30 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="skip-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Block Project</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <select id="skip-step-option" class="form-control">
+                        @foreach ($project->workflow->sub_items() as $step)
+                            <option value="{{ $loop->index }}">{{ $step->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn save-skip btn-primary" data-dismiss="modal">Skip</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section("scripts")
@@ -282,5 +308,26 @@
         if (anyUnchecked) $("#complete-step").addClass("invisible");
 
     });
+
+    @if (Auth::user()->can('skipWorkflow'))
+    $(".save-skip").click(function() {
+        step = $("#skip-step-option").val()
+        $.ajax({
+            url: "{{ route("project::skip-step", $project->id) }}",
+            method: "GET",
+            data: {
+                'api_token': '{{ Auth::user()->api_token }}',
+                'step': step,
+            },
+            success: function() {
+                location.reload();
+            },
+            error: function() {
+                alert("Could not skip step");
+            }
+
+        })
+    })
+    @endif
 </script>
 @endsection

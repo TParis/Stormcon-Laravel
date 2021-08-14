@@ -4,6 +4,7 @@
     <div class="col-3">
         {{ Form::select('inspector_id', $inspectors, $project->inspector_id, array('class' => 'text-right form-control')) }}
     </div>
+    <div class="col-3"><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#inspection-modal">See Schedule</a></div>
 </div>
 <div class="form-group row">
     {{ Form::label('inspection_cycle', 'Schedule', array('class' => 'col-3 text-right control-label required-field')) }}
@@ -12,15 +13,15 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('inspection_cycle', 'Format', array('class' => 'col-3 text-right control-label required-field')) }}
+    {{ Form::label('inspection_start', 'Start Date', array('class' => 'col-3 text-right control-label required-field')) }}
     <div class="col-3">
-        {{ Form::select('inspection_format', [], [], array('class' => 'text-right form-control')) }}
+        {{ Form::date('inspection_start', null, array('class' => 'text-right form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('rdy_to_noi', 'Ready to NOI', array('class' => 'col-3 text-right control-label')) }}
-    <div class="col-9">
-        {{ Form::checkbox('rdy_to_noi', 'true', $project->rdy_to_noi, array('class' => 'control-label', 'style' => 'margin-top: 7px;')) }}
+    {{ Form::label('inspection_cycle', 'Format', array('class' => 'col-3 text-right control-label required-field')) }}
+    <div class="col-3">
+        {{ Form::select('inspection_format', ['Format A'], [], array('class' => 'text-right form-control')) }}
     </div>
 </div>
 
@@ -53,3 +54,36 @@
         @endforeach
     </tbody>
 </table>
+
+<div class="modal" id="inspection-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Block Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function getWeeklySchedule() {
+        $.ajax({
+            url: "{{ route('inspection::weekly') }}",
+            success: function (data) {
+                $("#inspection-modal .modal-body").html(data)
+            }
+        })
+    }
+
+    $('#inspection-modal').on('shown.bs.modal', function () {
+        getWeeklySchedule();
+    });
+</script>

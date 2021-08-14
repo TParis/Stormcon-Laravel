@@ -124,6 +124,10 @@ class Project extends Model
     {
         return $this->hasOne(Workflow::class);
     }
+    public function inspector(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(User::class, 'id','inspector_id');
+    }
 
     public function county() {
         return $this->belongsTo(County::class);

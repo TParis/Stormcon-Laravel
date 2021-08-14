@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use Krizalys\Onedrive\Onedrive;
 use Microsoft\Graph\Graph;
@@ -119,5 +121,17 @@ class User extends Authenticatable
 
         return false;
 
+    }
+
+
+    public function inspecting() {
+        return $this->hasMany(Project::class, 'inspector_id');
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->api_token = Hash::make(Str::random(64));
+        });
     }
 }
