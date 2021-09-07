@@ -9,6 +9,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 use Krizalys\Onedrive\Onedrive;
@@ -123,6 +124,7 @@ class userController extends Controller
             //Create password for emailing later
             $new_pass = $this->randomPassword();
             $user->password = bcrypt($new_pass);
+            $user->api_token = Hash::make(Str::random(60));
 
             if ($user->save())
             {

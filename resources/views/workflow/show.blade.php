@@ -98,9 +98,12 @@
         })
     })
 
-    $(".workflow-list").on("click", ".workflow-button", function(e) {
+    function sortWorkflowList(e) {
        id = $(e.target.parentNode).data("id");
        action = $(e.target.parentNode).data("action");
+
+       $(".workflow-list").off("click", ".workflow-button", sortWorkflowList);
+
        $.ajax({
            url: "{{ route("workflow::template::item::sort", $template->id) }}/" + id + "/" + action,
            method: "POST",
@@ -109,12 +112,16 @@
            },
            success: function (data) {
                 $(".workflow-list").html(data);
+
+                $(".workflow-list").on("click", ".workflow-button", sortWorkflowList);
            },
            error: function(data) {
                alert("Could not update workflow list")
            }
        });
-    });
+    }
+
+    $(".workflow-list").on("click", ".workflow-button", sortWorkflowList);
 
 </script>
 @endsection

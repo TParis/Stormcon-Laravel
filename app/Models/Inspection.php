@@ -18,4 +18,5 @@ class Inspection extends Model
     public function inspector() {
         return $this->belongsTo(User::class, 'inspector_id');
     }
+
 }

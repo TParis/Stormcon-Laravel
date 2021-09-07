@@ -1,10 +1,23 @@
 
 <div id="blocked-status"><strong>Status:</strong>
-@if ($project->workflow->status != 3)
-    <span id="status">Open</span>
-@else
-    <span id="status">Blocked</span>
-@endif
+    <span id="status">
+        @switch($project->workflow->status)
+            @case(0)
+                Open
+                @break
+            @case(1)
+                Closed
+                @break
+            @case(2)
+                Hold
+                @break
+            @case(3)
+                Blocked
+                @break
+            @default
+                Unknown
+        @endswitch
+    </span>
 </div>
 <div class="modal" id="block-modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -28,14 +41,14 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-        $(".save-b  lock").on("click", function() {
+        $(".save-block").on("click", function() {
 
             $.ajax({
                 url: '/api/workflow/{{ $project->workflow->id }}/block',
                 headers: {'Authorization': 'Bearer {{ Auth::user()->api_token }}'},
                 method: 'POST',
                 data: {
-                    message: $("select[name='block-message']").val()
+                    message: $("textarea[name='block-message']").val()
                 },
                 success: function (assignee) {
                     $("#status").html("Blocked");

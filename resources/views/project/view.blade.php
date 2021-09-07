@@ -51,7 +51,7 @@
                 @include("project.block.view")
                 <strong>NOIs Signed:</strong> {{ $project->contractors->sum('noi_signed') }} / {{ $project->contractors->count() }}<br />
                 <strong>NOTs Signed:</strong> {{ $project->contractors->sum('not_signed') }} / {{ $project->contractors->count() }}
-                @if (Auth::user()->hasRole($project->workflow->step()->role) ||
+                @if (($project->workflow->step()->role && Auth::user()->hasRole($project->workflow->step()->role)) ||
                         Auth::user()->hasRole(['Owner', 'Admin', 'Sr Admin']))
                 <h3 align="right" class="project-block-header">Actions</h3>
                 <div class="container-fluid border project-block">
@@ -68,7 +68,7 @@
                     <a href="#" class="w-100 d-block">Remove Hold</a>
                 </div>
                 @endif
-                @if (Auth::user()->hasRole($project->workflow->step()->role))
+                @if (($project->workflow->step()->role && Auth::user()->hasRole($project->workflow->step()->role)))
                 <h3 align="right" class="project-block-header">To Do</h3>
                 <div class="container-fluid border project-block" id="checklist-block">
                     @foreach (preg_split('/\r\n|\r|\n/', $project->workflow->step()->checklist) as $task)

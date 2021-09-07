@@ -223,4 +223,11 @@ class Project extends Model
         return $export;
     }
 
+    public function noi_complete() {
+        return $this->contractors->sum('noi_signed') == $this->contractors->count();
+    }
+    public function not_complete() {
+        return $this->contractors->sum('not_signed') == $this->contractors->count();
+    }
+
 }

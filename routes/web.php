@@ -576,7 +576,7 @@ Route::group(['prefix' => 'contractor', 'as' => 'contractor::'], function() {
     ]);
 });
 
-//Workflow Templates
+//Inspection Templates
 Route::group(['prefix' => 'inspection', 'as' => 'inspection::'], function() {
     Route::get('/schedule', [
         'as' => 'schedule',
@@ -585,6 +585,18 @@ Route::group(['prefix' => 'inspection', 'as' => 'inspection::'], function() {
     Route::get('/weekly', [
         'as' => 'weekly',
         'uses' => 'InspectionController@getWeeklySchedule'
+    ]);
+    Route::get('/view/{inspection}', [
+        'as' => 'view',
+        'uses' => 'InspectionController@viewInspection'
+    ]);
+    Route::get('/complete/{inspection}', [
+        'as' => 'complete',
+        'uses' => 'InspectionController@markComplete'
+    ]);
+    Route::get('/notready/{inspection}', [
+        'as' => 'not',
+        'uses' => 'InspectionController@markReadyToNot'
     ]);
 });
 

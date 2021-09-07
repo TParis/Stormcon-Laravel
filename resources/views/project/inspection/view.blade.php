@@ -15,7 +15,7 @@
 <div class="form-group row">
     {{ Form::label('inspection_start', 'Start Date', array('class' => 'col-3 text-right control-label required-field')) }}
     <div class="col-3">
-        {{ Form::date('inspection_start', null, array('class' => 'text-right form-control')) }}
+        {{ Form::date('inspection_start', $project->inspection_start, array('class' => 'text-right form-control')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -45,10 +45,11 @@
     <tbody>
         @foreach ($project->inspections as $inspection)
         <tr>
-            <td>{{ $inspection->date }}</td>
+            <td>{{ $inspection->inspection_date }}</td>
             <td>{{ $inspection->status }}</td>
             <td>{{ $inspection->inspector->fullName }}</td>
             <td>{{ $project->inspection_format }}</td>
+            <td>{{ $project->inspection_cycle }} days</td>
             <td>{{ $inspection->updated_at }}</td>
         </tr>
         @endforeach
@@ -56,7 +57,7 @@
 </table>
 
 <div class="modal" id="inspection-modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered max-width-750">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Block Project</h5>

@@ -52,8 +52,8 @@ class Workflow extends Model
         return $this->sub_items()->sortBy("order")->flatten()[$this->step];
     }
 
-    public function getDaysInQueueAttribute() {
-        return Carbon::parse($this->updated_at)->diffInDays(Carbon::now());
+    public function getHoursInQueueAttribute() {
+        return Carbon::parse($this->updated_at)->diffInHours(Carbon::now());
     }
 
     public function getDaysActiveAttribute() {

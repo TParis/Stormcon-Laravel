@@ -10274,7 +10274,6 @@ nav.navbar {
 }
 
 .navbar > div, .navbar > div > div, .navbar > div > div > ul, .navbar > div > div > ul > li.nav-item {
-  height: 100%;
   vertical-align: middle;
 }
 
@@ -10287,6 +10286,13 @@ nav.navbar {
   background: #b4ffff;
   background: linear-gradient(180deg, #b4ffff 0%, #5caadf 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b4ffff",endColorstr="#5caadf",GradientType=1);
+}
+
+.navbar-collapse.collapse.show, .navbar-collapse.collapsing.show {
+  z-index: 100;
+  background: #5ac2ee;
+  background: linear-gradient(180deg, #5ac2ee 0%, #2e55df 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#5ac2ee",endColorstr="#2e55df",GradientType=1);
 }
 
 header input {
@@ -10470,6 +10476,6 @@ form .row {
   background-color: #c51f1a;
 }
 
-#inspection-modal > .modal-dialog {
-  max-width: 750px;
+.max-width-750 {
+  max-width: 750px !important;
 }

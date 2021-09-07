@@ -128,10 +128,4 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'inspector_id');
     }
 
-    protected static function booted()
-    {
-        static::created(function ($user) {
-            $user->api_token = Hash::make(Str::random(64));
-        });
-    }
 }

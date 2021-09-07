@@ -19,16 +19,13 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.3|>3.0",
         "laravelcollective/html": "^6.2",
-<<<<<<< HEAD
         "nicolasbeauvais/flysystem-onedrive": "^1.0",
         "phpoffice/phpword": "^0.18.1",
         "propaganistas/laravel-phone": "^4.3",
-        "spatie/laravel-permission": "^4.0"
-=======
+        "spatie/laravel-permission": "^4.0",
         "spatie/laravel-permission": "^4.0",
         "ext-simplexml": "*",
         "ext-json": "*"
->>>>>>> 9c4eddafe8de597865e41bdfe31e0a7d2fccf7c9
     },
     "require-dev": {
         "facade/ignition": "^2.5",

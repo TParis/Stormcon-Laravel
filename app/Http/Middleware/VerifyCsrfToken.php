@@ -13,5 +13,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'http://stormcon.sitedevbox.com/logout',
+        'https://stormcon.sitedevbox.com/logout',
     ];
 }

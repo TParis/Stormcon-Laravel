@@ -100,3 +100,7 @@ Route::middleware('auth:api')->get('/view/{project}/skip-step', [
     'as'    => 'project::skip-step',
     'uses'  => 'ProjectController@skipStep'
 ]);
+Route::middleware('auth:api')->post('/inspection/reassign/{inspection}', [
+    'as'    => 'inspection::reassign',
+    'uses'  => 'InspectionController@reassignInspector'
+]);

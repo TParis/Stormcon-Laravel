@@ -11,10 +11,10 @@
     </thead>
     <tbody>
 
-        @foreach ($inspectors as $name => $schedule)
+        @foreach ($inspectors as $name)
             <tr>
             @php
-                $schedule = $schedule->groupBy('dayOfWeek')
+                $schedule = (isset($inspectors_on_schedule[$name])) ? $inspectors_on_schedule[$name]->groupBy('dayOfWeek') : [];
             @endphp
                 <td>{{ $name }}</td>
                 <td>{{ isset($schedule['Sunday']) ? $schedule['Sunday']->count() : 0 }}</td>

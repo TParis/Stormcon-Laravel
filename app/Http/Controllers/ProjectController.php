@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use App\Jobs\CreateInitialProjectSpace;
 
 class ProjectController extends Controller
@@ -92,15 +93,16 @@ class ProjectController extends Controller
 
         //If it's in inspection phase
         if (get_class($project->workflow->step()) == 'App\Models\WorkflowInspectionItem') {
-            if (!Auth::user()->hasRole(['Owner', 'Admin', 'Inspector Supervisor', 'Inspector'])) {
-                //Users that aren't in the above list shouldn't be able to access
-                throw new Exception("Error: This project is in the inspection phase");
+            if (Auth::user()->hasAnyRole(['Owner', 'Admin', 'Inspector Supervisor', 'Inspector'])) {
+                // pass
             } else if (Auth::user()->hasRole('Inspector')) {
                 // Inspectors get inspection screen
                 $insp_cont = new InspectionController();
-                return $insp_cont->view($project);
+                return $insp_cont->schedule($project);
+            } else {
+                //Users that aren't in the above list shouldn't be able to access
+                throw new UnauthorizedException(403, "This project is in the inspection phase");
             }
-            //If they are in the above groups but not inspectors, they get through.
         }
 
         if (Auth::user()->can("viewProjects"))
@@ -351,7 +353,7 @@ class ProjectController extends Controller
             $project->inspector_id = $request->inspector_id;
             $project->inspection_cycle = $request->inspection_cycle;
             $project->inspection_format = $request->inspection_format;
-            $project->rdy_to_noi = (isset($request->rdy_to_noi)) ? 1 : 0;
+            $project->inspection_start = $request->inspection_start;
             $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
 
             foreach ($project->contractors as $contractor) {
@@ -541,5 +543,24 @@ class ProjectController extends Controller
                                 })->count(),
             ];
         }));
+    }
+
+    public static function getStatusCleartext($status) {
+        switch ($status) {
+            case 0:
+            case "0":
+                return 'Open';
+            case 1:
+            case "1":
+                return 'Closed';
+            case 2:
+            case "2":
+                return 'Hold';
+            case 3:
+            case "3":
+                return 'Blocked';
+            default:
+                return 'Unknown Status';
+        }
     }
 }

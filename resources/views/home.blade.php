@@ -16,18 +16,16 @@
                     <th>State</th>
                     <th>Team</th>
                     <th>Assignee</th>
-                    <th>Days in Queue</th>
                     <th>Days Active</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($your_projects as $project)
-                    <tr data-workflow="{{ $project->step()->days }}">
+                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
                         <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                        <td>{{ $project->status }}</td>
+                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
                         <td>{{ $project->step()->role }}</td>
                         <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                        <td>{{ $project->days_in_queue }}</td>
                         <td>{{ $project->days_active }}</td>
                     </tr>
                 @endforeach
@@ -41,25 +39,23 @@
                     <th>State</th>
                     <th>Team</th>
                     <th>Assignee</th>
-                    <th>Days in Queue</th>
                     <th>Days Active</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($your_team_projects as $project)
-                    <tr data-workflow="{{ $project->step()->days }}">
+                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
                         <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                        <td>{{ $project->status }}</td>
+                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
                         <td>{{ $project->step()->role }}</td>
                         <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                        <td>{{ $project->days_in_queue }}</td>
                         <td>{{ $project->days_active }}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
             @if (Auth::user()->hasRole("Owner"))
-            <h2 align="right">Active Projects</h2>
+            <h2 align="right">SWPPP Phase</h2>
                 <table id="activeProjects" class="table">
                     <thead>
                     <tr>
@@ -67,17 +63,15 @@
                         <th>State</th>
                         <th>Team</th>
                         <th>Assignee</th>
-                        <th>Days in Queue</th>
                         <th>Days Active</th>
                     </tr>
                     </thead>
                     @foreach($active_projects as $project)
-                        <tr data-workflow="{{ $project->step()->days }}">
+                        <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
                             <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                            <td>{{ $project->status }}</td>
+                            <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
                             <td>{{ $project->step()->role }}</td>
                             <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                            <td>{{ $project->days_in_queue }}</td>
                             <td>{{ $project->days_active }}</td>
                         </tr>
                     @endforeach
@@ -90,16 +84,14 @@
                         <th>State</th>
                         <th>Team</th>
                         <th>Assignee</th>
-                        <th>Days in Queue</th>
                         <th>Days Active</th>
                     </tr>
                     @foreach($inspection_projects as $project)
-                        <tr data-workflow="{{ $project->step()->days }}">
+                        <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
                             <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                            <td>{{ $project->status }}</td>
+                            <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
                             <td>{{ $project->step()->role }}</td>
                             <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                            <td>{{ $project->days_in_queue }}</td>
                             <td>{{ $project->days_active }}</td>
                         </tr>
                     @endforeach
@@ -113,17 +105,17 @@
                         <th>State</th>
                         <th>Team</th>
                         <th>Assignee</th>
-                        <th>Days in Queue</th>
                         <th>Days Active</th>
                     </tr>
                     </thead>
                     @foreach($blocked_projects as $project)
-                        <tr data-workflow="{{ $project->step()->days }}" data-toggle="tooltip" data-placement="bottom" title="{{ $project->blocker }}">
+                        <tr data-workflow="{{ $project->step()->days }}"  data-in-queue="{{ $project->hours_in_queue }}" data-toggle="tooltip" data-placement="bottom" title="{{ $project->blocker }}">
                             <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                            @status($project->status)
+                            <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
                             <td>{{ $project->status }}</td>
                             <td>{{ $project->step()->role }}</td>
                             <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                            <td>{{ $project->days_in_queue }}</td>
                             <td>{{ $project->days_active }}</td>
                         </tr>
                     @endforeach
@@ -197,7 +189,7 @@
             });
             $("#inspectionPhase").DataTable({
                 "createdRow": function( row, data, dataIndex){
-                    if (data[4] > $(row).data("workflow")) {
+                    if ($(row).data("in-queue") > $(row).data("workflow")) {
                         $(row).addClass("redRow");
                     }
                 }

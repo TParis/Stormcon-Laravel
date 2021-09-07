@@ -25,7 +25,7 @@ class ProcessToNextStep implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(User $user, Workflow $workflow)
+    public function __construct($user, Workflow $workflow)
     {
         $this->drive = $user->getOneDrive();
         $this->project = $workflow->project;
@@ -40,6 +40,8 @@ class ProcessToNextStep implements ShouldQueue
     public function handle()
     {
 
+        if (!isset($this->project->workflow->step()->user_id)) return null;
+
         $origin = "/Personal/" . $this->user->fullName . "/" . $this->project->id . " - " . $this->project->name;
 
         $template_items = collect($this->drive->listContents($origin, true));
@@ -50,9 +52,7 @@ class ProcessToNextStep implements ShouldQueue
             $path_array = explode("/", $item["path"]);
 
             //Adjust the path
-            array_shift($path_array);
-            array_shift($path_array);
-            array_shift($path_array);
+            for ($i = 0; $i < 3; $i++) array_shift($path_array);
             array_unshift($path_array, $this->project->id . " - " . $this->project->name);
             array_unshift($path_array, "Projects");
 
@@ -69,17 +69,25 @@ class ProcessToNextStep implements ShouldQueue
 
             //Copy the item
             if ($item["type"] == "file") {
-                print("Testing for existence of: " . "/" . implode("/", $path_array));
+                print("Testing for existence of: " . "/" . implode("/", $path_array) . "\n");
                 if ($this->drive->has("/" . implode("/", $path_array))) {
-                    print("Deleting: " . "/" . implode("/", $path_array));
+                    print("Deleting: " . "/" . implode("/", $path_array) . "\n");
                     $this->drive->delete("/" . implode("/", $path_array));
                 }
-                if (!$this->drive->copy($item["path"], "/" . implode("/", $path_array))) {
+                print("Copying: " . $item["path"] . " to " . "/" . implode("/", $path_array) . "\n");
+                if ($this->drive->copy($item["path"], "/" . implode("/", $path_array))) {
+                    print("File Copy Complete");
+                } else {
+                    print("File Copy Error");
                     throw new IOException("Could not copy " . $item["path"] . " to projects directory.");
+                    return false;
                 }
             }
         }
 
+        sleep(10);
+        print("Deleting origin");
         $this->drive->deleteDir($origin);
+        return true;
     }
 }
