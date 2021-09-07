@@ -24,7 +24,7 @@ class OneDriveController extends Controller
             'files.readwrite',
             'files.readwrite.all',
             'offline_access',
-        ], 'https://stormcon.sitedevbox.com/auth');
+        ], 'https://portal.stormcon.com/auth');
         return response()->view('oauth.gettoken', compact('url'));
     }
 
