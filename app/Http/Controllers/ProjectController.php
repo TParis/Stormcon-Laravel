@@ -538,9 +538,22 @@ class ProjectController extends Controller
             return [
                 'name' => $user->fullName,
                 'id' => $user->id,
-                'projects' => $user->projects()->whereHas('workflow', function(Builder $query) {
+                /*'projects' => $user->projects()->whereHas('workflow', function(Builder $query) {
                                     $query->where('status', '!=', 3);
-                                })->count(),
+                                    $query->where('id)
+                                })->count(),*/
+                'projects' => Collect(DB::select(DB::raw("
+                                select *
+                                from [users]
+                                inner join [workflow_to_do_items]
+                                on [users].[id] = [workflow_to_do_items].[user_id]
+                                    inner join [workflows]
+                                    on [workflows].[id] = [workflow_to_do_items].[workflow_id]
+                                    inner join [find_workflow_step]
+                                    on [workflow_to_do_items].[id] = [find_workflow_step].[step_id]
+                                where [find_workflow_step].[Row] = find_workflow_step.step
+                                and [workflows].[status] != 3
+                                and [users].id = " . $user->id)))->count()
             ];
         }));
     }

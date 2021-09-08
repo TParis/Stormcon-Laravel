@@ -111,9 +111,7 @@
                     @foreach($blocked_projects as $project)
                         <tr data-workflow="{{ $project->step()->days }}"  data-in-queue="{{ $project->hours_in_queue }}" data-toggle="tooltip" data-placement="bottom" title="{{ $project->blocker }}">
                             <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                            @status($project->status)
                             <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
-                            <td>{{ $project->status }}</td>
                             <td>{{ $project->step()->role }}</td>
                             <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
                             <td>{{ $project->days_active }}</td>
