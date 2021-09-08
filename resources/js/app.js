@@ -8,6 +8,9 @@ window.jQuery = require('jquery')(window);
 require('./bootstrap');
 window.dt = require('datatables.net-bs4');
 window.dtselect = require( 'datatables.net-select-dt' )
+require('datatables.net');
+require('datatables.net-bs4');
+require('datatables.net-bs4/css/dataTables.bootstrap.css');
 import Vue from 'vue'
 window.Vue = require('vue');
 
