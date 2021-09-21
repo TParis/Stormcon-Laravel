@@ -2,6 +2,10 @@
 
 namespace App\Console;
 
+use App\Http\Controllers\InspectionController;
+use App\Http\Controllers\InspectionScheduleController;
+use App\Http\Controllers\ProjectController;
+use App\Models\InspectionSchedule;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,7 +28,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            InspectionController::updateWeeklySchedule();
+        })->dailyAt("2:00")->withoutOverlapping();
     }
 
     /**
