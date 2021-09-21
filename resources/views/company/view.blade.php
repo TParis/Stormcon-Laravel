@@ -121,8 +121,33 @@
                     </table>
                 </div>
             </div>
+        </div>
+        <button class="btn btn-info add-btn" data-action="add"><i class="glyphicon glyphicon-plus"></i> Add New Contact</button>
     </div>
-    <button class="btn btn-info add-btn" data-action="add"><i class="glyphicon glyphicon-plus"></i> Add New Contact</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h3 align="center">Projects</h3>
+                <div class="container-fixed">
+                    <table id="projects" class="table table-sortable table-bordered table-striped display">
+                        <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($jobs as $job)
+                            <tr id="{{ $job->project->id }}">
+                                <td><a href="{{ route("project::view", $job->project->id) }}">{{ $job->project->name }}</a></td>
+                                <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($job->project->workflow->status) }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     <div class="modal fade" tabindex="-1" role="dialog" id="editcontacts">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -149,6 +174,9 @@
         @section("scripts")
             <script language="javascript" type="text/javascript">
                 window.onload = function () {
+
+
+                    $("#projects").DataTable();
 
                     $.ajaxSetup({
                         headers: {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Contractor;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,8 +59,9 @@ class CompanyController extends Controller
         {
 
             $company->load("contacts");
+            $jobs = Contractor::where('legal_name', $company->legal_name)->get();
 
-            return view('company.view', compact('company'));
+            return view('company.view', compact('company', 'jobs'));
 
         }
         else

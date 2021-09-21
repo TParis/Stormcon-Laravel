@@ -43,4 +43,8 @@ class Contractor extends Model
     protected $casts = [
         'responsibilities' => 'array',
     ];
+
+    public function project() {
+        return $this->belongsTo(Project::class);
+    }
 }
