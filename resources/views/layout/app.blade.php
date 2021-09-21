@@ -32,12 +32,12 @@
                 <div class="row">
                     <div class="col-4">
                         <img src="{{ asset('images/stormcon.png') }}" alt="Stormcon LLC Logo" />
-                    </div><!--
+                    </div>
                     <div class="col-2 offset-md-5">
-                        <form class="form-search form-inline">
-                            <input type="text" class="search-query" placeholder="Search..." />
+                        <form action="{{ route("search") }}" method="get" class="form-search form-inline">
+                            <input type="text" name="search" class="search-query" placeholder="Search..." />
                         </form>
-                    </div>-->
+                    </div>
                 </div>
             </div>
         </header>

@@ -16,6 +16,7 @@ class ProjectPolicy
     private $inspection_phase = ['Admin', 'Sr Admin', 'Owner', 'Inspector', 'Inspector Supervisor'];
     private $closed_phase = ['Admin', 'Sr Admin', 'Owner'];
     private $initiation_phase = ['Initiator', 'Admin', 'Sr Admin', 'Owner'];
+    private $admins = ['Admin', 'Sr Admin', 'Owner'];
 
     /**
      * Determine whether the user can view any models.
@@ -140,7 +141,8 @@ class ProjectPolicy
 
     public function progress(User $user, Project $project)
     {
-        if ($user->hasRole([$project->workflow->step()->role, 'Admin', 'Sr Admin', 'Owner'])) return true;
+        $roles = (isset($project->workflow->step()->role)) ? array_push($this->admins, $project->workflow->step()->role) : $this->admins;
+        if ($user->hasRole($roles)) return true;
         return false;
     }
 }

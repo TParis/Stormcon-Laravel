@@ -24,7 +24,7 @@ class OneDriveController extends Controller
             'files.readwrite',
             'files.readwrite.all',
             'offline_access',
-        ], url('/') . 'auth');
+        ], url('/') . '/auth');
         return response()->view('oauth.gettoken', compact('url'));
     }
 

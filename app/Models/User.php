@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Spatie\Permission\Traits\HasRoles;
 use Krizalys\Onedrive\Onedrive;
 use Microsoft\Graph\Graph;
@@ -21,7 +22,7 @@ use App\Http\Controllers\ProjectController;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, Searchable;
 
     /**
      * The attributes that are mass assignable.

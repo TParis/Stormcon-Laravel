@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Contact;
+use Laravel\Scout\Searchable;
+
 
 class Company extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Searchable;
 
     protected $fillable = ['name', 'legal_name', 'also_known_as', 'phone', 'fax', 'address', 'city', 'state', 'website',
         'zipcode', 'type', 'division', 'num_of_employees', 'federal_tax_id', 'state_tax_id', 'sos', 'cn', 'sic'];

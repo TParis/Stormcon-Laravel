@@ -609,3 +609,7 @@ Route::get('/onedrive/request',[
 Route::get('/auth',[
     'uses'  => 'OneDriveController@captureOneDriveToken'
 ]);
+Route::get('/search',[
+    'as' => 'search',
+    'uses'  => 'SearchController@Search'
+]);
