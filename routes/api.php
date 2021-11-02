@@ -104,3 +104,7 @@ Route::middleware('auth:api')->post('/inspection/reassign/{inspection}', [
     'as'    => 'inspection::reassign',
     'uses'  => 'InspectionController@reassignInspector'
 ]);
+Route::middleware('auth:api')->get('/projects/{project}/checklist/{item}/{status}', [
+    'as'    => 'project::task-complete',
+    'uses'  => 'ProjectController@completeChecklistItem'
+]);

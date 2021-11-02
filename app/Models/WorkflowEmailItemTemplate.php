@@ -12,4 +12,11 @@ class WorkflowEmailItemTemplate extends WorkflowItemTemplate
 
     protected $fillable = ['workflow_template_id', 'role', 'name', 'message','subject', 'order'];
 
+    protected $casts = [
+        'role' => 'array'
+    ];
+
+    public function getRoleAttribute($value) {
+        return (is_array($value)) ? $value : Array($value);
+    }
 }

@@ -26,14 +26,12 @@
 			<thead>
 				<tr>
                     <th>Name</th>
-                    <th>Priority</th>
 				</tr>
 			</thead>
 			<tbody>
 			@foreach ($templates as $template)
 				<tr id="{{ $template->id }}">
                     <td><a href="{{ route("workflow_template::show", $template->id) }}">{{ $template->name }}</a></td>
-                    <td>{{ $template->priority }}</td>
 				</tr>
 			@endforeach
 			</tbody>

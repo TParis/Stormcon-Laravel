@@ -12,6 +12,9 @@ class WorkflowToDoItem extends WorkflowItem
 
     protected $fillable = ['user_id', 'workflow_id', 'name', 'checklist', 'days', 'role', 'order'];
     public $type = "todo";
+    protected $casts = [
+        'checklist' => 'array'
+    ];
 
     public function assigned() {
         return $this->belongsTo(User::class, 'user_id', 'id');

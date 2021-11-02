@@ -51,7 +51,7 @@
     <div class="form-group row">
         {{ Form::label('provider_' . $provider->index . '_city', 'City', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('provider_' . $provider->index . '_city', $provider->{'provider_' . $provider->index . '_city'}, array('class' => 'form-control', 'placeholder' => 'Dallas')) }}
+            {{ Form::text('provider_' . $provider->index . '_city', $provider->{'provider_' . $provider->index . '_city'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -63,7 +63,7 @@
     <div class="form-group row">
         {{ Form::label('provider_' . $provider->index . '_zipcode', 'Zipcode', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('provider_' . $provider->index . '_zipcode', $provider->{'provider_' . $provider->index . '_zipcode'}, array('class' => 'form-control', 'placeholder' => '78123')) }}
+            {{ Form::text('provider_' . $provider->index . '_zipcode', $provider->{'provider_' . $provider->index . '_zipcode'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -75,7 +75,7 @@
     <div class="form-group row">
         {{ Form::label('provider_' . $provider->index . '_state_tax_id', 'State Tax ID', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('provider_' . $provider->index . '_state_tax_id', $provider->{'provider_' . $provider->index . '_state_tax_id'}, array('class' => 'form-control', 'placeholder' => '1231564897')) }}
+            {{ Form::text('provider_' . $provider->index . '_state_tax_id', $provider->{'provider_' . $provider->index . '_state_tax_id'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -93,25 +93,25 @@
     <div class="form-group row">
         {{ Form::label('provider_' . $provider->index . '_division', 'Division', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('provider_' . $provider->index . '_division', $provider->{'provider_' . $provider->index . '_division'}, array('class' => 'form-control', 'placeholder' => 'Residential')) }}
+            {{ Form::text('provider_' . $provider->index . '_division', $provider->{'provider_' . $provider->index . '_division'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('provider_' . $provider->index . '_sos', 'SOS Number', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('provider_' . $provider->index . '_sos', $provider->{'provider_' . $provider->index . '_sos'}, array('class' => 'form-control', 'placeholder' => '23123483')) }}
+            {{ Form::text('provider_' . $provider->index . '_sos', $provider->{'provider_' . $provider->index . '_sos'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('provider_' . $provider->index . '_cn', 'CN Number', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('provider_' . $provider->index . '_cn', $provider->{'provider_' . $provider->index . '_cn'}, array('class' => 'form-control', 'placeholder' => '1315547354')) }}
+            {{ Form::text('provider_' . $provider->index . '_cn', $provider->{'provider_' . $provider->index . '_cn'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('provider_' . $provider->index . '_sic', 'SIC Code', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('provider_' . $provider->index . '_sic', $provider->{'provider_' . $provider->index . '_sic'}, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('provider_' . $provider->index . '_sic', $provider->{'provider_' . $provider->index . '_sic'}, array('class' => 'form-control')) }}
         </div>
     </div>
 </div>

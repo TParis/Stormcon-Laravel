@@ -24,11 +24,11 @@
         <div class="form-group row">
             {{ Form::label('name', 'Project Name', array('class' => 'col-3 control-label required-field')) }}
             <div class="col-9">
-                {{ Form::text('name', '', array('class' => 'form-control', 'placeholder' => 'Project')) }}
+                {{ Form::text('name', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
-            {{ Form::label('workflow_id', 'workflow', array('class' => 'col-3 control-label')) }}
+            {{ Form::label('workflow_id', 'Workflow', array('class' => 'col-3 control-label')) }}
             <div class="col-9">
                 {{ Form::select('workflow_id', $workflow_templates, '', array('class' => 'form-control', 'placeholder' => 'Please select workflow')) }}
             </div>

@@ -16,13 +16,13 @@
         <div class="form-group row">
             {{ Form::label('first_name', 'First Name', array('class' => 'col-4 control-label required-field')) }}
             <div class="col-8">
-                {{ Form::text('first_name', '', array('class' => 'form-control', 'placeholder' => 'First')) }}
+                {{ Form::text('first_name', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
             {{ Form::label('last_name', 'Last Name', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('last_name', '', array('class' => 'form-control', 'placeholder' => 'Last')) }}
+                {{ Form::text('last_name', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
@@ -63,7 +63,7 @@
         <div class="form-group row">
             {{ Form::label('title', 'Title', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('title', '', array('class' => 'form-control', 'placeholder' => 'Manager')) }}
+                {{ Form::text('title', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
@@ -75,13 +75,13 @@
         <div class="form-group row">
             {{ Form::label('er', 'ER Number', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('er', '', array('class' => 'form-control', 'placeholder' => 'ASB654646')) }}
+                {{ Form::text('er', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
             {{ Form::label('epa', 'EPA Number', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('epa', '', array('class' => 'form-control', 'placeholder' => '254354AS')) }}
+                {{ Form::text('epa', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
@@ -99,7 +99,7 @@
         <div class="form-group row">
             {{ Form::label('qualifications', 'Qualifications', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('qualifications', '', array('class' => 'form-control', 'placeholder' => 'Description')) }}
+                {{ Form::text('qualifications', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">

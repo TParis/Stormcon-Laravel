@@ -21,6 +21,7 @@ use App\Models\WorkflowToDoItem;
 use App\Models\WorkflowEmailItem;
 use App\Models\WorkflowInitialEmailItem;
 use App\Models\WorkflowInspectionItem;
+use App\Notifications\LandDevelopmentReport;
 use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
@@ -60,7 +61,9 @@ class ProjectController extends Controller
         {
 
             if (Auth::user()->hasRole("Owner")) {
-                $projects = Project::all();
+                $projects = Project::whereHas('workflow', function($q) {
+                    $q->where("status", ProjectController::STATUS_OPEN);
+                })->get();
             } else {
                 $projects = Workflow::where("status", ProjectController::STATUS_OPEN)->get()->filter(function($workflow) {
                     return $workflow->step()->role && Auth::user()->hasRole($workflow->step()->role);
@@ -207,26 +210,7 @@ class ProjectController extends Controller
 
         if (!$project->save()) $errors++;
 
-        $workflow_template = WorkflowTemplate::find($request->workflow_id);
-        $workflow = new Workflow([
-            'name' => $workflow_template->name,
-            'priority' => $workflow_template->priority,
-            'project_id' => $project->id,
-            'status'=> self::STATUS_OPEN,
-        ]);
-
-
-        if (!$workflow->save()) $errors++;
-
-        foreach ($workflow_template->sub_items() as $item) {
-            $class = str_replace("Template", "", class_basename($item));
-            if ($class == 'WorkflowToDoItem') $item = new WorkflowToDoItem($item->toArray());
-            if ($class == 'WorkflowEmailItem') $item = new WorkflowEmailItem($item->toArray());
-            if ($class == 'WorkflowInitialEmailItem') $item = new WorkflowInitialEmailItem($item->toArray());
-            if ($class == 'WorkflowInspectionItem') $item = new WorkflowInspectionItem($item->toArray());
-            $item->workflow_id = $workflow->id;
-            if (!$item->save()) $errors++;
-        }
+        $workflow_template = WorkflowController::createWorkflow($request->workflow_id, $project->id, $errors);
 
         if (!$errors)
         {
@@ -278,6 +262,7 @@ class ProjectController extends Controller
 
             //SET VALUES TO MODEL
             $project->name = $request->name;
+            $project->proj_number = $request->proj_number;
             $project->latitude = $request->latitude;
             $project->longitude = $request->longitude;
             $project->city = $request->city;
@@ -558,6 +543,17 @@ class ProjectController extends Controller
         }));
     }
 
+    public function completeChecklistItem(Project $project, int $item, int $status) {
+        if ($project->workflow->step()->role && Auth::user()->hasRole($project->workflow->step()->role)) {
+            $task = $project->workflow->step();
+            $checklist = $task->checklist;
+            $checklist[$item]["status"] = $status;
+            $task->checklist = $checklist;
+            $task->save();
+            return response('');
+        }
+    }
+
     public static function getStatusCleartext($status) {
         switch ($status) {
             case 0:
@@ -575,5 +571,33 @@ class ProjectController extends Controller
             default:
                 return 'Unknown Status';
         }
+    }
+
+    public static function LandDevelopmentNOISignerReport()  {
+        $workflows = Workflow::where([['name', 'like', '%Land Development%'], ['status', '!=', ProjectController::STATUS_CLOSE]])->get();
+
+        $projects_needing_noi_signer = [];
+
+        $workflows->each(function($workflow) use (&$projects_needing_noi_signer) {
+
+            $workflow->project->contractors->each(function ($contractor) use (&$projects_needing_noi_signer, $workflow) {
+                print("Checking Contractor: " . $contractor->name);
+                if ($contractor->noi_signer_name == "" || $contractor->noi_signer_name == "Please select") {
+                    print("Found One");
+                    array_push($projects_needing_noi_signer, $workflow->project->id);
+                    return false;
+                }
+
+            });
+
+        });
+
+        $projects = Project::whereIn('id', $projects_needing_noi_signer)->get();
+
+
+        $roles = Role::where('name', 'NOIs')->first()->users->each(function($user) use ($projects) {
+           $user->notify(new LandDevelopmentReport($projects));
+        });
+
     }
 }

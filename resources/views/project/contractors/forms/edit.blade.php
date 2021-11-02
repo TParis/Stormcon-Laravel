@@ -37,7 +37,7 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_city', 'City', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_city', $contractor->city, array('class' => 'form-control', 'placeholder' => 'Dallas')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_city', $contractor->city, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -57,7 +57,7 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_zipcode', 'Zipcode', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_zipcode', $contractor->zipcode, array('class' => 'form-control', 'placeholder' => '78123')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_zipcode', $contractor->zipcode, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -77,7 +77,7 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_state_tax_id', 'State Tax ID', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_state_tax_id', $contractor->state_tax_id, array('class' => 'form-control', 'placeholder' => '1231564897')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_state_tax_id', $contractor->state_tax_id, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -87,7 +87,7 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_division', 'Division', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_division', $contractor->division, array('class' => 'form-control', 'placeholder' => 'Residential')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_division', $contractor->division, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -97,7 +97,7 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_sos', 'SOS Number', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_sos', $contractor->sos, array('class' => 'form-control', 'placeholder' => '23123483')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_sos', $contractor->sos, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -107,13 +107,13 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_cn', 'CN Number', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_cn', $contractor->cn, array('class' => 'form-control', 'placeholder' => '1315547354')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_cn', $contractor->cn, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_sic', 'SIC Code', array('class' => 'offset-6 col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_sic', $contractor->sic, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_sic', $contractor->sic, array('class' => 'form-control')) }}
         </div>
     </div>
     <hr>
@@ -133,23 +133,23 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_contact_title', 'Title', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_contact_title', $contractor->contact_title, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_contact_title', $contractor->contact_title, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_contact_phone', 'Phone', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_contact_phone', $contractor->contact_phone, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_contact_phone', $contractor->contact_phone, array('class' => 'form-control')) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_contact_fax', 'Fax', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_contact_fax', $contractor->contact_fax, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_contact_fax', $contractor->contact_fax, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_contact_email', 'Email', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_contact_email', $contractor->contact_email, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_contact_email', $contractor->contact_email, array('class' => 'form-control')) }}
         </div>
     </div>
     <hr>
@@ -169,7 +169,7 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_noi_signer_title', 'Title', array('class' => 'col-3 text-right control-label')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_noi_signer_title', $contractor->noi_signer_title, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_noi_signer_title', $contractor->noi_signer_title, array('class' => 'form-control')) }}
         </div>
     </div>
 
@@ -196,7 +196,7 @@
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_not_signer_title', 'Title', array('class' => 'col-3 text-right control-label')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_not_signer_title', $contractor->not_signer_title, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_not_signer_title', $contractor->not_signer_title, array('class' => 'form-control')) }}
         </div>
     </div>
 

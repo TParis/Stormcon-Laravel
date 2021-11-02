@@ -19,13 +19,13 @@
     <div class="form-group row">
         {{ Form::label('description', 'Description', array('class' => 'col-4 control-label')) }}
         <div class="col-8">
-            {{ Form::text('description', $bmp->description, array('class' => 'form-control', 'placeholder' => 'Description')) }}
+            {{ Form::text('description', $bmp->description, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('uses', 'Uses', array('class' => 'col-4 control-label')) }}
         <div class="col-8">
-            {{ Form::text('uses', $bmp->uses, array('class' => 'form-control', 'placeholder' => 'Uses')) }}
+            {{ Form::text('uses', $bmp->uses, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -37,7 +37,7 @@
     <div class="form-group row">
         {{ Form::label('maintenance', 'Maintenance', array('class' => 'col-4 control-label')) }}
         <div class="col-8">
-            {{ Form::text('maintenance', $bmp->maintenance, array('class' => 'form-control', 'placeholder' => 'Maintenance')) }}
+            {{ Form::text('maintenance', $bmp->maintenance, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -49,7 +49,7 @@
     <div class="form-group row">
         {{ Form::label('considerations', 'Considerations', array('class' => 'col-4 control-label')) }}
         <div class="col-8">
-            {{ Form::text('considerations', $bmp->considerations, array('class' => 'form-control', 'placeholder' => 'Considerations')) }}
+            {{ Form::text('considerations', $bmp->considerations, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">

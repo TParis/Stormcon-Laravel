@@ -71,7 +71,7 @@
                 <div class="form-group row">
                     {{ Form::label('city', 'City', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('city', $company->city, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Dallas')) }}
+                        {{ Form::text('city', $company->city, array('required' => 'required', 'class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
@@ -83,7 +83,7 @@
                 <div class="form-group row">
                     {{ Form::label('zipcode', 'Zipcode', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('zipcode', $company->zipcode, array('required' => 'required', 'class' => 'form-control', 'placeholder' => '78123')) }}
+                        {{ Form::text('zipcode', $company->zipcode, array('required' => 'required', 'class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
@@ -95,7 +95,7 @@
                 <div class="form-group row">
                     {{ Form::label('state_tax_id', 'State Tax ID', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('state_tax_id', $company->state_tax_id, array('class' => 'form-control', 'placeholder' => '1231564897')) }}
+                        {{ Form::text('state_tax_id', $company->state_tax_id, array('class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
@@ -113,25 +113,25 @@
                 <div class="form-group row">
                     {{ Form::label('division', 'Division', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('division', $company->division, array('class' => 'form-control', 'placeholder' => 'Residential')) }}
+                        {{ Form::text('division', $company->division, array('class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
                     {{ Form::label('sos', 'SOS Number', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('sos', $company->sos, array('class' => 'form-control', 'placeholder' => '23123483')) }}
+                        {{ Form::text('sos', $company->sos, array('class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
                     {{ Form::label('cn', 'CN Number', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('cn', $company->cn, array('class' => 'form-control', 'placeholder' => '1315547354')) }}
+                        {{ Form::text('cn', $company->cn, array('class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
                     {{ Form::label('sic', 'SIC Code', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('sic', $company->sic, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+                        {{ Form::text('sic', $company->sic, array('class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">

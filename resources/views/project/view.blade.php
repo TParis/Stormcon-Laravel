@@ -59,7 +59,7 @@
                     <a href="#" class="w-100 d-block" id="save-unblock">Clear Blocker</a>
                     <hr>
                     <a href="{{ route("project::reverse-step", $project->id) }}" class="w-100 d-block">Return to Previous Step</a>
-                    <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="w-100 d-block invisible">Complete Step</a>
+                    <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="w-100 d-block invisible complete-btn">Complete Step</a>
                     @if (Auth::user()->can('skipWorkflow'))
                     <a href="#" data-toggle="modal" data-target="#skip-modal">Skip to...</a>
                     @endif
@@ -69,17 +69,18 @@
                 </div>
                 @endif
                 @if (($project->workflow->step()->role && Auth::user()->hasRole($project->workflow->step()->role)))
-                <h3 align="right" class="project-block-header">To Do</h3>
+                <h3 align="right" class="project-block-header">Checklist</h3>
                 <div class="container-fluid border project-block" id="checklist-block">
-                    @foreach (preg_split('/\r\n|\r|\n/', $project->workflow->step()->checklist) as $task)
+                    @foreach ($project->workflow->step()->checklist as $task)
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="task{{ $loop->index }}">
+                        <input class="form-check-input" type="checkbox" id="{{ $loop->index }}" value="1" {{ ($task["status"]) ? " checked " : "" }} id="task{{ $loop->index }}">
                         <label class="form-check-label" for="task{{ $loop->index }}">
-                            {{ $task }}
+                            {{ $task["task"] }}
                         </label>
                     </div>
                     @endforeach
                 </div>
+                <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="btn btn-primary w-100 d-block invisible complete-btn">Complete Step</a>
                 @endif
                 <h3 align="right" class="project-block-header">Files</h3>
                 <div class="container-fluid border project-block" style="padding: 0px">
@@ -304,10 +305,31 @@
            if (!subel.checked) anyUnchecked = true;
         })
 
-        if (!anyUnchecked) $("#complete-step").removeClass("invisible");
-        if (anyUnchecked) $("#complete-step").addClass("invisible");
+        if (!anyUnchecked) $(".complete-btn").removeClass("invisible");
+        if (anyUnchecked) $(".complete-btn").addClass("invisible");
 
     });
+
+    $("#checklist-block input").on("click", function(el) {
+        let item = el.target;
+        let id = $(item).attr("id");
+        let status = ( $(item).prop("checked") ) ? 1 : 0;
+
+        $.ajax({
+            url: "/api/projects/{{ $project->id }}/checklist/" + id + "/" + status,
+            context: el,
+            method: "get",
+            data: {
+                'api_token': '{{ Auth::user()->api_token }}',
+            },
+            error: function () {
+                alert("Failed to update checklist");
+            }
+        });
+
+
+
+    })
 
     @if (Auth::user()->can('skipWorkflow'))
     $(".save-skip").click(function() {

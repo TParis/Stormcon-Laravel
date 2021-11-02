@@ -18,13 +18,13 @@
         <div class="form-group row">
             {{ Form::label('description', 'Description', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('description', '', array('class' => 'form-control', 'placeholder' => 'Description')) }}
+                {{ Form::text('description', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
             {{ Form::label('uses', 'Uses', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('uses', '', array('class' => 'form-control', 'placeholder' => 'Uses')) }}
+                {{ Form::text('uses', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
@@ -36,7 +36,7 @@
         <div class="form-group row">
             {{ Form::label('maintenance', 'Maintenance', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('maintenance', '', array('class' => 'form-control', 'placeholder' => 'Maintenance')) }}
+                {{ Form::text('maintenance', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">
@@ -48,7 +48,7 @@
         <div class="form-group row">
             {{ Form::label('considerations', 'Considerations', array('class' => 'col-4 control-label')) }}
             <div class="col-8">
-                {{ Form::text('considerations', '', array('class' => 'form-control', 'placeholder' => 'Considerations')) }}
+                {{ Form::text('considerations', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">

@@ -2,7 +2,13 @@
 <div class="form-group row">
     {{ Form::label('name', 'Project Name', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('name', $project->name, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Project Name')) }}
+        {{ Form::text('name', $project->name, array('required' => 'required', 'class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('proj_number', 'Project Number', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('proj_number', $project->proj_number, array('required' => 'required', 'class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -20,31 +26,31 @@
 <div class="form-group row">
     {{ Form::label('mailing_address_street_number', 'Street Number', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('mailing_address_street_number', $project->mailing_address_street_number, array('class' => 'form-control', 'placeholder' => 'Dallas')) }}
+        {{ Form::text('mailing_address_street_number', $project->mailing_address_street_number, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
     {{ Form::label('mailing_address_street_name', 'Street Name', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('mailing_address_street_name', $project->mailing_address_street_name, array('class' => 'form-control', 'placeholder' => 'Dallas')) }}
+        {{ Form::text('mailing_address_street_name', $project->mailing_address_street_name, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
     {{ Form::label('city', 'City', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('city', $project->city, array('class' => 'form-control', 'placeholder' => 'Dallas')) }}
+        {{ Form::text('city', $project->city, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
     {{ Form::label('state', 'State', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('state', $project->state, array('class' => 'form-control', 'placeholder' => 'Texas')) }}
+        {{ Form::text('state', $project->state, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
     {{ Form::label('zipcode', 'Zipcode', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('zipcode', $project->zipcode, array('class' => 'form-control', 'placeholder' => '78123')) }}
+        {{ Form::text('zipcode', $project->zipcode, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">

@@ -23,13 +23,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-3">
-                <h3>Add Step</h3>
+                <h3>Add Task</h3>
                 <div class="table-bordered border-dark p-3">
                     {{ Form::open(array('route' => array('workflow_template::item::create', $template->id), 'method' => 'post', 'class'	=> 'form-horizontal')) }}
                     {{ Form::label('name', 'Step Name', array('class' => 'control-label required-field')) }}
-                    {{ Form::text('name', '', array('class' => 'form-control')) }}
+                    {{ Form::text('name', '', array('class' => 'form-control', 'required' => 'required')) }}
                     {{ Form::label('type', 'Type', array('class' => 'control-label required-field')) }}
-                    {{ Form::select('type', ['initial' => 'Email All Teams', 'inspection' => 'Inspection Phase', 'email' => "E-Mail", 'todo' => "To-Do List"], [],array('class' => 'form-control', 'placeholder' => 'Please select')) }}
+                    {{ Form::select('type', ['inspection' => 'Inspection Phase', 'email' => "E-Mail", 'todo' => "Checklist"], [],array('class' => 'form-control', 'placeholder' => 'Please select')) }}
                     <div id="options"></div>
                     <button class="btn btn-success w-100 mt-3">Add Task</button>
                     {{ Form::close() }}
@@ -52,7 +52,7 @@
                 <h1 align="center">END</h1>
             </div>
             <div class="col-3 offset-1">
-                <h3 align="right">Template</h3>
+                <h3 align="right">File Templates</h3>
                 @if (Auth::user()->need_token())
                     <h2>Please login to the Microsoft API (allow popups)</h2>
                 @else

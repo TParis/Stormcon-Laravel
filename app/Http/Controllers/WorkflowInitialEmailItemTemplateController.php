@@ -27,7 +27,7 @@ class WorkflowInitialEmailItemTemplateController extends Controller
      */
     public function create()
     {
-        return response('')->status(200);
+        return response('');
     }
 
     /**

@@ -41,7 +41,7 @@
 						<div class="form-group">
 							{{ Form::label('password', 'Password', array('class' => 'col-sm-2 control-label required-field')) }}
 							<div class="col-sm-4">
-								{{ Form::password('password', array('class' => 'form-control', 'placeholder' => 'Password')) }}
+								{{ Form::password('password', array('class' => 'form-control')) }}
 							</div>
 						</div>
 					</div>

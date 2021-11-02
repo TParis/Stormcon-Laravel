@@ -29,7 +29,7 @@
                 <div class="form-group row">
                     {{ Form::label('name', 'Name', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('name', $municipal->name, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Austin')) }}
+                        {{ Form::text('name', $municipal->name, array('required' => 'required', 'class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
@@ -47,7 +47,7 @@
                 <div class="form-group row">
                     {{ Form::label('city', 'City', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('city', $municipal->city, array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Austin')) }}
+                        {{ Form::text('city', $municipal->city, array('required' => 'required', 'class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">
@@ -59,7 +59,7 @@
                 <div class="form-group row">
                     {{ Form::label('zipcode', 'Zipcode', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
-                        {{ Form::text('zipcode', $municipal->zipcode, array('required' => 'required', 'class' => 'form-control', 'placeholder' => '78123')) }}
+                        {{ Form::text('zipcode', $municipal->zipcode, array('required' => 'required', 'class' => 'form-control')) }}
                     </div>
                 </div>
                 <div class="form-group row">

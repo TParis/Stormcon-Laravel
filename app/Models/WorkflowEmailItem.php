@@ -14,17 +14,29 @@ class WorkflowEmailItem extends WorkflowItem
 
     protected $fillable = ['workflow_id', 'role', 'name', 'subject', 'message', 'order'];
     public $type = "Email";
+    protected $casts = [
+        'role' => 'array'
+    ];
 
     public function executeAutomatedTasks() {
 
+        $already_emailed = [];
+
         //Email stuff here
-        $role = Role::where('name', $this->role)->first();
-        $role->users->each(function ($user) {
-            $user->notify(new ProjectWorkflow($this->workflow->project));
+        $roles = Role::whereIn('name', $this->role)->get();
+
+        $roles->each(function ($role) use (&$already_emailed) {
+            $role->users->each(function ($user) use (&$already_emailed) {
+                if (!in_array($user->id, $already_emailed)) {
+                    $user->notify(new ProjectWorkflow($this->workflow->project));
+                    array_push($already_emailed, $user->id);
+                }
+            });
         });
 
         //Automatically increment steps
         $this->workflow->next_step();
         return null;
     }
+
 }

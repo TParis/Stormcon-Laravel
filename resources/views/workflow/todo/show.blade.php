@@ -13,7 +13,7 @@
                 <div class="col-9">
                     <div class="card-body">
                         <div>Type:</div>
-                        <div class="pl-3">To-Do List</div>
+                        <div class="pl-3">Checklist</div>
                         <div>Steps:</div>
                         <div style="font-size: 10pt;" class="pl-3">{!! nl2br(e($item->checklist ), false) !!}</div>
                         <div>Team:</div>

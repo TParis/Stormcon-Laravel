@@ -51,7 +51,7 @@
     <div class="form-group row">
         {{ Form::label('operator_' . $operator->index . '_city', 'City', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $operator->index . '_city', $operator->{'operator_' . $operator->index . '_city'}, array('class' => 'form-control', 'placeholder' => 'Dallas')) }}
+            {{ Form::text('operator_' . $operator->index . '_city', $operator->{'operator_' . $operator->index . '_city'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -63,7 +63,7 @@
     <div class="form-group row">
         {{ Form::label('operator_' . $operator->index . '_zipcode', 'Zipcode', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $operator->index . '_zipcode', $operator->{'operator_' . $operator->index . '_zipcode'}, array('class' => 'form-control', 'placeholder' => '78123')) }}
+            {{ Form::text('operator_' . $operator->index . '_zipcode', $operator->{'operator_' . $operator->index . '_zipcode'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -75,7 +75,7 @@
     <div class="form-group row">
         {{ Form::label('operator_' . $operator->index . '_state_tax_id', 'State Tax ID', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $operator->index . '_state_tax_id', $operator->{'operator_' . $operator->index . '_state_tax_id'}, array('class' => 'form-control', 'placeholder' => '1231564897')) }}
+            {{ Form::text('operator_' . $operator->index . '_state_tax_id', $operator->{'operator_' . $operator->index . '_state_tax_id'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
@@ -93,25 +93,25 @@
     <div class="form-group row">
         {{ Form::label('operator_' . $operator->index . '_division', 'Division', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $operator->index . '_division', $operator->{'operator_' . $operator->index . '_division'}, array('class' => 'form-control', 'placeholder' => 'Residential')) }}
+            {{ Form::text('operator_' . $operator->index . '_division', $operator->{'operator_' . $operator->index . '_division'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $operator->index . '_sos', 'SOS Number', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $operator->index . '_sos', $operator->{'operator_' . $operator->index . '_sos'}, array('class' => 'form-control', 'placeholder' => '23123483')) }}
+            {{ Form::text('operator_' . $operator->index . '_sos', $operator->{'operator_' . $operator->index . '_sos'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $operator->index . '_cn', 'CN Number', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $operator->index . '_cn', $operator->{'operator_' . $operator->index . '_cn'}, array('class' => 'form-control', 'placeholder' => '1315547354')) }}
+            {{ Form::text('operator_' . $operator->index . '_cn', $operator->{'operator_' . $operator->index . '_cn'}, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $operator->index . '_sic', 'SIC Code', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $operator->index . '_sic', $operator->{'operator_' . $operator->index . '_sic'}, array('class' => 'form-control', 'placeholder' => 'B3B354ASD')) }}
+            {{ Form::text('operator_' . $operator->index . '_sic', $operator->{'operator_' . $operator->index . '_sic'}, array('class' => 'form-control')) }}
         </div>
     </div>
 </div>

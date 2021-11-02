@@ -27,7 +27,7 @@ class WorkflowInspectionItemTemplateController extends Controller
      */
     public function create()
     {
-        return response('')->status(200);
+        return response('');
     }
 
     /**

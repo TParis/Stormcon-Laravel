@@ -12,7 +12,7 @@
         <div class="form-group row">
             {{ Form::label('username', 'Username', array('class' => 'col-3 control-label required-field')) }}
             <div class="col-9">
-                {{ Form::text('username', '', array('class' => 'form-control', 'placeholder' => 'Username')) }}
+                {{ Form::text('username', '', array('class' => 'form-control')) }}
             </div>
         </div>
         <div class="form-group row">

@@ -16,7 +16,13 @@
                         <div>Type:</div>
                         <div class="pl-3">Email</div>
                         <div>Role:</div>
-                        <div class="pl-3">{{ $item->role }}</div>
+                        <div class="pl-3">
+                            @if (is_array($item->role))
+                                {{ implode(", ", $item->role) }}
+                            @else
+                                {{ $item->role }}
+                            @endif
+                        </div>
                         <div>Subject:</div>
                         <div class="pl-3">{{ $item->subject }}</div>
                         <div>Body:</div>

@@ -19,13 +19,13 @@
     <div class="form-group row">
         {{ Form::label('days', 'Schedule', array('class' => 'col-4 control-label')) }}
         <div class="col-8">
-            {{ Form::select('days', $days, $schedule->days, array('class' => 'form-control', 'placeholder' => 'Description')) }}
+            {{ Form::select('days', $days, $schedule->days, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('Description', 'Description', array('class' => 'col-4 control-label')) }}
         <div class="col-8">
-            {{ Form::text('Description', $schedule->Description, array('class' => 'form-control', 'placeholder' => 'Description')) }}
+            {{ Form::text('Description', $schedule->Description, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">

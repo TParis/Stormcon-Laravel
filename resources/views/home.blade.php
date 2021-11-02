@@ -141,7 +141,7 @@
                 <hr>
                 @endif
                 @if (Auth::user()->can('viewWorkflows'))
-                <a href="#" class="w-100 d-block">Manage Workflows</a>
+                <a href="{{ route("workflow_template::index") }}" class="w-100 d-block">Manage Workflows</a>
                 @endif
                 @if (Auth::user()->hasRole(['Sr Admin', 'Owner']))
                 <hr>

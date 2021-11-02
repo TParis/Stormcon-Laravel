@@ -17,6 +17,7 @@ class Project extends Model
 
     protected $fillable = [
         "name",
+        "proj_number",
         "latitude",
         "longitude",
         "city",
@@ -229,6 +230,14 @@ class Project extends Model
     }
     public function not_complete() {
         return $this->contractors->sum('not_signed') == $this->contractors->count();
+    }
+
+    public function getLongitudeAttribute($value) {
+        return round($value, 6);
+    }
+
+    public function getLatitudeAttribute($value) {
+        return round($value, 6);
     }
 
 }

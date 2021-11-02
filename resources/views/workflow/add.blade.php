@@ -24,13 +24,13 @@
         <div class="form-group row">
             {{ Form::label('name', 'Template Name', array('class' => 'col-3 control-label required-field')) }}
             <div class="col-9">
-                {{ Form::text('name', '', array('class' => 'form-control', 'placeholder' => 'Workflow')) }}
+                {{ Form::text('name', '', array('class' => 'form-control')) }}
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row d-none">
             {{ Form::label('priority', 'Priority', array('class' => 'col-3 control-label')) }}
             <div class="col-9">
-                {{ Form::select('priority', ['Immediate', 'Expedite', 'Regular'], 2, array('class' => 'form-control', 'placeholder' => 'First name')) }}
+                {{ Form::hidden('priority', 2, array('class' => 'form-control', 'placeholder' => 'First name')) }}
             </div>
         </div>
         <button class="btn btn-primary">Create Template</button>

@@ -31,6 +31,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             InspectionController::updateWeeklySchedule();
         })->dailyAt("2:00")->withoutOverlapping();
+
+        $schedule->call(function() {
+            ProjectController::LandDevelopmentNOISignerReport();
+        })->dailyAt("2:00")->withoutOverlapping();
     }
 
     /**

@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\ProjectController;
 use App\Models\Project;
 use App\Models\Workflow;
+use App\Models\WorkflowEmailItem;
+use App\Models\WorkflowInitialEmailItem;
+use App\Models\WorkflowInspectionItem;
+use App\Models\WorkflowTemplate;
+use App\Models\WorkflowToDoItem;
 use App\Notifications\ProjectAssigned;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,5 +40,36 @@ class WorkflowController extends Controller
         $workflow->blocker = "";
         if ($workflow->save()) return response()->json($workflow);
         return response("Error", 500);
+    }
+
+    public static function createWorkflow($workflow_template_id, $project_id, &$errors) {
+
+        $workflow_template = WorkflowTemplate::find($workflow_template_id);
+        $workflow = new Workflow([
+            'name' => $workflow_template->name,
+            'priority' => $workflow_template->priority,
+            'project_id' => $project_id,
+            'status'=> ProjectController::STATUS_OPEN,
+        ]);
+
+
+        if (!$workflow->save()) $errors++;
+
+        foreach ($workflow_template->sub_items() as $item) {
+            $class = str_replace("Template", "", class_basename($item));
+            if ($class == 'WorkflowToDoItem') {
+                $item = new WorkflowToDoItem($item->toArray());
+                $checklist = Array();
+                foreach (explode("\r\n", $item->checklist) as $cl_item) array_push($checklist, array("task" => $cl_item, "status" => 0));
+                $item->checklist = $checklist;
+            }
+            if ($class == 'WorkflowEmailItem') $item = new WorkflowEmailItem($item->toArray());
+            if ($class == 'WorkflowInitialEmailItem') $item = new WorkflowInitialEmailItem($item->toArray());
+            if ($class == 'WorkflowInspectionItem') $item = new WorkflowInspectionItem($item->toArray());
+            $item->workflow_id = $workflow->id;
+            if (!$item->save()) $errors++;
+        }
+
+        return $workflow_template;
     }
 }
