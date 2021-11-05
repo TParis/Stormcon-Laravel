@@ -22,7 +22,19 @@ class WorkflowToDoItem extends WorkflowItem
 
     public function getChecklistAttribute($value) {
         if (json_decode($value)) {
-            return json_decode($value);
+
+            $steps = [];
+
+            $items = json_decode($value);
+
+            foreach ($items as $item) {
+                $obj = [];
+                $obj["task"] = $item->task;
+                $obj["status"] = $item->status;
+                array_push($steps, $obj);
+            };
+
+            return $steps;
         } else {
 
             $steps = [];
