@@ -73,55 +73,64 @@
 @section("scripts")
 <script type="text/javascript">
 
-    $("form #type").change(function(e) {
-        val = $(e.target).val()
-        let url = '{{ route('workflow_template::todo::create') }}'
-        if (val === 'email') url = '{{ route('workflow_template::email::create') }}'
-        if (val === 'initial') url = '/workflow-template/initial/create'
-        if (val === 'inspection') url = '/workflow-template/inspection/create'
+    $(document).ready(function() {
 
-        $.get({
-            url: url,
-            success: function(data) {
-                $("#options").html(data);
-            }
-        });
-    })
+        $("form #type").change(function(e) {
+            val = $(e.target).val()
+            let url = '{{ route('workflow_template::todo::create') }}'
+            if (val === 'email') url = '{{ route('workflow_template::email::create') }}'
+            if (val === 'initial') url = '/workflow-template/initial/create'
+            if (val === 'inspection') url = '/workflow-template/inspection/create'
 
-    $("input[type='radio']").click(function(e) {
-        val = $(e.target).val()
-        $.get({
-            url: '{{ route('workflow_template::template::update', $template->id) }}',
-            data: {
-                template: val
-            }
+            $.get({
+                url: url,
+                success: function(data) {
+                    $("#options").html(data);
+                }
+            });
         })
-    })
 
-    function sortWorkflowList(e) {
-       id = $(e.target.parentNode).data("id");
-       action = $(e.target.parentNode).data("action");
+        $("input[type='radio']").click(function(e) {
+            val = $(e.target).val()
+            $.get({
+                url: '{{ route('workflow_template::template::update', $template->id) }}',
+                data: {
+                    template: val
+                }
+            })
+        })
 
-       $(".workflow-list").off("click", ".workflow-button", sortWorkflowList);
+        function sortWorkflowList(e) {
+            id = ($(e.target.parentNode).data("id") === undefined) ? $(e.target).data("id") : $(e.target.parentNode).data("id");
+            action = ($(e.target.parentNode).data("action") === undefined) ? $(e.target).data("action") : $(e.target.parentNode).data("action");
 
-       $.ajax({
-           url: "{{ route("workflow::template::item::sort", $template->id) }}/" + id + "/" + action,
-           method: "POST",
-           data: {
-               'api_token': '{{ Auth::user()->api_token }}',
-           },
-           success: function (data) {
-                $(".workflow-list").html(data);
+           $(".workflow-list").off("click", ".workflow-button", sortWorkflowList);
 
-                $(".workflow-list").on("click", ".workflow-button", sortWorkflowList);
-           },
-           error: function(data) {
-               alert("Could not update workflow list")
-           }
-       });
-    }
+           $.ajax({
+               url: "{{ route("workflow::template::item::sort", $template->id) }}/" + id + "/" + action,
+               method: "POST",
+               data: {
+                   'api_token': '{{ Auth::user()->api_token }}',
+               },
+               success: function (data) {
+                    $(".workflow-list").html(data);
 
-    $(".workflow-list").on("click", ".workflow-button", sortWorkflowList);
+               },
+               error: function(data) {
+                   alert("Could not update workflow list.  Please try again.")
+               },
+               complete: function() {
+                   $(".workflow-list").on("click", ".workflow-button", sortWorkflowList);
+               }
+           });
+
+
+        }
+
+
+        $(".workflow-list").on("click", ".workflow-button", sortWorkflowList);
+
+    });
 
 </script>
 @endsection

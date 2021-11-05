@@ -83,6 +83,9 @@
 
                                 @endif
                                 <div class="dropdown-divider"></div>
+                                @if (Auth::user()->hasAnyRole(['Admin', 'Sr Admin', 'Owner']))
+                                <a class="dropdown-item" href="{{ route("roles::index") }}">Roles</a>
+                                @endif
                                 @if (Auth::user()->can('viewWorkflows'))
                                 <a class="dropdown-item" href="{{ route("workflow_template::index") }}">Workflows</a>
                                 @endif

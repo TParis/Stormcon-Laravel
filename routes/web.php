@@ -601,6 +601,43 @@ Route::group(['prefix' => 'inspection', 'as' => 'inspection::'], function() {
 });
 
 
+Route::group(['prefix' => 'roles', 'as' => 'roles::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'RoleController@index'
+    ]);
+    Route::get('/view/{role}',[
+        'as'    => 'view',
+        'uses'  => 'RoleController@show'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'RoleController@create'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'RoleController@store'
+    ]);
+    Route::get('/edit/{role}',[
+        'as'    => 'edit',
+        'uses'  => 'RoleController@edit'
+    ]);
+    Route::put( '/edit/{role}',[
+        'as'    => 'update',
+        'uses'  => 'RoleController@update'
+    ]);
+    Route::delete('/delete/{role}',[
+        'as'    => 'delete',
+        'uses'  => 'RoleController@destroy'
+    ]);
+    Route::get('/undelete/{trashed_role}',[
+        'as'    => 'undelete',
+        'uses'  => 'RoleController@undelete'
+    ]);
+});
+
+
+
 Route::get('/onedrive/request',[
     'as'    => 'onedrive::create',
     'uses'  => 'OneDriveController@getOAuthToken'

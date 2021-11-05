@@ -127,12 +127,12 @@ class WorkflowTemplateController extends Controller
     }
 
     public function sort(WorkflowTemplate $template, $id, $action) {
-        $id++;
-        $item = $template->sub_items()->where("order", $id)->first();
+        //$id++;
+        $item = $template->sub_items()->flatten()[$id];
         if ($action == "delete") {
             $item->delete();
         } else {
-            $other = ($action == "up") ? $template->sub_items()->where("order", ($id - 1))->first() : $template->sub_items()->where("order", ($id + 1))->first();
+            $other = ($action == "up") ? $template->sub_items()->flatten()[$id - 1] : $template->sub_items()->flatten()[$id + 1];
 
             $curr = $item->order;
             $item->order = $other->order;
