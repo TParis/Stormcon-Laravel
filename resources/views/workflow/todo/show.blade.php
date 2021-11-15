@@ -15,7 +15,11 @@
                         <div>Type:</div>
                         <div class="pl-3">Checklist</div>
                         <div>Steps:</div>
-                        <div style="font-size: 10pt;" class="pl-3">{!! nl2br(e($item->checklist ), false) !!}</div>
+                        <div style="font-size: 10pt;" class="pl-3">
+                        @foreach($item->checklist as $task)
+                            {{ $task["task"] }} <br />
+                        @endforeach
+                        </div>
                         <div>Team:</div>
                         <div class="pl-3">{{ $item->role }}</div>
                         <div>Est Hours:</div>

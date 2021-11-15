@@ -20,37 +20,5 @@ class WorkflowToDoItem extends WorkflowItem
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function getChecklistAttribute($value) {
-        if (json_decode($value)) {
-
-            $steps = [];
-
-            $items = json_decode($value);
-
-            foreach ($items as $item) {
-                $obj = [];
-                $obj["task"] = $item->task;
-                $obj["status"] = $item->status;
-                array_push($steps, $obj);
-            };
-
-            return $steps;
-        } else {
-
-            $steps = [];
-
-            $items = (is_array($value)) ? $value : explode("\r\n", $value);
-
-            foreach ($items as $item) {
-                $obj = [];
-                $obj["task"] = $item;
-                $obj["status"] = 0;
-                array_push($steps, $obj);
-            };
-
-            return $steps;
-        }
-    }
-
 
 }

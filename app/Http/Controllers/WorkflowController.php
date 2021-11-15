@@ -57,12 +57,7 @@ class WorkflowController extends Controller
 
         foreach ($workflow_template->sub_items() as $item) {
             $class = str_replace("Template", "", class_basename($item));
-            if ($class == 'WorkflowToDoItem') {
-                $item = new WorkflowToDoItem($item->toArray());
-                $checklist = Array();
-                foreach (explode("\r\n", $item->checklist) as $cl_item) array_push($checklist, array("task" => $cl_item, "status" => 0));
-                $item->checklist = $checklist;
-            }
+            if ($class == 'WorkflowToDoItem') $item = new WorkflowToDoItem($item->toArray());
             if ($class == 'WorkflowEmailItem') $item = new WorkflowEmailItem($item->toArray());
             if ($class == 'WorkflowInitialEmailItem') $item = new WorkflowInitialEmailItem($item->toArray());
             if ($class == 'WorkflowInspectionItem') $item = new WorkflowInspectionItem($item->toArray());

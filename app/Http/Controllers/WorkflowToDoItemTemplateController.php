@@ -41,6 +41,15 @@ class WorkflowToDoItemTemplateController extends Controller
     {
         $item = new WorkflowToDoItemTemplate($request->all());
 
+        $checklist = [];
+        foreach (explode("\r\n", $request->checklist) as $task) {
+            $task_obj = [
+                "task" => $task,
+                "status" => 0
+            ];
+            array_push($checklist, $task_obj);
+        };
+        $item->checklist = $checklist;
         $item->order = $template->sub_items()->max("order") + 1;
 
         $template->todo_items()->save($item);

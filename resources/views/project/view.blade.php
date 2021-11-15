@@ -73,9 +73,9 @@
                 <div class="container-fluid border project-block" id="checklist-block">
                     @foreach ($project->workflow->step()->checklist as $task)
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="{{ $loop->index }}" value="1" {{ ($task["status"]) ? " checked " : "" }} id="task{{ $loop->index }}">
+                        <input class="form-check-input" type="checkbox" id="{{ $loop->index }}" value="1" {{ (isset($task["status"]) && $task["status"]) ? " checked " : "" }} id="task{{ $loop->index }}">
                         <label class="form-check-label" for="task{{ $loop->index }}">
-                            {{ $task["task"] }}
+                            {{ (isset($task["task"])) ? $task["task"] : $task }}
                         </label>
                     </div>
                     @endforeach

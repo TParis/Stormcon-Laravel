@@ -57,7 +57,7 @@ class WorkflowTemplateController extends Controller
         $initiator_task = new WorkflowToDoItemTemplate([
            'name' => 'Initial Setup',
            'role' => 'Initiator',
-           'checklist' => 'Complete initial information',
+           'checklist' => [["task" => "Complete initial information", "status" => 0]],
            'order' => 1,
            'days' => 1
         ]);

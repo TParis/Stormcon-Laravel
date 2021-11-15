@@ -12,5 +12,9 @@ class WorkflowToDoItemTemplate extends WorkflowItemTemplate
 
     protected $fillable = ['workflow_template_id', 'name', 'checklist', 'role', 'order', 'days'];
 
+    protected $casts = [
+        'checklist' => 'array'
+    ];
+
 
 }
