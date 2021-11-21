@@ -2,32 +2,26 @@
 <div class="form-group row">
     {{ Form::label('researcher', 'Researcher', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::select('researcher', $stormcon->pluck("full_name"), $project->researcher, array('class' => 'form-control')) }}
+        {{ Form::select('researcher', $researchers, $project->researcher, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('research_complete', 'Completed Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('research_completed', 'Completed Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::date('research_complete', $project->research_complete, array('class' => 'form-control')) }}
+        {{ Form::date('research_completed', $project->research_completed, array('class' => 'form-control')) }}
     </div>
 </div>
 <h3>Research</h3>
 <div class="form-group row">
     {{ Form::label('edwards_aquifer', 'Edwards Aquifer', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::select('edwards_aquifer', ["Yes" => "Yes", "No" => "No"], $project->edwards_aquifer, array('class' => 'form-control')) }}
+        {{ Form::select('edwards_aquifer', ["Inside" => "Inside", "Outside" => "Outside"], $project->edwards_aquifer, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('surrounding_project', 'Surrounding Projects', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('classified_waters', 'Classified Waters', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('surrounding_project', $project->surrounding_project, array('class' => 'form-control')) }}
-    </div>
-</div>
-<div class="form-group row">
-    {{ Form::label('huc', 'HUC', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('huc', $project->huc, array('class' => 'form-control')) }}
+        {{ Form::select('classified_waters', ["Yes" => "Yes", "No" => "No"], $project->classified_waters, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -37,9 +31,21 @@
     </div>
 </div>
 <div class="form-group row">
+    {{ Form::label('surrounding_project', 'Water Features Surrounding Projects', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('surrounding_project', $project->surrounding_project, array('class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
     {{ Form::label('within_50ft', 'Within 50ft', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::select('within_50ft', ["No" => "No", "Yes" => "Yes"], $project->within_50ft, array('class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('huc', '8-Digit HUC #', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('huc', $project->huc, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -64,13 +70,13 @@
 <div class="form-group row">
     {{ Form::label('303d_epa', 'Listed EPA', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('303d_epa', $project->{"303d_epa"}, array('class' => 'form-control')) }}
+        {{ Form::select('303d_epa', ["not " => "No", "" => "Yes"], $project->{"303d_epa"}, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
     {{ Form::label('303d_tceq', 'Listed TCEQ', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('303d_tceq', $project->{"303d_tceq"}, array('class' => 'form-control')) }}
+        {{ Form::select('303d_tceq', ["not " => "No", "" => "Yes"], $project->{"303d_tceq"}, array('class' => 'form-control')) }}
     </div>
 </div>
 <h3>Constituents</h3>
@@ -86,10 +92,11 @@
         {{ Form::text('constituent_1_co_area', $project->constituent_1_co_area, array('class' => 'form-control')) }}
     </div>
 </div>
+{{ Form::datalist('water_quality_list', $water_qualities->pluck("category", "category")->toArray()) }}
 <div class="form-group row">
     {{ Form::label('constituent_1_tmdl', 'First TMDL', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('constituent_1_tmdl', $project->constituent_1_tmdl, array('class' => 'form-control')) }}
+        {{ Form::text('constituent_1_tmdl', $project->constituent_1_tmdl, array('class' => 'form-control', 'list' => 'water_quality_list')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -107,7 +114,7 @@
 <div class="form-group row">
     {{ Form::label('constituent_2_tmdl', 'Second TMDL', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('constituent_2_tmdl', $project->constituent_2_tmdl, array('class' => 'form-control')) }}
+        {{ Form::text('constituent_2_tmdl', $project->constituent_2_tmdl, array('class' => 'form-control', 'list' => 'water_quality_list')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -125,6 +132,6 @@
 <div class="form-group row">
     {{ Form::label('constituent_3_tmdl', 'Third TMDL', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('constituent_3_tmdl', $project->constituent_3_tmdl, array('class' => 'form-control')) }}
+        {{ Form::text('constituent_3_tmdl', $project->constituent_3_tmdl, array('class' => 'form-control', 'list' => 'water_quality_list')) }}
     </div>
 </div>

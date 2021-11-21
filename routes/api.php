@@ -1,7 +1,9 @@
 <?php
 
 use App\Models\Company;
+use App\Models\Municipal;
 use App\Models\Project;
+use App\Models\Soil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -27,8 +29,18 @@ Route::middleware('auth:api')->get('role/{role}/users', [
 ]);
 
 Route::middleware('auth:api')->get("/company/{company}", function (Request $request, $company) {
-    $company = Company::where('name', $company)->firstOrFail();
+    $company = Company::where('name', $company)->firstOrNew();
     return response()->json($company);
+});
+
+Route::middleware('auth:api')->get("/soils/{soil}", function (Request $request, $soil) {
+    $soil = Soil::where('name', urldecode($soil))->firstOrNew();
+    return response()->json($soil);
+});
+
+Route::middleware('auth:api')->get("/municipals/{municipal}", function (Request $request, $ms4) {
+    $ms4 = Municipal::where('name', urldecode($ms4))->firstOrNew();
+    return response()->json($ms4);
 });
 
 //Notes Templates

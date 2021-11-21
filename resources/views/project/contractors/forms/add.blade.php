@@ -11,7 +11,7 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_role', 'Role', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::select('contractor_' . $contractor->id . '_role', $roles, '', array('class' => 'form-control')) }}
+            {{ Form::select('contractor_' . $contractor->id . '_role', Collect($roles)->sort()->toArray(), '', array('class' => 'form-control')) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_address', 'Address', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
@@ -36,7 +36,7 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_legal_name', 'Legal Name', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_legal_name', '', array('class' => 'form-control', 'placeholder' => 'Gas R Us LLC')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_legal_name', '', array('class' => 'form-control',)) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_state', 'State', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
@@ -46,9 +46,9 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_also_known_as', 'Also Known As', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_also_known_as', '', array('class' => 'form-control', 'placeholder' => 'Gas R Us')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_also_known_as', '', array('class' => 'form-control',)) }}
         </div>
-        {{ Form::label('contractor_' . $contractor->id . '_zipcode', 'Zipcode', array('class' => 'col-3 text-right control-label required-field')) }}
+        {{ Form::label('contractor_' . $contractor->id . '_zipcode', 'Zip Code', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
             {{ Form::text('contractor_' . $contractor->id . '_zipcode', '', array('class' => 'form-control')) }}
         </div>
@@ -56,7 +56,7 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_phone', 'Phone Number', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_phone', $contractor->phone, array('class' => 'form-control', 'placeholder' => '123-456-7890')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_phone', $contractor->phone, array('class' => 'form-control',)) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_federal_tax_id', 'Federal Tax ID', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
@@ -66,7 +66,7 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_fax', 'Fax Number', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_fax', $contractor->fax, array('class' => 'form-control', 'placeholder' => '123-456-7891')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_fax', $contractor->fax, array('class' => 'form-control',)) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_state_tax_id', 'State Tax ID', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
@@ -76,7 +76,7 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_website', 'Website', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_website', $contractor->website, array('class' => 'form-control', 'placeholder' => 'https://www.website.com/')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_website', $contractor->website, array('class' => 'form-control',)) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_division', 'Division', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
@@ -86,7 +86,7 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_type', 'Type of Company', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::text('contractor_' . $contractor->id . '_type', $contractor->type, array('class' => 'form-control', 'placeholder' => 'Limited Liability Corporation')) }}
+            {{ Form::text('contractor_' . $contractor->id . '_type', $contractor->type, array('class' => 'form-control',)) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_sos', 'SOS Number', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
@@ -96,7 +96,7 @@
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_num_of_employees', 'Number of Employees', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">
-            {{ Form::number('contractor_' . $contractor->id . '_num_of_employees', $contractor->num_of_employees, array('class' => 'form-control', 'placeholder' => '5')) }}
+            {{ Form::number('contractor_' . $contractor->id . '_num_of_employees', $contractor->num_of_employees, array('class' => 'form-control',)) }}
         </div>
         {{ Form::label('contractor_' . $contractor->id . '_cn', 'CN Number', array('class' => 'col-3 text-right control-label required-field')) }}
         <div class="col-3">

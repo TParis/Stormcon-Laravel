@@ -26,9 +26,10 @@
                 subdir: dir
             },
             success: function(data) {
+                $(".onedrive-files").css("visibility", "visible");
                 data.unshift({type: "dir", filename: "../"})
 
-                data.sort(function(a, b) {
+                data.sort(function (a, b) {
 
                     if (a.type == "dir" && b.type == "file") return -1;
                     var nameA = a.filename.toUpperCase();
@@ -46,7 +47,7 @@
 
                 });
 
-                $.each(data, function(key, el, e) {
+                $.each(data, function (key, el, e) {
 
                     if (el.type == "dir") {
                         $(".onedrive").append(makeDir(el))
@@ -55,6 +56,10 @@
                     }
 
                 });
+            },
+            error: function(data) {
+                $(".onedrive-files").css("visibility", "hidden");
+                setTimeout(getDir, 5000);
             }
         });
 

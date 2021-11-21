@@ -13,110 +13,30 @@ class Project extends Model
 
     protected $casts = [
         'bmps' => 'array',
+        'longitude' => 'decimal:6',
+        'latitude' => 'decimal:6',
+        'acres' => 'decimal:6',
+        'acres_disturbed' => 'decimal:6',
+        'soil_1_k_factor' => 'decimal:2',
+        'soil_1_area' => 'decimal:6',
+        'soil_2_k_factor' => 'decimal:2',
+        'soil_2_area' => 'decimal:6',
+        'soil_3_k_factor' => 'decimal:2',
+        'soil_3_area' => 'decimal:6',
+        'soil_4_k_factor' => 'decimal:2',
+        'soil_4_area' => 'decimal:6',
+        'soil_5_k_factor' => 'decimal:2',
+        'soil_5_area' => 'decimal:6',
+        'soil_6_k_factor' => 'decimal:2',
+        'soil_6_area' => 'decimal:6',
+        'soil_7_k_factor' => 'decimal:2',
+        'soil_7_area' => 'decimal:6',
+        'pre_construction_coefficient' => 'decimal:6',
+        'post_construction_coefficient' => 'decimal:6',
     ];
 
     protected $fillable = [
         "name",
-        "proj_number",
-        "latitude",
-        "longitude",
-        "city",
-        "state",
-        "zipcode",
-        "county_id",
-        "directions",
-        "nearest_city",
-        "local_official_ms4",
-        "local_official_address",
-        "local_official_city",
-        "local_official_state",
-        "local_official_zipcode",
-        "local_official_contact",
-        "mailing_address_street_number",
-        "mailing_address_street_name",
-        "engineer_name",
-        "engineer_street",
-        "engineer_city",
-        "engineer_state",
-        "engineer_zipcode",
-        "engineer_contact",
-        "engineer_phone",
-        "engineer_email",
-        "engineer_fax",
-        "preparer",
-        "preparer_street",
-        "preparer_city",
-        "preparer_state",
-        "preparer_zipcode",
-        "preparer_contact",
-        "preparer_phone",
-        "preparer_email",
-        "updated_at",
-        "researcher",
-        "research_completed",
-        "edwards_aquifer",
-        "surrounding_project",
-        "receiving_waters",
-        "within_50ft",
-        "huc",
-        "303d_id",
-        "constituent_1",
-        "constituent_1_co_area",
-        "constituent_1_tmdl",
-        "constituent_2",
-        "constituent_2_co_area",
-        "constituent_2_tmdl",
-        "constituent_3",
-        "constituent_3_co_area",
-        "constituent_3_tmdl",
-        "303d_epa",
-        "303d_tceq",
-        "impaired_waters",
-        "endangered_species_website",
-        "endangered_species_county",
-        "indian_lands",
-        "description",
-        "acres",
-        "acres_disturbed",
-        "existing_system",
-        "larger_plan",
-        "soil_1_type",
-        "soil_1_hsg",
-        "soil_1_k_factor",
-        "soil_1_area",
-        "soil_2_type",
-        "soil_2_hsg",
-        "soil_2_k_factor",
-        "soil_2_area",
-        "soil_3_type",
-        "soil_3_hsg",
-        "soil_3_k_factor",
-        "soil_3_area",
-        "soil_4_type",
-        "soil_4_hsg",
-        "soil_4_k_factor",
-        "soil_4_area",
-        "soil_5_type",
-        "soil_5_hsg",
-        "soil_5_k_factor",
-        "soil_5_area",
-        "soil_6_type",
-        "soil_6_hsg",
-        "soil_6_k_factor",
-        "soil_6_area",
-        "soil_7_type",
-        "soil_7_hsg",
-        "soil_7_k_factor",
-        "soil_7_area",
-        "erosivity",
-        "pre_construction_coefficient",
-        "post_construction_coefficient",
-        "bmps",
-        'rdy_to_not',
-        'rdy_to_noi',
-        'inspection_format',
-        'inspection_cycle',
-        'inspector_id',
     ];
 
     /**
@@ -132,7 +52,7 @@ class Project extends Model
     }
 
     public function county() {
-        return $this->belongsTo(County::class);
+        return $this->belongsTo(County::class, "county_name", "name");
     }
 
     public function contractors() {
@@ -205,6 +125,12 @@ class Project extends Model
                 case "Paving":
                     $prefix = "cont_pave";
                     break;
+                case "SWPPP Preparer":
+                    $prefix = "cont_swppp_preparer";
+                    break;
+                case "Engineer":
+                    $prefix = "cont_engineer";
+                    break;
                 default:
                     $prefix = "cont";
             }
@@ -214,9 +140,32 @@ class Project extends Model
             $export[$prefix . "_" . "responsibilities"] = (isset($contractor->responsibilities)) ? implode(PHP_EOL, $contractor->responsibilities) : '';
         }
 
+        //Guarantee at least 10
         for ($i = 1; $i <= 10; $i++) {
-            $export['bmp_' . $i] = (isset($this->bmps[$i - 1])) ? $this->bmps[$i - 1] : '';
+            $export['bmp_' . $i . "_name"] = '';
+            $export['bmp_' . $i . "_name"] = '';
+            $export['bmp_' . $i . "_name"] = '';
+            $export['bmp_' . $i . "_name"] = '';
+            $export['bmp_' . $i . "_name"] = '';
+            $export['bmp_' . $i . "_name"] = '';
+            $export['bmp_' . $i . "_name"] = '';
         }
+
+        //Set actual values
+        $bmp_idx = 1;
+        foreach($this->bmps as $item) {
+            $bmp = bmp::firstOrNew(['name' => $item]);
+            $export['bmp_' . $bmp_idx . "_name"] = $bmp->name;
+            $export['bmp_' . $bmp_idx . "_description"] = $bmp->description;
+            $export['bmp_' . $bmp_idx . "_uses"] = $bmp->uses;
+            $export['bmp_' . $bmp_idx . "_inspection_schedule"] = $bmp->inspection_schedule;
+            $export['bmp_' . $bmp_idx . "_maintenance"] = $bmp->maintenance;
+            $export['bmp_' . $bmp_idx . "_inspection_schedule"] = $bmp->installation_schedule;
+            $export['bmp_' . $bmp_idx . "_considerations"] = $bmp->considerations;
+            $bmp_idx++;
+        }
+
+        $export["researcher"] = User::findOrNew($this->researcher)->fullName;
 
         foreach ($export as $key => $value) {
             if (is_array($value)) unset($export[$key]);
@@ -232,12 +181,7 @@ class Project extends Model
         return $this->contractors->sum('not_signed') == $this->contractors->count();
     }
 
-    public function getLongitudeAttribute($value) {
-        return round($value, 6);
-    }
 
-    public function getLatitudeAttribute($value) {
-        return round($value, 6);
-    }
+
 
 }

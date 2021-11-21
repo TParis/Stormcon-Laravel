@@ -22,6 +22,8 @@ use App\Models\WorkflowEmailItem;
 use App\Models\WorkflowInitialEmailItem;
 use App\Models\WorkflowInspectionItem;
 use App\Notifications\LandDevelopmentReport;
+use http\Exception\InvalidArgumentException;
+use League\Flysystem\FileNotFoundException;
 use Spatie\Permission\Models\Role;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Collection;
@@ -32,6 +34,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use App\Jobs\CreateInitialProjectSpace;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -117,18 +120,16 @@ class ProjectController extends Controller
             $bmps = bmp::all()->sortBy("name");
             $soils = Soil::all()->sortBy("name");
             $responsibilities = Responsibilities::all()->sortBy("name");
-            $water_qualities = WaterQuality::all()->sortBy("name");
+            $water_qualities = WaterQuality::all()->sortBy("category");
             $ms4s = Municipal::all()->sortBy("name");
-            $counties = County::with("endangered_species")->get()->sortBy("name")->pluck("name", "id");
+            $counties = County::with("endangered_species")->get()->sortBy("name");
             $companies = Company::all()->sortBy("name");
             $contacts = Contact::all();
             $inspectors = User::role('Inspector')->get()->pluck("fullName", "id");
             $inspectors = $inspectors->put('', "Please select")->sortBy('fullName');
             $inspection_schedules = InspectionSchedule::all();
             $inspections = $project->inspections;
-            $stormcon = Contact::whereHas('employer', function(Builder $query) {
-                $query->where("name", "like", "Stormcon%");
-            })->get()->sortBy("name");
+            $researchers = User::role('Research')->get()->pluck("fullName", "id");
             $roles = Company::$roles;
             $states = Company::$states;
             $endangered_status = EndangeredSpecies::ENDANGERED_STATUS;
@@ -142,7 +143,7 @@ class ProjectController extends Controller
                 "ms4s",
                 "counties",
                 "companies",
-                "stormcon",
+                "researchers",
                 "inspectors",
                 "inspection_schedules",
                 "roles",
@@ -192,19 +193,18 @@ class ProjectController extends Controller
 
         $this->authorize('create', Project::class);
 
-        /*$this->validate($request,
+        $this->validate($request,
             [
-                'name'              => 'required|string|min:5|max:255|unique:municipals',
-                'phone'             => 'required|string',
-                'address'           => 'required|string',
-                'city'              => 'required|string',
-                'state'             => 'required|string',
-                'zipcode'           => 'required|string',
-
+                'name'              => 'required|string|min:5|max:255',
             ]
-        );*/
+        );
 
         $errors = 0;
+
+        if (WorkflowTemplate::findOrFail($request->workflow_id)->sub_items()->count() < 1) {
+            Session::flash('error', "You've selected a workflow with no steps configured.  Cannot create a project.");
+            return response()->redirectToRoute("project::create");
+        }
 
         $project = new Project(['name' => $request->name]);
 
@@ -268,7 +268,7 @@ class ProjectController extends Controller
             $project->city = $request->city;
             $project->state = $request->state;
             $project->zipcode = $request->zipcode;
-            $project->county_id = $request->county_id;
+            $project->county_name = $request->county_name;
             $project->directions = $request->directions;
             $project->nearest_city = $request->nearest_city;
             $project->local_official_ms4 = $request->local_official_ms4;
@@ -279,23 +279,29 @@ class ProjectController extends Controller
             $project->local_official_contact = $request->local_official_contact;
             $project->mailing_address_street_number = $request->mailing_address_street_number;
             $project->mailing_address_street_name = $request->mailing_address_street_name;
-            $project->engineer_name = $request->engineer_name;
-            $project->engineer_street = $request->engineer_street;
-            $project->engineer_city = $request->engineer_city;
-            $project->engineer_state = $request->engineer_state;
-            $project->engineer_zipcode = $request->engineer_zipcode;
-            $project->engineer_contact = $request->engineer_contact;
-            $project->engineer_phone = $request->engineer_phone;
-            $project->engineer_email = $request->engineer_email;
-            $project->engineer_fax = $request->engineer_fax;
-            $project->preparer = $request->preparer;
-            $project->preparer_street = $request->preparer_street;
-            $project->preparer_city = $request->preparer_city;
-            $project->preparer_state = $request->preparer_state;
-            $project->preparer_zipcode = $request->preparer_zipcode;
-            $project->preparer_contact = $request->preparer_contact;
-            $project->preparer_phone = $request->preparer_phone;
-            $project->preparer_email = $request->preparer_email;
+
+            $project->classified_waters = $request->classified_waters;
+            $project->project_company = $request->project_company;
+            $project->swppp_preparrer = $request->swppp_preparrer;
+            $project->cust_proj_number = $request->cust_proj_number;
+            $project->cost_center = $request->cost_center;
+            $project->critical_areas = $request->critical_areas;
+            $project->sedi_pond = $request->sedi_pond;
+            $project->sedi_pond_design = $request->sedi_pond_design;
+            $project->sedi_pond_construction = $request->sedi_pond_construction;
+            $project->sedi_pond_maintenance = $request->sedi_pond_maintenance;
+            $project->sedi_pond_feasibility = $request->sedi_pond_feasibility;
+            $project->order_date = $request->order_date;
+            $project->preparation_date = $request->preparation_date;
+            $project->start_date = $request->start_date;
+            $project->completion_date = $request->completion_date;
+            $project->disturbed_areas_stabilization_date = $request->disturbed_areas_stabilization_date;
+            $project->bmp_removal_date = $request->bmp_removal_date;
+            $project->stabilization_description = $request->stabilization_description;
+            $project->stabilization_dates = $request->stabilization_dates;
+            $project->stabilization_schedule = $request->stabilization_schedule;
+            $project->stabilization_responsibility = $request->stabilization_responsibility;
+
             $project->updated_at = $request->updated_at;
             $project->researcher = $request->researcher;
             $project->research_completed = $request->research_completed;
@@ -326,7 +332,7 @@ class ProjectController extends Controller
             $project->existing_system = $request->existing_system;
             $project->larger_plan = $request->larger_plan;
             $project->bmps = $request->bmps;
-            for ($i = 1; $i <= 7; $i++) {
+            for ($i = 1; $i <= 8; $i++) {
                 $project->{"soil_" . $i . "_type"}       = $request->{"soil_" . $i . "_type"};
                 $project->{"soil_" . $i . "_hsg"}        = $request->{"soil_" . $i . "_hsg"};
                 $project->{"soil_" . $i . "_k_factor"}   = $request->{"soil_" . $i . "_k_factor"};
@@ -370,6 +376,8 @@ class ProjectController extends Controller
                     $contractor->contact_email     = $request->{"contractor_" . $contractor->id . "_contact_email"};
                     $contractor->noi_signer_name   = $request->{"contractor_" . $contractor->id . "_noi_signer_name"};
                     $contractor->noi_signer_title  = $request->{"contractor_" . $contractor->id . "_noi_signer_title"};
+                    $contractor->noi_signer_er  = $request->{"contractor_" . $contractor->id . "_noi_signer_er"};
+                    $contractor->noi_signer_permit  = $request->{"contractor_" . $contractor->id . "_noi_signer_permit"};
                     $contractor->noi_signed        = (isset($request->{"contractor_" . $contractor->id . "_noi_signed"})) ? 1 : 0;
                     $contractor->not_signer_name   = $request->{"contractor_" . $contractor->id . "_not_signer_name"};
                     $contractor->not_signer_title  = $request->{"contractor_" . $contractor->id . "_not_signer_title"};
@@ -505,16 +513,47 @@ class ProjectController extends Controller
 
     }
 
-    public function export(Project $project) {
-        //This is the main document in  Template.docx file.
-        $file = public_path('testtemplate.docx');
+    public function export(Project $project) {//This is the main document in  Template.docx file.
+        try {
+            $drive = Auth::user()->getOneDrive();
+            $local_storage_path = storage_path() . "/" . $project->id . " - " . $project->name . " - SWPPP.docx";
 
-        $phpword = new \PhpOffice\PhpWord\TemplateProcessor($file);
+            //Get Template Data From Drive
+            if (!isset($project->workflow->step()->user_id)) {
+                $file = $drive->read("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
+            } else {
+                $file = $drive->read("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
+            }
 
-        $phpword->setValues($project->export());
+            //Save it to a temporary file
+            file_put_contents($local_storage_path, $file);
 
-        $phpword->saveAs(storage_path() . '/edited.docx');
-        return response()->file(storage_path() . "/edited.docx");
+            //Fill in template
+            $phpword = new \PhpOffice\PhpWord\TemplateProcessor($local_storage_path);
+
+            //Update values
+            $phpword->setValues($project->export());
+
+            //Save updated template
+            $phpword->saveAs($local_storage_path);
+
+            //Upload back to OneDrive
+            $contents = file_get_contents($local_storage_path);
+
+            if (!isset($project->workflow->step()->user_id)) {
+                $file = $drive->update("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx", $contents);
+                $file = $drive->getMetaData("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
+            } else {
+                $file = $drive->update("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx", $contents);
+                $file = $drive->getMetaData("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
+            }
+
+            //Delete temporary file
+            unlink($local_storage_path);
+            return response()->redirectTo($file["link"]);
+        } catch (FileNotFoundException $e) {
+            return response("An error occured.  This may be because the project files have not been fully copied prior to trying to export.  Please try again in 5 minutes.", 500);
+        }
     }
 
     public function getRoleUsers(Request $request, $role) {

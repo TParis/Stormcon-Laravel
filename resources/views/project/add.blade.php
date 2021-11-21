@@ -9,6 +9,9 @@
     @if(Session::has('success'))
         <div class="alert alert-success">{{ Session::get('success') }}</div>
     @endif
+    @if(Session::has('error'))
+        <div class="alert alert-danger">{{ Session::get('error') }}</div>
+    @endif
     @if (count($errors))
         <div class="alert alert-danger">
             <p>Errors: {{ count($errors) }}</p>
@@ -24,13 +27,13 @@
         <div class="form-group row">
             {{ Form::label('name', 'Project Name', array('class' => 'col-3 control-label required-field')) }}
             <div class="col-9">
-                {{ Form::text('name', '', array('class' => 'form-control')) }}
+                {{ Form::text('name', '', array('class' => 'form-control', 'required' => 'required')) }}
             </div>
         </div>
         <div class="form-group row">
             {{ Form::label('workflow_id', 'Workflow', array('class' => 'col-3 control-label')) }}
             <div class="col-9">
-                {{ Form::select('workflow_id', $workflow_templates, '', array('class' => 'form-control', 'placeholder' => 'Please select workflow')) }}
+                {{ Form::select('workflow_id', $workflow_templates, '', array('class' => 'form-control',)) }}
             </div>
         </div>
         <button class="btn btn-primary">Create Project</button>
