@@ -101,7 +101,7 @@
                     type: "GET",
                     success: function(data) {
                         $("#modal-content").html(data);
-                        $(".modal-title").text(action.toUpperCase() + " Water Quality");
+                        $(".modal-title").text(action[0].toUpperCase() + action.slice(1) + " Water Quality");
                         $("#modal-errors").addClass("d-none");
                         $('#editwaterqualities').modal({
                             backdrop: 'static',

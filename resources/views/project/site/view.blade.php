@@ -1,4 +1,4 @@
-<h3>Information</h3>
+<h3>Construction Site Description</h3>
 <div class="form-group row">
     {{ Form::label('description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
@@ -6,7 +6,7 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('acres', 'Acres', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('acres', 'Total Acres', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('acres', $project->acres, array('class' => 'form-control')) }}
     </div>
@@ -18,24 +18,24 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('existing_system', 'Existing System', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('existing_system', 'Existing Stormdrain System', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('existing_system', $project->existing_system, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('larger_plan', 'Larger Plan', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('larger_plan', 'Part of a Larger Plan', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::select('larger_plan', ["No" => "No", "Yes" => "Yes"], $project->larger_plan, array('class' => 'form-control')) }}
     </div>
 </div>
 <h3>Soils</h3>
-@for ($i = 1; $i <= 7; $i++)
+@for ($i = 1; $i <= 8; $i++)
     <div id="soil-{{ $i }}">
         <div class="form-group row">
             {{ Form::label('soil_' . $i . '_type', 'Soil ' . $i . ' Type', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
             <div class="col-sm-9">
-                {{ Form::select('soil_' . $i . '_type', $soils->pluck("name"), $project->{"soil_" . $i . "_type"}, array('class' => 'form-control', 'placeholder' => 'Please select')) }}
+                {{ Form::text('soil_' . $i . '_type', $project->{"soil_" . $i . "_type"}, array('class' => 'soil-control form-control', 'list' => 'soils_datalist')) }}
             </div>
         </div>
         <div class="form-group row">
@@ -57,10 +57,36 @@
             </div>
         </div>
     </div>
-    @if ($i < 7)
+    @if ($i < 8)
     <hr>
     @endif
 @endfor
+{{ Form::datalist('soils_datalist', $soils->pluck("name", "name")->toArray()) }}
+<h3>Sendimentation Pond</h3>
+<div class="form-group row">
+    {{ Form::label('sedi_pond_description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('sedi_pond_description', $project->sedi_pond_description, array('class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('sedi_pond_design', 'Design', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('sedi_pond_design', $project->sedi_pond_design, array('class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('sedi_pond_construction', 'Construction', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('sedi_pond_construction', $project->sedi_pond_construction, array('class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('sedi_pond_maintenance', 'Maintenance', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('sedi_pond_maintenance', $project->sedi_pond_maintenance, array('class' => 'form-control')) }}
+    </div>
+</div>
 <h3>Erosivity</h3>
 <div class="form-group row">
     {{ Form::label('erosivity', 'Erosivity', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
@@ -81,3 +107,33 @@
         {{ Form::text('post_construction_coefficient', $project->post_construction_coefficient, array('class' => 'form-control')) }}
     </div>
 </div>
+<script type="text/javascript">
+
+    $(".tab-content").on("change", ".soil-control", function(e) {
+        el = e.target;
+        $.ajax({
+            url: "/api/soils/" + encodeURIComponent(el.value),
+            context: el,
+            data: {
+                'api_token': '{{ Auth::user()->api_token }}',
+            },
+            success: function(soil) {
+
+                let prefix = $(this).attr("id").substr(0, $(this).attr("id").lastIndexOf("_")+1);
+
+                $("#" + prefix + "hsg").val(soil.group);
+                $("#" + prefix + "k_factor").val(soil.k);
+
+
+            },
+            error: function() {
+
+                let prefix = $(this).attr("id").substr(0, $(this).attr("id").lastIndexOf("_")+1);
+
+                $("#" + prefix + "hsg").val("");
+                $("#" + prefix + "k_factor").val("");
+            }
+
+        })
+    })
+</script>

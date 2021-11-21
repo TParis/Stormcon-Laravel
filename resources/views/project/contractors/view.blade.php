@@ -58,8 +58,8 @@
 
         prefix = e.target.name.substring(0, e.target.name.indexOf("_", e.target.name.indexOf("_")+1))
 
-        contact_id = $("select[name='" + prefix + "_contact_name']").find(":selected")[0].id;
-        contact_obj = contact_list.find(element => element.id == contact_id);
+        contact_name = $(e.target).val();
+        contact_obj = contact_list.find(element => element.first_name + " " + element.last_name == contact_name);
 
         $("input[name='" + prefix + "_contact_phone'").val(contact_obj.phone)
         $("input[name='" + prefix + "_contact_fax'").val(contact_obj.fax)
@@ -72,8 +72,8 @@
 
         prefix = e.target.name.substring(0, e.target.name.indexOf("_", e.target.name.indexOf("_")+1))
 
-        contact_id = $("select[name='" + prefix + "_noi_signer_name']").find(":selected")[0].id;
-        contact_obj = contact_list.find(element => element.id == contact_id);
+        contact_name = $(e.target).val();
+        contact_obj = contact_list.find(element => element.first_name + " " + element.last_name == contact_name);
 
         $("input[name='" + prefix + "_noi_signer_title'").val(contact_obj.title)
 
@@ -82,8 +82,8 @@
 
         prefix = e.target.name.substring(0, e.target.name.indexOf("_", e.target.name.indexOf("_")+1))
 
-        contact_id = $("select[name='" + prefix + "_not_signer_name']").find(":selected")[0].id;
-        contact_obj = contact_list.find(element => element.id == contact_id);
+        contact_name = $(e.target).val();
+        contact_obj = contact_list.find(element => element.first_name + " " + element.last_name == contact_name);
 
         $("input[name='" + prefix + "_not_signer_title'").val(contact_obj.title)
 

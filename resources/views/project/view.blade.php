@@ -38,7 +38,7 @@
             @endforeach
             </div>
         </div>
-        <h1>{{ $project->name }} #{{ $project->id }}</h1>
+        <h1>{{ $project->proj_number }} &mdash; {{ $project->name }}</h1>
     @else
         <h1>Create Project</h1>
     @endif
@@ -83,7 +83,7 @@
                 <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="btn btn-primary w-100 d-block invisible complete-btn">Complete Step</a>
                 @endif
                 <h3 align="right" class="project-block-header">Files</h3>
-                <div class="container-fluid border project-block" style="padding: 0px">
+                <div class="container-fluid border project-block onedrive-files" style="padding: 0px">
                     @include("project.onedrive.view")
                 </div>
                 <div class="w-100 text-right"><a href="#">Upload File</a></div>
@@ -112,6 +112,9 @@
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#bestpractices" role="tab" aria-controls="contact" aria-selected="false">BMPs</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#stabilization" role="tab" aria-controls="contact" aria-selected="false">Stabilization</a>
                     </li>
                     @if (isset($project->county))
                     <li class="nav-item" role="presentation">
@@ -246,14 +249,11 @@
 
                 contacts = contact_list.filter(x => x.employer_id == company.id)
 
-                $("select[name='" + prefix + "contact_name']").empty()
-                $("[id^='" + prefix + "contact']").val("");
-                $("select[name='" + prefix + "contact_name']")
-                    .append($("<option></option>")
-                        .text("Please select"));
+                $("#" + prefix + "contact_name_list").empty()
+                $("[id^='" + prefix + "contact").val("");
 
                 $.each(contacts, function(key, value) {
-                    $("select[name='" + prefix + "contact_name']")
+                    $("#" + prefix + "contact_name_list")
                         .append($("<option></option>")
                             .attr("value", value.first_name + " " + value.last_name)
                             .attr("id", value.id)
@@ -262,14 +262,11 @@
 
                 noi_signers = contact_list.filter(x => x.employer_id == company.id && x.noi == "1")
 
-                $("select[name='" + prefix + "noi_signer_name']").empty()
+                $("#" + prefix + "noi_signer_name_list").empty()
                 $("." + prefix + "noi_signer_title").val("");
-                $("select[name='" + prefix + "noi_signer_name']")
-                    .append($("<option></option>")
-                        .text("Please select"));
 
                 $.each(noi_signers, function(key, value) {
-                    $("select[name='" + prefix + "noi_signer_name']")
+                    $("#" + prefix + "noi_signer_name_list")
                         .append($("<option></option>")
                             .attr("value", value.first_name + " " + value.last_name)
                             .attr("id", value.id)
@@ -278,20 +275,39 @@
 
                 not_signers = contact_list.filter(x => x.employer_id == company.id && x.noi == "1")
 
-                $("select[name='" + prefix + "not_signer_name']").empty()
+                $("#" + prefix + "not_signer_name_list").empty()
                 $("." + prefix + "not_signer_title").val("");
-                $("select[name='" + prefix + "not_signer_name']")
-                    .append($("<option></option>")
-                        .text("Please select"));
 
                 $.each(not_signers, function(key, value) {
-                    $("select[name='" + prefix + "not_signer_name']")
+                    $("#" + prefix + "not_signer_name_list")
                         .append($("<option></option>")
                             .attr("value", value.first_name + " " + value.last_name)
                             .attr("id", value.id)
                             .text(value.first_name + " " + value.last_name));
                 });
 
+            },
+            error: function() {
+
+
+                let prefix = $(this).attr("id").substr(0, $(this).attr("id").lastIndexOf("_")+1);
+
+                $("#" + prefix + "legal_name").val("");
+                $("#" + prefix + "also_known_as").val("");
+                $("#" + prefix + "phone").val("");
+                $("#" + prefix + "fax").val("");
+                $("#" + prefix + "website").val("");
+                $("#" + prefix + "address").val("");
+                $("#" + prefix + "city").val("");
+                $("#" + prefix + "state").val("");
+                $("#" + prefix + "zipcode").val("");
+                $("#" + prefix + "federal_tax_id").val("");
+                $("#" + prefix + "state_tax_id").val("");
+                $("#" + prefix + "type").val("");
+                $("#" + prefix + "num_of_employees").val("");
+                $("#" + prefix + "sos").val("");
+                $("#" + prefix + "cn").val("");
+                $("#" + prefix + "sic").val("");
             }
 
         })

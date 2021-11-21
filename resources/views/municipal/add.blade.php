@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    {{ Form::label('zipcode', 'Zipcode', array('class' => 'col-4 text-right control-label required-field')) }}
+                    {{ Form::label('zipcode', 'Zip Code', array('class' => 'col-4 text-right control-label required-field')) }}
                     <div class="col-8">
                         {{ Form::text('zipcode', '', array('required' => 'required', 'class' => 'form-control')) }}
                     </div>

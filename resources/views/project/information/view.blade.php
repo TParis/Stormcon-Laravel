@@ -1,26 +1,26 @@
 <h3>Information</h3>
 <div class="form-group row">
-    {{ Form::label('name', 'Project Name', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('name', $project->name, array('required' => 'required', 'class' => 'form-control')) }}
-    </div>
-</div>
-<div class="form-group row">
     {{ Form::label('proj_number', 'Project Number', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('proj_number', $project->proj_number, array('required' => 'required', 'class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
+    {{ Form::label('name', 'Project Name', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('name', $project->name, array('required' => 'required', 'class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
     {{ Form::label('latitude', 'Latitude', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('latitude', $project->latitude, array('class' => 'form-control', 'placeholder' => '00.000')) }}
+        {{ Form::text('latitude', $project->latitude, array('class' => 'form-control',)) }}
     </div>
 </div>
 <div class="form-group row">
     {{ Form::label('longitude', 'Longitude', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('longitude', $project->longitude, array('class' => 'form-control', 'placeholder' => '00.000')) }}
+        {{ Form::text('longitude', $project->longitude, array('class' => 'form-control',)) }}
     </div>
 </div>
 <div class="form-group row">
@@ -48,15 +48,16 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('zipcode', 'Zipcode', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('zipcode', 'Zip Code', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('zipcode', $project->zipcode, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('county_id', 'County', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('county_name', 'County', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::select('county_id', $counties,  $project->county_id, array('class' => 'form-control')) }}
+        {{ Form::text('county_name', $project->county_name, array('class' => 'form-control', 'list' => 'county_list')) }}
+        {{ Form::datalist('county_list', $counties->pluck("name", "name")->toArray()) }}
     </div>
 </div>
 <div class="form-group row">
@@ -71,11 +72,36 @@
         {{ Form::text('nearest_city', $project->nearest_city, array('class' => 'form-control')) }}
     </div>
 </div>
+<h3>Project</h3>
+<div class="form-group row">
+    {{ Form::label('project_company', 'Project Company', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('project_company', $project->project_company, array('class' => 'form-control', 'list' => 'company_list')) }}
+        <datalist id="company_list">
+            @foreach ($companies as $company)
+                <option value="{{$company->name}}" id="{{$company->id}}">{{$company->name}}</option>
+            @endforeach
+        </datalist>
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('cust_proj_number', 'Customer Project #', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('cust_proj_number', $project->cust_proj_number, array('class' => 'form-control')) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('cost_center', 'Cost Center', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('cost_center', $project->cost_center, array('class' => 'form-control')) }}
+    </div>
+</div>
 <h3>Municipal Separate Storm Sewer System</h3>
 <div class="form-group row">
     {{ Form::label('local_official_ms4', 'Municipal', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::select('local_official_ms4', $ms4s->pluck("name", "name"), $project->local_official_ms4, array('class' => 'form-control')) }}
+        {{ Form::text('local_official_ms4', $project->local_official_ms4, array('class' => 'ms4-control form-control', 'list' => 'local_official_ms4_list')) }}
+        {{ Form::datalist('local_official_ms4_list', $ms4s->pluck("name", "name")->toArray()) }}
     </div>
 </div>
 <div class="form-group row">
@@ -97,63 +123,75 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('local_official_zipcode', 'Zipcode', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('local_official_zipcode', 'Zip Code', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('local_official_zipcode', $project->local_official_zipcode, array('class' => 'form-control')) }}
     </div>
 </div>
-<h3>Engineer's Information</h3>
+<h3>Dates</h3>
 <div class="form-group row">
-    {{ Form::label('engineer_name', 'Company', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('order_date', 'Order Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::select('engineer_name', $companies->pluck("name"), $project->engineer_name, array('class' => 'form-control')) }}
+        {{ Form::date('order_date', $project->order_date, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('engineer_street', 'Address', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('preparation_date', 'Preparation Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('engineer_street', $project->engineer_street, array('class' => 'form-control')) }}
+        {{ Form::date('preparation_date', $project->preparation_date, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('engineer_city', 'City', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('start_date', 'Start Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('engineer_city', $project->engineer_city, array('class' => 'form-control')) }}
+        {{ Form::date('start_date', $project->start_date, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('engineer_state', 'State', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('completion_date', 'Completion Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('engineer_state', $project->engineer_state, array('class' => 'form-control')) }}
+        {{ Form::date('completion_date', $project->completion_date, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('engineer_zipcode', 'Zipcode', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('disturbed_areas_stabilization_date', 'Disturbed Areas Stabilization Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('engineer_zipcode', $project->engineer_zipcode, array('class' => 'form-control')) }}
+        {{ Form::date('disturbed_areas_stabilization_date', $project->disturbed_areas_stabilization_date, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('engineer_contact', 'Contact', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('bmp_removal_date', 'BMP Removal Date', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('engineer_contact', $project->engineer_contact, array('class' => 'form-control')) }}
+        {{ Form::date('bmp_removal_date', $project->bmp_removal_date, array('class' => 'form-control')) }}
     </div>
 </div>
-<div class="form-group row">
-    {{ Form::label('engineer_phone', 'Phone', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('engineer_phone', $project->engineer_phone, array('class' => 'form-control')) }}
-    </div>
-</div>
-<div class="form-group row">
-    {{ Form::label('engineer_email', 'Email', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('engineer_email', $project->engineer_email, array('class' => 'form-control')) }}
-    </div>
-</div>
-<div class="form-group row">
-    {{ Form::label('engineer_fax', 'Fax', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('engineer_fax', $project->engineer_fax, array('class' => 'form-control')) }}
-    </div>
-</div>
+<script type="text/javascript">
+
+    $(".tab-content").on("change", ".ms4-control", function(e) {
+        el = e.target;
+        $.ajax({
+            url: "/api/municipals/" + encodeURIComponent(el.value),
+            context: el,
+            data: {
+                'api_token': '{{ Auth::user()->api_token }}',
+            },
+            success: function(ms4) {
+
+                $("#local_official_address").val(ms4.address);
+                $("#local_official_city").val(ms4.city);
+                $("#local_official_state").val(ms4.state);
+                $("#local_official_zipcode").val(ms4.zipcode);
+
+
+            },
+            error: function() {
+
+                $("#local_official_address").val("");
+                $("#local_official_city").val("");
+                $("#local_official_state").val("");
+                $("#local_official_zipcode").val("");
+            }
+
+        })
+    })
+</script>

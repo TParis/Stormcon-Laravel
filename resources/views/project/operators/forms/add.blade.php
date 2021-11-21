@@ -9,43 +9,43 @@
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_name', 'Name', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::select('operator_' . $iter . '_name', $companies, "", array('class' => 'form-control company-select', 'placeholder' => 'Please select company')) }}
+            {{ Form::select('operator_' . $iter . '_name', $companies, "", array('class' => 'form-control company-select',)) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_legal_name', 'Legal Name', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_legal_name', "", array('class' => 'form-control', 'placeholder' => 'Gas R Us LLC')) }}
+            {{ Form::text('operator_' . $iter . '_legal_name', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_also_known_as', 'Also Known As', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_also_known_as', "", array('class' => 'form-control', 'placeholder' => 'Gas R Us')) }}
+            {{ Form::text('operator_' . $iter . '_also_known_as', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_phone', 'Phone Number', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_phone', "", array('class' => 'form-control', 'placeholder' => '123-456-7890')) }}
+            {{ Form::text('operator_' . $iter . '_phone', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_fax', 'Fax Number', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_fax', "", array('class' => 'form-control', 'placeholder' => '123-456-7891')) }}
+            {{ Form::text('operator_' . $iter . '_fax', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_website', 'Website', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_website', "", array('class' => 'form-control', 'placeholder' => 'https://www.website.com/')) }}
+            {{ Form::text('operator_' . $iter . '_website', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_address', 'Address', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_address', "", array('class' => 'form-control', 'placeholder' => '123 Main St East #211')) }}
+            {{ Form::text('operator_' . $iter . '_address', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
@@ -61,7 +61,7 @@
         </div>
     </div>
     <div class="form-group row">
-        {{ Form::label('operator_' . $iter . '_zipcode', 'Zipcode', array('class' => 'col-4 text-right control-label required-field')) }}
+        {{ Form::label('operator_' . $iter . '_zipcode', 'Zip Code', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
             {{ Form::text('operator_' . $iter . '_zipcode', "", array('class' => 'form-control')) }}
         </div>
@@ -69,7 +69,7 @@
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_federal_tax_id', 'Federal Tax ID', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_federal_tax_id', "", array('class' => 'form-control', 'placeholder' => '25-1354867')) }}
+            {{ Form::text('operator_' . $iter . '_federal_tax_id', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
@@ -81,13 +81,13 @@
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_type', 'Type of Company', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('operator_' . $iter . '_type', "", array('class' => 'form-control', 'placeholder' => 'Limited Liability Corporation')) }}
+            {{ Form::text('operator_' . $iter . '_type', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">
         {{ Form::label('operator_' . $iter . '_num_of_employees', 'Number of Employees', array('class' => 'col-4 text-right control-label required-field')) }}
         <div class="col-8">
-            {{ Form::number('operator_' . $iter . '_num_of_employees', "", array('class' => 'form-control', 'placeholder' => '5')) }}
+            {{ Form::number('operator_' . $iter . '_num_of_employees', "", array('class' => 'form-control',)) }}
         </div>
     </div>
     <div class="form-group row">

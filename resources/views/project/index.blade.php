@@ -5,9 +5,12 @@
         <li class="breadcrumb-item"><a href="{{ Route("Home") }}">Home</a></li>
         <li class="breadcrumb-item active" aria-current="page">Projects</li>
     </ol>
-	@if(Session::has('success'))
-		<div class="alert alert-success">{{ Session::get('success') }}</div>
-	@endif
+    @if(Session::has('success'))
+        <div class="alert alert-success">{{ Session::get('success') }}</div>
+    @endif
+    @if(Session::has('error'))
+        <div class="alert alert-danger">{{ Session::get('error') }}</div>
+    @endif
     @if (count($errors))
         <p>Errors: {{ count($errors) }}</p>
         <div class="alert alert-danger">

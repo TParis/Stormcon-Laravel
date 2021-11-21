@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ProjectController;
 
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
