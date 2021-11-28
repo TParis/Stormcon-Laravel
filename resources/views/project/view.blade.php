@@ -218,53 +218,6 @@
 
     var contact_list = {!! $contacts->toJson() !!};
 
-    //Page Load
-    $(".company-select").each(function(index, item) {
-
-        if ($(item).val() != "") {
-            let prefix = $(item).attr("id").substr(0, $(this).attr("id").lastIndexOf("_") + 1);
-
-            contacts = contact_list.filter(x => x.employer_id == company.id)
-
-            $("#" + prefix + "contact_name_list").empty()
-            $("[id^='" + prefix + "contact").val("");
-
-            $.each(contacts, function(key, value) {
-                $("#" + prefix + "contact_name_list")
-                    .append($("<option></option>")
-                        .attr("value", value.first_name + " " + value.last_name)
-                        .attr("id", value.id)
-                        .text(value.first_name + " " + value.last_name));
-            });
-
-            noi_signers = contact_list.filter(x => x.employer_id == company.id && x.noi == "1")
-
-            $("#" + prefix + "noi_signer_name_list").empty()
-            $("." + prefix + "noi_signer_title").val("");
-
-            $.each(noi_signers, function(key, value) {
-                $("#" + prefix + "noi_signer_name_list")
-                    .append($("<option></option>")
-                        .attr("value", value.first_name + " " + value.last_name)
-                        .attr("id", value.id)
-                        .text(value.first_name + " " + value.last_name));
-            });
-
-            not_signers = contact_list.filter(x => x.employer_id == company.id && x.noi == "1")
-
-            $("#" + prefix + "not_signer_name_list").empty()
-            $("." + prefix + "not_signer_title").val("");
-
-            $.each(not_signers, function(key, value) {
-                $("#" + prefix + "not_signer_name_list")
-                    .append($("<option></option>")
-                        .attr("value", value.first_name + " " + value.last_name)
-                        .attr("id", value.id)
-                        .text(value.first_name + " " + value.last_name));
-            });
-
-        }
-    })
 
     $(".tab-content").on("change", ".company-select", function(e) {
         el = e.target;
@@ -359,6 +312,12 @@
             }
 
         })
+    })
+
+
+    //Page Load
+    $(".company-select").each(function(index, item) {
+        $(item).change();
     })
 
     $("#checklist-block").on("change", ".form-check-input", function(el) {
