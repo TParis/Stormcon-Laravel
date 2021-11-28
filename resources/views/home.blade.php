@@ -8,117 +8,221 @@
         @else
         <div class="col-12">
         @endif
-            <h2 align="right">Your Projects</h2>
-            <table id="yourProjects" class="table">
-                <thead>
-                <tr>
-                    <th>Project Name</th>
-                    <th>State</th>
-                    <th>Team</th>
-                    <th>Assignee</th>
-                    <th>Days Active</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($your_projects as $project)
-                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
-                        <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
-                        <td>{{ $project->step()->role }}</td>
-                        <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                        <td>{{ $project->days_active }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            <h2 align="right">Team Projects</h2>
-            <table id="yourTeamProjects" class="table">
-                <thead>
-                <tr>
-                    <th>Project Name</th>
-                    <th>State</th>
-                    <th>Team</th>
-                    <th>Assignee</th>
-                    <th>Days Active</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($your_team_projects as $project)
-                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
-                        <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
-                        <td>{{ $project->step()->role }}</td>
-                        <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                        <td>{{ $project->days_active }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            @if (Auth::user()->hasRole("Owner"))
-            <h2 align="right">SWPPP Phase</h2>
-                <table id="activeProjects" class="table">
-                    <thead>
-                    <tr>
-                        <th>Project Number</th>
-                        <th>State</th>
-                        <th>Team</th>
-                        <th>Assignee</th>
-                        <th>Days Active</th>
-                    </tr>
-                    </thead>
-                    @foreach($active_projects as $project)
-                        <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
-                            <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                            <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
-                            <td>{{ $project->step()->role }}</td>
-                            <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                            <td>{{ $project->days_active }}</td>
-                        </tr>
+            <div class="accordian" id="projectsList">
+                <div class="card">
+                    <div class="card-header" id="yourProjectsHeading">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#yourprojects" aria-expanded="true" aria-controls="yourprojects">
+                                Your Projects
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="yourprojects" class="collapse show" aria-labelledby="yourProjectsHeading" data-parent="#projectsList">
+                        <div class="card-body">
+                            <table id="yourProjects" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th>State</th>
+                                    <th>Team</th>
+                                    <th>Assignee</th>
+                                    <th>Days Active</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($your_projects as $project)
+                                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
+                                        <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
+                                        <td>{{ $project->step()->role }}</td>
+                                        <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                                        <td>{{ $project->days_active }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="teamProjectsHeading">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#teamprojects" aria-expanded="true" aria-controls="teamprojects">
+                                Team Projects
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="teamprojects" class="collapse" aria-labelledby="teamProjectsHeading" data-parent="#projectsList">
+                        <div class="card-body">
+                            <table id="yourTeamProjects" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th>State</th>
+                                    <th>Team</th>
+                                    <th>Assignee</th>
+                                    <th>Days Active</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($your_team_projects as $project)
+                                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
+                                        <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
+                                        <td>{{ $project->step()->role }}</td>
+                                        <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                                        <td>{{ $project->days_active }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @if (Auth::user()->hasRole("Owner"))
+                <div class="card">
+                    <div class="card-header" id="swpppProjectsHeading">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#swpppphase" aria-expanded="true" aria-controls="swpppphase">
+                                SWPPP Phase
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="swpppphase" class="collapse" aria-labelledby="swpppProjectsHeading" data-parent="#projectsList">
+                        <div class="card-body">
+                            <table id="activeProjects" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Project Number</th>
+                                    <th>State</th>
+                                    <th>Team</th>
+                                    <th>Assignee</th>
+                                    <th>Days Active</th>
+                                </tr>
+                                </thead>
+                                @foreach($active_projects as $project)
+                                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
+                                        <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
+                                        <td>{{ $project->step()->role }}</td>
+                                        <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                                        <td>{{ $project->days_active }}</td>
+                                    </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="inspProjectsHeading">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#inspphase" aria-expanded="true" aria-controls="inspphase">
+                                Inspection Phase
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="inspphase" class="collapse" aria-labelledby="inspProjectsHeading" data-parent="#projectsList">
+                        <div class="card-body">
+                            <table id="inspectionPhase" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Project Number</th>
+                                    <th>State</th>
+                                    <th>Team</th>
+                                    <th>Assignee</th>
+                                    <th>Days Active</th>
+                                </tr>
+                                @foreach($inspection_projects as $project)
+                                    <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
+                                        <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                                        <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
+                                        <td>{{ $project->step()->role }}</td>
+                                        <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                                        <td>{{ $project->days_active }}</td>
+                                    </tr>
+                                @endforeach
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                    <div class="card">
+                        <div class="card-header" id="blockProjectsHeading">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#blockedProjs" aria-expanded="true" aria-controls="blockedProjs">
+                                    Blocked Projects
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="blockedProjs" class="collapse" aria-labelledby="blockProjectsHeading" data-parent="#projectsList">
+                            <div class="card-body">
+                                <table id="blockedProjects" class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Project Number</th>
+                                        <th>State</th>
+                                        <th>Team</th>
+                                        <th>Assignee</th>
+                                        <th>Days Active</th>
+                                    </tr>
+                                    </thead>
+                                    @foreach($blocked_projects as $project)
+                                        <tr data-workflow="{{ $project->step()->days }}"  data-in-queue="{{ $project->hours_in_queue }}" data-toggle="tooltip" data-placement="bottom" title="{{ $project->blocker }}">
+                                            <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                                            <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
+                                            <td>{{ $project->step()->role }}</td>
+                                            <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                                            <td>{{ $project->days_active }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                <br />
+                <h2>Team Projects</h2>
+                    @foreach($teams as $name => $team_project)
+                        @php
+                          $htmlname = preg_replace("/[^A-Za-z0-9]/", '', $name);
+                        @endphp
+                        <div class="card">
+                            <div class="card-header" id="{{ $htmlname }}TeamProjectsHeading">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#{{ $htmlname }}TeamProjects" aria-expanded="true" aria-controls="{{ $htmlname }}TeamProjects">
+                                        Team {{ $name }} Projects
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="{{ $htmlname }}TeamProjects" class="collapse" aria-labelledby="{{ $htmlname }}TeamProjectsHeading" data-parent="#projectsList">
+                                <div class="card-body">
+                                    <table id="blockedProjects" class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Project Name</th>
+                                            <th>State</th>
+                                            <th>Team</th>
+                                            <th>Assignee</th>
+                                            <th>Days Active</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($team_project as $project)
+                                            <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
+                                                <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
+                                                <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
+                                                <td>{{ $project->step()->role }}</td>
+                                                <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
+                                                <td>{{ $project->days_active }}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
-                </table>
-            <h2 align="right">Inspection Phase</h2>
-                <table id="inspectionPhase" class="table">
-                    <thead>
-                    <tr>
-                        <th>Project Number</th>
-                        <th>State</th>
-                        <th>Team</th>
-                        <th>Assignee</th>
-                        <th>Days Active</th>
-                    </tr>
-                    @foreach($inspection_projects as $project)
-                        <tr data-workflow="{{ $project->step()->days }}" data-in-queue="{{ $project->hours_in_queue }}">
-                            <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                            <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
-                            <td>{{ $project->step()->role }}</td>
-                            <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                            <td>{{ $project->days_active }}</td>
-                        </tr>
-                    @endforeach
-                    </thead>
-                </table>
-            <h2 align="right">Blocked Projects</h2>
-                <table id="blockedProjects" class="table">
-                    <thead>
-                    <tr>
-                        <th>Project Number</th>
-                        <th>State</th>
-                        <th>Team</th>
-                        <th>Assignee</th>
-                        <th>Days Active</th>
-                    </tr>
-                    </thead>
-                    @foreach($blocked_projects as $project)
-                        <tr data-workflow="{{ $project->step()->days }}"  data-in-queue="{{ $project->hours_in_queue }}" data-toggle="tooltip" data-placement="bottom" title="{{ $project->blocker }}">
-                            <td><a href="{{ route("project::view", $project->project->id) }}">{{ $project->project->name }}</a></td>
-                            <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($project->status) }}</td>
-                            <td>{{ $project->step()->role }}</td>
-                            <td>{{ ($project->step()->user_id) ? $project->step()->user_id : "None" }}</td>
-                            <td>{{ $project->days_active }}</td>
-                        </tr>
-                    @endforeach
-                </table>
-            @endif
+                @endif
+            </div>
         </div>
         @if (Auth::user()->hasAnyPermission(['viewConfig', 'viewWorkflows']))
         <div class="col-3">

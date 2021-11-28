@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 use App\Jobs\CreateInitialProjectSpace;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
@@ -196,6 +197,7 @@ class ProjectController extends Controller
         $this->validate($request,
             [
                 'name'              => 'required|string|min:5|max:255',
+                'proj_number'          => 'required|numeric|unique:projects,proj_number'
             ]
         );
 
@@ -206,7 +208,7 @@ class ProjectController extends Controller
             return response()->redirectToRoute("project::create");
         }
 
-        $project = new Project(['name' => $request->name]);
+        $project = new Project(['name' => $request->name, 'proj_number' => $request->proj_number]);
 
         if (!$project->save()) $errors++;
 
@@ -244,6 +246,14 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         $this->authorize('update', $project);
+
+
+        $this->validate($request,
+            [
+                'name'              => 'required|string|min:5|max:255',
+                'proj_number'          => ['required','numeric',Rule::unique('projects', 'proj_number')->ignore($project->id)]
+            ]
+        );
 
         if (Auth::user()->hasRole("Owner"))
         {

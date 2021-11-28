@@ -37,6 +37,7 @@ class Project extends Model
 
     protected $fillable = [
         "name",
+        'proj_number'
     ];
 
     /**
@@ -152,17 +153,19 @@ class Project extends Model
         }
 
         //Set actual values
-        $bmp_idx = 1;
-        foreach($this->bmps as $item) {
-            $bmp = bmp::firstOrNew(['name' => $item]);
-            $export['bmp_' . $bmp_idx . "_name"] = $bmp->name;
-            $export['bmp_' . $bmp_idx . "_description"] = $bmp->description;
-            $export['bmp_' . $bmp_idx . "_uses"] = $bmp->uses;
-            $export['bmp_' . $bmp_idx . "_inspection_schedule"] = $bmp->inspection_schedule;
-            $export['bmp_' . $bmp_idx . "_maintenance"] = $bmp->maintenance;
-            $export['bmp_' . $bmp_idx . "_inspection_schedule"] = $bmp->installation_schedule;
-            $export['bmp_' . $bmp_idx . "_considerations"] = $bmp->considerations;
-            $bmp_idx++;
+        if ($this->bmps) {
+            $bmp_idx = 1;
+            foreach ($this->bmps as $item) {
+                $bmp = bmp::firstOrNew(['name' => $item]);
+                $export['bmp_' . $bmp_idx . "_name"] = $bmp->name;
+                $export['bmp_' . $bmp_idx . "_description"] = $bmp->description;
+                $export['bmp_' . $bmp_idx . "_uses"] = $bmp->uses;
+                $export['bmp_' . $bmp_idx . "_inspection_schedule"] = $bmp->inspection_schedule;
+                $export['bmp_' . $bmp_idx . "_maintenance"] = $bmp->maintenance;
+                $export['bmp_' . $bmp_idx . "_inspection_schedule"] = $bmp->installation_schedule;
+                $export['bmp_' . $bmp_idx . "_considerations"] = $bmp->considerations;
+                $bmp_idx++;
+            }
         }
 
         $export["researcher"] = User::findOrNew($this->researcher)->fullName;

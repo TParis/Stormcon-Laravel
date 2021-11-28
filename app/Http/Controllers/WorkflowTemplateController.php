@@ -118,7 +118,8 @@ class WorkflowTemplateController extends Controller
      */
     public function destroy(WorkflowTemplate $template)
     {
-        //
+        $template->delete();
+        return $this->index();
     }
 
     public function updateTemplate(Request $request, WorkflowTemplate $template) {

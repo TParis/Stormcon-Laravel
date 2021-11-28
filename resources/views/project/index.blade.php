@@ -29,6 +29,7 @@
 			<thead>
 				<tr>
                     <th>Name</th>
+                    <th>Number</th>
                     <th>Municipal S4</th>
                     <th>County</th>
                     <th>City</th>
@@ -40,6 +41,7 @@
 			@foreach ($projects as $project)
 				<tr id="{{ $project->id }}">
                     <td><a href="{{ route("project::view", $project->id) }}">{{ $project->name }}</a></td>
+                    <td>{{ $project->proj_number }}</td>
                     <td>{{ $project->local_official_ms4 }}</td>
                     @if (isset($project->county) && $project->county)
                     <td>{{ $project->county->name }}</td>
