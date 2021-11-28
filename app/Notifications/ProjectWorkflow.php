@@ -45,7 +45,6 @@ class ProjectWorkflow extends Notification
     {
         return (new MailMessage)
             ->line('A project has been assigned to your team.')
-            ->line('The priority has been set to: ' . $this->project->workflow->priority)
             ->action('Notification Action', url(route('project::view', $this->project->id)))
             ->line('Please review and take actions');
     }

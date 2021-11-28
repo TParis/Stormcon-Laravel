@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\ProjectController;
+use App\Notifications\ProjectWorkflow;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -75,7 +76,17 @@ class Workflow extends Model
         //Step
         $this->step++;
         $this->save();
+
+        //Automated Tasks
         $this->sub_items()->flatten()[$this->step]->executeAutomatedTasks();
+
+        //Email
+        if ($this->step()->role) {
+            User::role($this->step()->role)->get()->each(function($user) {
+               $user->notify(new ProjectWorkflow($this->project));
+            });
+        }
+
         return true;
 
     }
