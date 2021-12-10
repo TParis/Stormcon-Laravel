@@ -59,7 +59,7 @@ class CompanyController extends Controller
         {
 
             $company->load("contacts");
-            $jobs = Contractor::where('legal_name', $company->legal_name)->get();
+            $jobs = Contractor::where('name', $company->name)->get();
 
             return view('company.view', compact('company', 'jobs'));
 
