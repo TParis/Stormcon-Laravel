@@ -59,7 +59,7 @@ class ContactController extends Controller
         if (Auth::user()->hasRole('Owner'))
         {
 
-            $states = $this->states;
+            $states = ContactController::$states;
 
             return view('contact.add', compact('states'));
 
@@ -200,7 +200,7 @@ class ContactController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $states = $this->states;
+            $states = ContactController::$states;
 
             return view('contact.edit', compact('contact', 'states'));
 
