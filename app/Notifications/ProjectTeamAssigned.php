@@ -45,8 +45,8 @@ class ProjectAssigned extends Notification
     {
 
         return (new MailMessage)
-                    ->subject("Project Assignment")
-                    ->line('A project has been assigned to you.')
+                    ->subject("Team Assignment")
+                    ->line('A project has been assigned to your team.')
                     ->action('Notification Action', url(route('project::view', $this->project->id)))
                     ->line('Please review and take actions');
     }

@@ -532,7 +532,7 @@ Route::group(['prefix' => 'workflow-template', 'as' => 'workflow_template::'], f
         'as'    => 'update',
         'uses'  => 'WorkflowTemplateController@update'
     ]);
-    Route::delete('/delete/{template}',[
+    Route::get('/delete/{template}',[
         'as'    => 'destroy',
         'uses'  => 'WorkflowTemplateController@destroy'
     ]);
