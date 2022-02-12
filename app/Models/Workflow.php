@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\ProcessToNextStep;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notification;
 
 /**
  * Class Workflow
@@ -81,11 +82,7 @@ class Workflow extends Model
         $this->sub_items()->flatten()[$this->step]->executeAutomatedTasks();
 
         //Email
-        if ($this->step()->role) {
-            User::role($this->step()->role)->get()->each(function($user) {
-               $user->notify(new ProjectWorkflow($this->project));
-            });
-        }
+        $this->notifyUsers(new ProjectWorkflow($this->project));
 
         return true;
 
@@ -98,6 +95,9 @@ class Workflow extends Model
         //Step
         $this->step--;
         $this->save();
+
+        $this->notifyUsers(new ProjectWorkflow($this->project));
+
         $this->sub_items()->flatten()[$this->step]->executeAutomatedTasks();
         return true;
 
@@ -110,6 +110,7 @@ class Workflow extends Model
         //Step
         $this->step = $step;
         $this->save();
+        $this->notifyUsers(new ProjectWorkflow($this->project));
         $this->sub_items()->flatten()[$this->step]->executeAutomatedTasks();
         return true;
 
@@ -122,5 +123,13 @@ class Workflow extends Model
         if ($this->save()) return true;
         return false;
 
+    }
+
+    private function notifyUsers(Notification $template) {
+        if ($this->step()->role) {
+            User::role($this->step()->role)->get()->each(function($user) use ($template) {
+                $user->notify($template);
+            });
+        }
     }
 }

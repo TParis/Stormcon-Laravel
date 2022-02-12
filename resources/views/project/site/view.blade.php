@@ -2,7 +2,7 @@
 <div class="form-group row">
     {{ Form::label('description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('description', $project->description, array('class' => 'form-control')) }}
+        {{ Form::textarea('description', $project->description, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -20,7 +20,7 @@
 <div class="form-group row">
     {{ Form::label('existing_system', 'Existing Stormdrain System', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('existing_system', $project->existing_system, array('class' => 'form-control')) }}
+        {{ Form::textarea('existing_system', $project->existing_system, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -62,7 +62,7 @@
     @endif
 @endfor
 {{ Form::datalist('soils_datalist', $soils->pluck("name", "name")->toArray()) }}
-<h3>Sendimentation Pond</h3>
+<h3>Sendiment Pond</h3>
 <div class="form-group row">
     {{ Form::label('sedi_pond_description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
@@ -78,7 +78,7 @@
 <div class="form-group row">
     {{ Form::label('sedi_pond_construction', 'Construction', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('sedi_pond_construction', $project->sedi_pond_construction, array('class' => 'form-control')) }}
+        {{ Form::textarea('sedi_pond_construction', $project->sedi_pond_construction, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">

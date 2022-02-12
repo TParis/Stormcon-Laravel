@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use GuzzleHttp\Exception\ClientException;
 use Laravel\Scout\Searchable;
 use Spatie\Permission\Traits\HasRoles;
 use Krizalys\Onedrive\Onedrive;
@@ -97,7 +98,13 @@ class User extends Authenticatable
         );
 
         // Obtain the token using the code received by the OneDrive API.
-        $client->renewAccessToken(config('onedrive.client_secret'));
+        try {
+            $client->renewAccessToken(config('onedrive.client_secret'));
+        } catch (ClientException $e) {
+            $this->onedrive_token = null;
+            $this->save();
+            return null;
+        }
 
         $graph = new Graph();
         $graph->setAccessToken($state->token->data->access_token);

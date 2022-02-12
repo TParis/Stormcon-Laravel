@@ -34,7 +34,7 @@
                     <button class="btn btn-success w-100 mt-3">Add Task</button>
                     {{ Form::close() }}
                 </div>
-                <button class="btn btn-danger w-100 mt-3">Delete Template</button>
+                <a href="{{ route("workflow_template::destroy", $template->id) }}" class="btn btn-danger w-100 mt-3">Delete Template</a>
                 <a href="{{ route("workflow_template::index") }}" class="btn btn-info w-100 mt-3">Return to List</a>
 
             </div>
@@ -129,6 +129,12 @@
 
 
         $(".workflow-list").on("click", ".workflow-button", sortWorkflowList);
+
+        $(".btn-danger").click(function(e) {
+            if(!confirm("Are you sure you want to delete this workflow?")) {
+                e.preventDefault();
+            }
+        });
 
     });
 
