@@ -7,33 +7,33 @@
 </div>
 <h3>Sedimentation Pond</h3>
 <div class="form-group row">
-    {{ Form::label('description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('sedi_pond', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::textarea('description', $project->description, array('class' => 'form-control')) }}
+        {{ Form::textarea('sedi_pond', $project->sedi_pond, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('sedi_pond_design', 'Design', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::textarea('description', $project->description, array('class' => 'form-control')) }}
+        {{ Form::textarea('sedi_pond_design', $project->sedi_pond_design, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('acres', 'Acres', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('sedi_pond_construction', 'Construction', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::textarea('acres', $project->acres, array('class' => 'form-control')) }}
+        {{ Form::textarea('sedi_pond_construction', $project->sedi_pond_construction, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('acres_disturbed', 'Acres Disturbed', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('sedi_pond_maintenance', 'Maintenance', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::textarea('acres_disturbed', $project->acres_disturbed, array('class' => 'form-control')) }}
+        {{ Form::textarea('sedi_pond_maintenance', $project->sedi_pond_maintenance, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('sedi_pond_feasibility', 'Feasibility', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::textarea('description', $project->description, array('class' => 'form-control')) }}
+        {{ Form::textarea('sedi_pond_feasibility', $project->sedi_pond_feasibility, array('class' => 'form-control')) }}
     </div>
 </div>
 <h3>Stabilization Plan</h3>
