@@ -271,8 +271,6 @@ class ProjectController extends Controller
             );*/
 
             //SET VALUES TO MODEL
-            $project->name = $request->name;
-            $project->proj_number = $request->proj_number;
             $project->latitude = $request->latitude;
             $project->longitude = $request->longitude;
             $project->city = $request->city;
@@ -525,44 +523,59 @@ class ProjectController extends Controller
 
     public function export(Project $project) {//This is the main document in  Template.docx file.
         try {
+            Log::debug('STARTING EXPORT');
             $drive = Auth::user()->getOneDrive();
-            $local_storage_path = storage_path() . "/" . $project->id . " - " . $project->name . " - SWPPP.docx";
-
+            Log::debug('Acquired Drive token');
+            $date = date("YmdHis");
+            $local_storage_path = storage_path() . "/" . $project->id . " - " . $project->name . " - SWPPP - " . $date . ".docx";
+            Log::debug('Path Calculated');
             //Get Template Data From Drive
             if (!isset($project->workflow->step()->user_id)) {
                 $file = $drive->read("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
             } else {
                 $file = $drive->read("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
             }
+            Log::debug('Template File Read');
 
             //Save it to a temporary file
             file_put_contents($local_storage_path, $file);
+            Log::debug('Copied template to temporary storage');
 
             //Fill in template
             $phpword = new \PhpOffice\PhpWord\TemplateProcessor($local_storage_path);
+            Log::debug('Loaded template into PHPOffice');
 
             //Update values
             $phpword->setValues($project->export());
+            Log::debug('Merged Data');
 
             //Save updated template
             $phpword->saveAs($local_storage_path);
+            Log::debug('Saved merged document');
 
             //Upload back to OneDrive
             $contents = file_get_contents($local_storage_path);
+            Log::debug('Loaded file into memory');
 
             if (!isset($project->workflow->step()->user_id)) {
-                $file = $drive->update("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx", $contents);
-                $file = $drive->getMetaData("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
+                $drive->put("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP - " . $date . ".docx", $contents);
+                $file = $drive->getMetadata("Projects/" . $project->id . " - " . $project->name . "/SWPPP/SWPPP - " . $date . ".docx");
+                Log::debug('File written');
             } else {
-                $file = $drive->update("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx", $contents);
-                $file = $drive->getMetaData("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP.docx");
-            }
+                $drive->put("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP - " . $date . ".docx", $contents);
+                $file = $drive->getMetadata("Personal/" . $project->workflow->step()->assigned->fullName . '/' . $project->id . " - " . $project->name . "/SWPPP/SWPPP - " . $date . ".docx");
 
+                Log::debug('File written');
+            }
+            Log::debug('Uploaded to OneDrive');
             //Delete temporary file
-            unlink($local_storage_path);
+            //unlink($local_storage_path);
+            Log::debug('Deleted teporary file');
             return response()->redirectTo($file["link"]);
         } catch (FileNotFoundException $e) {
-            return response("An error occured.  This may be because the project files have not been fully copied prior to trying to export.  Please try again in 5 minutes.", 500);
+            return response("An error occured.  This may be because the project files have not been fully copied prior to trying to export.  Please try again in 5 minutes.  Error: " . $e->getMessage(), 500);
+        } catch (Exception $e) {
+            return response("An error occured.  Please try again in 5 minutes.  Error: " . $e->getMessage(), 500);
         }
     }
 
