@@ -2,13 +2,13 @@
 <div class="form-group row">
     {{ Form::label('proj_number', 'Project Number', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('proj_number', $project->proj_number, array('required' => 'required', 'class' => 'form-control')) }}
+        {{ Form::text('proj_number', $project->proj_number, array('required' => 'required', 'class' => 'form-control', 'readonly' => 'readonly')) }}
     </div>
 </div>
 <div class="form-group row">
     {{ Form::label('name', 'Project Name', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('name', $project->name, array('required' => 'required', 'class' => 'form-control')) }}
+        {{ Form::text('name', $project->name, array('required' => 'required', 'class' => 'form-control', 'readonly' => 'readonly')) }}
     </div>
 </div>
 <div class="form-group row">
