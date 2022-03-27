@@ -257,7 +257,6 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
 html {
   font-family: sans-serif;
   line-height: 1.15;
-  overflow-y: scroll;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -10260,7 +10259,7 @@ footer {
   background-color: #000;
 }
 
-nav {
+nav.navbar {
   flex: 0 0 50px;
   width: 100%;
   background: #5ac2ee;
@@ -10275,19 +10274,25 @@ nav {
 }
 
 .navbar > div, .navbar > div > div, .navbar > div > div > ul, .navbar > div > div > ul > li.nav-item {
-  height: 100%;
   vertical-align: middle;
 }
 
-.nav-link {
+.navbar .nav-link {
   color: #FFF !important;
   padding: 0.8rem 1rem;
 }
 
-.nav-item:hover {
+.navbar .nav-item:hover {
   background: #b4ffff;
   background: linear-gradient(180deg, #b4ffff 0%, #5caadf 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b4ffff",endColorstr="#5caadf",GradientType=1);
+}
+
+.navbar-collapse.collapse.show, .navbar-collapse.collapsing.show {
+  z-index: 100;
+  background: #5ac2ee;
+  background: linear-gradient(180deg, #5ac2ee 0%, #2e55df 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#5ac2ee",endColorstr="#2e55df",GradientType=1);
 }
 
 header input {
@@ -10295,14 +10300,14 @@ header input {
   border-radius: 25px;
 }
 
-.nav-item {
+.navbar .nav-item {
   padding-right: 15px;
   padding-left: 15px;
   font-size: 14pt;
   border-left: 1px solid #000;
 }
 
-.nav-item:last-child {
+.navbar .nav-item:last-child {
   border-right: 1px solid #000;
 }
 
@@ -10344,4 +10349,133 @@ form .row {
 
 .select-info {
   display: none;
+}
+
+.project-block-header {
+  margin-top: 15px;
+}
+
+.workflow-timeline {
+  display: flex;
+  justify-content: space-between;
+  background-image: url("/images/bar.png");
+  background-repeat: repeat-x;
+  flex: 1 0 200px;
+}
+
+.workflow-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px;
+  height: 75px;
+  border-radius: 75px;
+  border: 1px solid #000;
+  background-color: #FFF;
+  font-weight: bold;
+  font-family: "Calibri", sans-serif;
+  font-size: 8pt;
+  text-align: center;
+}
+
+.workflow-item.active {
+  background-color: #C7F6B6;
+}
+
+.projects .tab-content h3 {
+  width: 100%;
+  background-color: #2D5070;
+  color: #FFF;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.soils:nth-child(8n), .soils:nth-child(8n+1), .soils:nth-child(8n+2), .soils:nth-child(8n+3) {
+  background-color: #95c5ed;
+}
+
+.add-item {
+  font-size: 16pt;
+  height: 40px;
+  line-height: 15px;
+  border-radius: 78px;
+  width: 40px;
+  margin-bottom: 10px;
+  background-color: greenyellow;
+}
+
+.add-item-container {
+  position: relative;
+  left: 140px;
+  margin-bottom: -65px;
+  top: -95px;
+}
+
+.delete-item-container {
+  position: relative;
+  left: 140px;
+  margin-bottom: -65px;
+  top: -10px;
+}
+
+.del-item {
+  font-size: 16pt;
+  height: 40px;
+  line-height: 15px;
+  border-radius: 78px;
+  width: 40px;
+  margin-bottom: 10px;
+  background-color: orangered;
+}
+
+.isDisabledLink {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.isDisabledLink > a {
+  color: currentColor;
+  display: inline-block;
+  /* For IE11/ MS Edge bug */
+  pointer-events: none;
+  text-decoration: none;
+}
+
+.dropzone {
+  border: none !important;
+  padding: 0px !important;
+}
+
+.redRow {
+  background-color: #940000;
+  color: white;
+}
+
+.redRow a {
+  color: white;
+}
+
+.workflow-button {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #000;
+  border-radius: 40px;
+  margin: 5px;
+}
+
+.up-button {
+  background-color: #1d643b;
+}
+
+.down-button {
+  background-color: #298fe2;
+}
+
+.delete-button {
+  background-color: #c51f1a;
+}
+
+.max-width-750 {
+  max-width: 750px !important;
 }

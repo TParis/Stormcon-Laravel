@@ -94,7 +94,7 @@
 </div>
 {{ Form::datalist('water_quality_list', $water_qualities->pluck("category", "category")->toArray()) }}
 <div class="form-group row">
-    {{ Form::label('constituent_1_tmdl', 'First TMDL', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('constituent_1_tmdl', 'First Category', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('constituent_1_tmdl', $project->constituent_1_tmdl, array('class' => 'form-control', 'list' => 'water_quality_list')) }}
     </div>
@@ -112,7 +112,7 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('constituent_2_tmdl', 'Second TMDL', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('constituent_2_tmdl', 'Second Category', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('constituent_2_tmdl', $project->constituent_2_tmdl, array('class' => 'form-control', 'list' => 'water_quality_list')) }}
     </div>
@@ -130,7 +130,7 @@
     </div>
 </div>
 <div class="form-group row">
-    {{ Form::label('constituent_3_tmdl', 'Third TMDL', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('constituent_3_tmdl', 'Third Category', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('constituent_3_tmdl', $project->constituent_3_tmdl, array('class' => 'form-control', 'list' => 'water_quality_list')) }}
     </div>

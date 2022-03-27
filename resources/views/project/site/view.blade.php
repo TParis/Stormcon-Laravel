@@ -64,9 +64,9 @@
 {{ Form::datalist('soils_datalist', $soils->pluck("name", "name")->toArray()) }}
 <h3>Sendiment Pond</h3>
 <div class="form-group row">
-    {{ Form::label('sedi_pond_description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    {{ Form::label('sedi_pond', 'Sedimentation Pond', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('sedi_pond_description', $project->sedi_pond_description, array('class' => 'form-control')) }}
+        {{ Form::select('sedi_pond', ['Yes' => 'Yes', 'No' => 'No'], $project->sedi_pond, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
