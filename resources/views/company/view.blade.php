@@ -138,10 +138,12 @@
                         </thead>
                         <tbody>
                         @foreach ($jobs as $job)
+                            @if (isset($job->project))
                             <tr id="{{ $job->project->id }}">
                                 <td><a href="{{ route("project::view", $job->project->id) }}">{{ $job->project->name }}</a></td>
                                 <td>{{ App\Http\Controllers\ProjectController::getStatusCleartext($job->project->workflow->status) }}</td>
                             </tr>
+                            @endif
                         @endforeach
                         </tbody>
                     </table>

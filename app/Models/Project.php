@@ -171,7 +171,11 @@ class Project extends Model
         $export["researcher"] = User::findOrNew($this->researcher)->fullName;
 
         foreach ($export as $key => $value) {
-            if (is_array($value)) unset($export[$key]);
+            if (is_array($value)) {
+                unset($export[$key]);
+            } else {
+                $export[$key] = e($value);
+            }
         }
 
         return $export;

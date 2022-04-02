@@ -386,6 +386,8 @@ class ProjectController extends Controller
                     $contractor->noi_signer_title  = $request->{"contractor_" . $contractor->id . "_noi_signer_title"};
                     $contractor->noi_signer_er  = $request->{"contractor_" . $contractor->id . "_noi_signer_er"};
                     $contractor->noi_signer_permit  = $request->{"contractor_" . $contractor->id . "_noi_signer_permit"};
+                    $contractor->noi_signer_phone  = $request->{"contractor_" . $contractor->id . "_noi_signer_phone"};
+                    $contractor->noi_signer_email  = $request->{"contractor_" . $contractor->id . "_noi_signer_email"};
                     $contractor->noi_signed        = (isset($request->{"contractor_" . $contractor->id . "_noi_signed"})) ? 1 : 0;
                     $contractor->not_signer_name   = $request->{"contractor_" . $contractor->id . "_not_signer_name"};
                     $contractor->not_signer_title  = $request->{"contractor_" . $contractor->id . "_not_signer_title"};

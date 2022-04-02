@@ -76,6 +76,9 @@
         contact_obj = contact_list.find(element => element.first_name + " " + element.last_name == contact_name);
 
         $("input[name='" + prefix + "_noi_signer_title'").val(contact_obj.title)
+        $("input[name='" + prefix + "_noi_signer_email'").val(contact_obj.email)
+        $("input[name='" + prefix + "_noi_signer_phone'").val(contact_obj.phone)
+        $("input[name='" + prefix + "_noi_signer_er'").val(contact_obj.er)
 
     });
     $(".contractors").on("change", ".not-signer-name", function(e) {

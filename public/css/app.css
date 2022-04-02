@@ -10247,6 +10247,7 @@ article {
   padding-bottom: 25px;
   background-color: white;
   box-shadow: 5px 5px 5px #aaaaaa, -2px -2px 5px #aaaaa;
+  min-height: 1250px;
 }
 
 aside {
@@ -10257,6 +10258,10 @@ aside {
 footer {
   flex: 0 1 100px;
   background-color: #000;
+}
+
+footer > div.container-fluid, footer > div.container-sm, footer > div.container-md, footer > div.container-lg, footer > div.container-xl {
+  display: block !important;
 }
 
 nav.navbar {

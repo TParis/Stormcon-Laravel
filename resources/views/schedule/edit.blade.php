@@ -13,7 +13,7 @@
     <div class="form-group row">
         {{ Form::label('Name', 'Name', array('class' => 'col-4 control-label required-field')) }}
         <div class="col-8">
-            {{ Form::text('Name', $schedule->Name, array('class' => 'form-control', 'placeholder' => 'Name of BMP')) }}
+            {{ Form::text('Name', $schedule->Name, array('class' => 'form-control')) }}
         </div>
     </div>
     <div class="form-group row">

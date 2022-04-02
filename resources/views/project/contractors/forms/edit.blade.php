@@ -147,6 +147,16 @@
             {{ Form::text('contractor_' . $contractor->id . '_noi_signer_permit', $contractor->noi_signer_permit, array('class' => 'form-control')) }}
         </div>
     </div>
+    <div class="form-group row">
+        {{ Form::label('contractor_' . $contractor->id . '_noi_signer_phone', 'Phone #', array('class' => 'col-3 text-right control-label required-field')) }}
+        <div class="col-3">
+            {{ Form::text("contractor_" . $contractor->id . "_noi_signer_phone", $contractor->noi_signer_phone,['class' => 'noi-signer-name form-control']) }}
+        </div>
+        {{ Form::label('contractor_' . $contractor->id . '_noi_signer_email', 'Email', array('class' => 'col-3 text-right control-label')) }}
+        <div class="col-3">
+            {{ Form::email('contractor_' . $contractor->id . '_noi_signer_email', $contractor->noi_signer_email, array('class' => 'form-control')) }}
+        </div>
+    </div>
 
     <div class="form-group row">
         {{ Form::label('contractor_' . $contractor->id . '_noi_signed', 'NOI Signed', array('class' => 'col-3 text-right control-label')) }}

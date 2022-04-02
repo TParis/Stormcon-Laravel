@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
 </head>
 <body>
-    <div class="box">
+    <div>
         <header>
             <div class="container">
                 <div class="row">
@@ -125,6 +125,7 @@
         </aside>
         @endif
         @endif
+        <div class="clearfix"></div>
         <footer>
             <div class="container-fluid">
                 <div class="row">

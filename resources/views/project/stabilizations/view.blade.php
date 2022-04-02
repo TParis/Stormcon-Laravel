@@ -4,7 +4,7 @@
     <div class="col-sm-9">
         {{ Form::textarea('critical_areas', $project->critical_areas, array('class' => 'form-control')) }}
     </div>
-</div>
+</div><!--
 <h3>Sedimentation Pond</h3>
 <div class="form-group row">
     {{ Form::label('sedi_pond', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
@@ -35,7 +35,7 @@
     <div class="col-sm-9">
         {{ Form::textarea('sedi_pond_feasibility', $project->sedi_pond_feasibility, array('class' => 'form-control')) }}
     </div>
-</div>
+</div>-->
 <h3>Stabilization Plan</h3>
 <div class="form-group row">
     {{ Form::label('stabilization_description', 'Description', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}

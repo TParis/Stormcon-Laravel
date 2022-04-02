@@ -66,13 +66,13 @@
     <div class="col-sm-9">
         {{ Form::text('303d_id', $project->{"303d_id"}, array('class' => 'form-control')) }}
     </div>
-</div>
+</div><!--
 <div class="form-group row">
     {{ Form::label('303d_epa', 'Listed EPA', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::select('303d_epa', ["not " => "No", "" => "Yes"], $project->{"303d_epa"}, array('class' => 'form-control')) }}
     </div>
-</div>
+</div>-->
 <div class="form-group row">
     {{ Form::label('303d_tceq', 'Listed TCEQ', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
