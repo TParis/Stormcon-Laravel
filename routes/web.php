@@ -650,3 +650,35 @@ Route::get('/search',[
     'as' => 'search',
     'uses'  => 'SearchController@Search'
 ]);
+
+
+Route::group(['prefix' => 'quicktext', 'as' => 'quicktext::'], function() {
+    Route::get('/',[
+        'as'    => 'index',
+        'uses'  => 'QuicktextController@index'
+    ]);
+    Route::get('/add/',[
+        'as'    => 'add',
+        'uses'  => 'QuicktextController@addQuicktext'
+    ]);
+    Route::post('/add/',[
+        'as'    => 'create',
+        'uses'  => 'QuicktextController@createQuicktext'
+    ]);
+    Route::get('/edit/{quicktext}',[
+        'as'    => 'edit',
+        'uses'  => 'QuicktextController@modifyQuicktext'
+    ]);
+    Route::put( '/edit/{quicktext}',[
+        'as'    => 'update',
+        'uses'  => 'QuicktextController@updateQuicktext'
+    ]);
+    Route::delete('/delete/{quicktext}',[
+        'as'    => 'delete',
+        'uses'  => 'QuicktextController@deleteQuicktext'
+    ]);
+    Route::get('/undelete/{trashed_qt}',[
+        'as'    => 'undelete',
+        'uses'  => 'QuicktextController@undeleteQuicktext'
+    ]);
+});

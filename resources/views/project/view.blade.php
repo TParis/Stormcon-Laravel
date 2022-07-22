@@ -113,9 +113,9 @@
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#bestpractices" role="tab" aria-controls="contact" aria-selected="false">BMPs</a>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <!--<li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#stabilization" role="tab" aria-controls="contact" aria-selected="false">Stabilization</a>
-                    </li>
+                    </li>-->
                     @if (isset($project->county))
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#species" role="tab" aria-controls="contact" aria-selected="false">End. Species</a>
@@ -145,6 +145,7 @@
                     <div class="tab-pane fade" id="site" role="tabpanel" aria-labelledby="site-tab">
                         <div class="border border-top-0 p-5">
                             @include("project.site.view")
+                            @include("project.stabilizations.view")
                         </div>
                     </div>
                     <div class="tab-pane fade" id="research" role="tabpanel" aria-labelledby="research-tab">
@@ -159,7 +160,6 @@
                     </div>
                     <div class="tab-pane fade" id="stabilization" role="tabpanel" aria-labelledby="stabilization-tab">
                         <div class="border border-top-0 p-5">
-                            @include("project.stabilizations.view")
                         </div>
                     </div>
                     <div class="tab-pane fade" id="species" role="tabpanel" aria-labelledby="species-tab">
@@ -210,6 +210,15 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="quick-fill-btn" id="quick-fill-btn">+</div>
+    <div class="quick-fill-select" style="display: none;" id="quick-fill-sel-div">
+        <select id="quick-fill-sel" class="form-control">
+            <option>Please select quick text</option>
+            @foreach ($quicktext as $qt)
+                <option value="{{ $qt->text }}">{{ $qt->name }}</option>
+            @endforeach
+        </select>
     </div>
 @endsection
 
@@ -372,6 +381,38 @@
             }
 
         })
+    })
+
+    var lastdomobject;
+
+    $(document).on("focusout", "input", function(e) {
+        lastdomobject = e.currentTarget;
+    })
+    $(document).on("focusout", "textarea", function(e) {
+        lastdomobject = e.currentTarget;
+    })
+
+    $(".quick-fill-btn").click(function(e) {
+        $(".quick-fill-btn").fadeOut(400, function() {
+            $(".quick-fill-select").fadeIn(400);
+        })
+        $("#quick-fill-sel").focus();
+    })
+
+    $(".quick-fill-select select").change(function(e) {
+        $(lastdomobject).val($(".quick-fill-select select").val())
+        $(".quick-fill-select").fadeOut(400, function() {
+            $(".quick-fill-btn").fadeIn(400);
+        })
+        $(".quick-fill-select select").prop("selectedIndex", 0);
+    })
+
+
+    $(".quick-fill-select select").focusout(function() {
+        $(".quick-fill-select").fadeOut(400, function () {
+            $(".quick-fill-btn").fadeIn(400);
+        })
+        $(".quick-fill-select select").prop("selectedIndex", 0);
     })
     @endif
 </script>

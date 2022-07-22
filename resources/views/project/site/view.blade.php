@@ -29,40 +29,14 @@
         {{ Form::select('larger_plan', ["No" => "No", "Yes" => "Yes"], $project->larger_plan, array('class' => 'form-control')) }}
     </div>
 </div>
-<h3>Soils</h3>
-@for ($i = 1; $i <= 8; $i++)
-    <div id="soil-{{ $i }}">
-        <div class="form-group row">
-            {{ Form::label('soil_' . $i . '_type', 'Soil ' . $i . ' Type', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-            <div class="col-sm-9">
-                {{ Form::text('soil_' . $i . '_type', $project->{"soil_" . $i . "_type"}, array('class' => 'soil-control form-control', 'list' => 'soils_datalist')) }}
-            </div>
-        </div>
-        <div class="form-group row">
-            {{ Form::label('soil_' . $i . '_hsg', 'Soil ' . $i . ' HSG', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-            <div class="col-sm-9">
-                {{ Form::text('soil_' . $i . '_hsg', $project->{"soil_" . $i . "_hsg"}, array('class' => 'form-control')) }}
-            </div>
-        </div>
-        <div class="form-group row">
-            {{ Form::label('soil_' . $i . '_k_factor', 'Soil ' . $i . ' K Factor', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-            <div class="col-sm-9">
-                {{ Form::text('soil_' . $i . '_k_factor', $project->{"soil_" . $i . "_k_factor"}, array('class' => 'form-control')) }}
-            </div>
-        </div>
-        <div class="form-group row">
-            {{ Form::label('soil_' . $i . '_area', 'Soil ' . $i . ' Area', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-            <div class="col-sm-9">
-                {{ Form::text('soil_' . $i . '_area', $project->{"soil_" . $i . "_area"}, array('class' => 'form-control')) }}
-            </div>
-        </div>
+<h3>Critical Areas</h3>
+<div class="form-group row">
+    {{ Form::label('critical_areas', 'Critical Areas', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::textarea('critical_areas', $project->critical_areas, array('class' => 'form-control')) }}
     </div>
-    @if ($i < 8)
-    <hr>
-    @endif
-@endfor
-{{ Form::datalist('soils_datalist', $soils->pluck("name", "name")->toArray()) }}
-<h3>Sendiment Pond</h3>
+</div>
+<h3>Detention Pond</h3>
 <div class="form-group row">
     {{ Form::label('sedi_pond', 'Sedimentation Pond', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
@@ -85,13 +59,6 @@
     {{ Form::label('sedi_pond_maintenance', 'Maintenance', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('sedi_pond_maintenance', $project->sedi_pond_maintenance, array('class' => 'form-control')) }}
-    </div>
-</div>
-<h3>Erosivity</h3>
-<div class="form-group row">
-    {{ Form::label('erosivity', 'Erosivity', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
-    <div class="col-sm-9">
-        {{ Form::text('erosivity', $project->erosivity, array('class' => 'form-control')) }}
     </div>
 </div>
 <h3>Coefficient</h3>

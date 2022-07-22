@@ -21,7 +21,7 @@
 <div class="form-group row">
     {{ Form::label('classified_waters', 'Classified Waters', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::select('classified_waters', ["Yes" => "Yes", "No" => "No"], $project->classified_waters, array('class' => 'form-control')) }}
+        {{ Form::text('classified_waters', $project->classified_waters, array('class' => 'form-control')) }}
     </div>
 </div>
 <div class="form-group row">
@@ -60,6 +60,40 @@
         {{ Form::select('indian_lands', ["No" => "No", "Yes" => "Yes"], $project->indian_lands, array('class' => 'form-control')) }}
     </div>
 </div>
+
+<h3>Soils</h3>
+@for ($i = 1; $i <= 8; $i++)
+    <div id="soil-{{ $i }}">
+        <div class="form-group row">
+            {{ Form::label('soil_' . $i . '_type', 'Soil ' . $i . ' Type', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+            <div class="col-sm-9">
+                {{ Form::text('soil_' . $i . '_type', $project->{"soil_" . $i . "_type"}, array('class' => 'soil-control form-control', 'list' => 'soils_datalist')) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ Form::label('soil_' . $i . '_hsg', 'Soil ' . $i . ' HSG', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+            <div class="col-sm-9">
+                {{ Form::text('soil_' . $i . '_hsg', $project->{"soil_" . $i . "_hsg"}, array('class' => 'form-control')) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ Form::label('soil_' . $i . '_k_factor', 'Soil ' . $i . ' K Factor', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+            <div class="col-sm-9">
+                {{ Form::text('soil_' . $i . '_k_factor', $project->{"soil_" . $i . "_k_factor"}, array('class' => 'form-control')) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ Form::label('soil_' . $i . '_area', 'Soil ' . $i . ' Area', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+            <div class="col-sm-9">
+                {{ Form::text('soil_' . $i . '_area', $project->{"soil_" . $i . "_area"}, array('class' => 'form-control')) }}
+            </div>
+        </div>
+    </div>
+    @if ($i < 8)
+        <hr>
+    @endif
+@endfor
+{{ Form::datalist('soils_datalist', $soils->pluck("name", "name")->toArray()) }}
 <h3>303 D</h3>
 <div class="form-group row">
     {{ Form::label('303d_id', 'Seg ID', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
@@ -133,5 +167,12 @@
     {{ Form::label('constituent_3_tmdl', 'Third Category', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('constituent_3_tmdl', $project->constituent_3_tmdl, array('class' => 'form-control', 'list' => 'water_quality_list')) }}
+    </div>
+</div>
+<h3>Erosivity</h3>
+<div class="form-group row">
+    {{ Form::label('erosivity', 'Erosivity', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
+    <div class="col-sm-9">
+        {{ Form::text('erosivity', $project->erosivity, array('class' => 'form-control')) }}
     </div>
 </div>

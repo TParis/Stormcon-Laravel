@@ -12,6 +12,7 @@ use App\Models\EndangeredSpecies;
 use App\Models\InspectionSchedule;
 use App\Models\Municipal;
 use App\Models\Project;
+use App\Models\quicktext;
 use App\Models\Responsibilities;
 use App\Models\Soil;
 use App\Models\WaterQuality;
@@ -134,6 +135,7 @@ class ProjectController extends Controller
             $roles = Company::$roles;
             $states = Company::$states;
             $endangered_status = EndangeredSpecies::ENDANGERED_STATUS;
+            $quicktext = quicktext::all();
 
             return view('project.view', compact(
                 'project',
@@ -150,7 +152,8 @@ class ProjectController extends Controller
                 "roles",
                 "states",
                 "contacts",
-                "endangered_status"
+                "endangered_status",
+                "quicktext"
             ));
 
         }

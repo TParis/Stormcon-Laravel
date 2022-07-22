@@ -10484,3 +10484,33 @@ form .row {
 .max-width-750 {
   max-width: 750px !important;
 }
+
+.quick-fill-btn {
+  position: fixed;
+  bottom: 75px;
+  right: 21px;
+  font-size: 28pt;
+  border: 21px #5cafd3 solid;
+  background-color: #5cafd3;
+  border-radius: 50px;
+  line-height: 19px;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+}
+
+.quick-fill-select {
+  position: fixed;
+  width: 300px;
+  bottom: 100px;
+  right: 21px;
+  font-size: 28pt;
+  line-height: 19px;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+}
+
+.quick-fill-select select {
+  width: 300px;
+}
