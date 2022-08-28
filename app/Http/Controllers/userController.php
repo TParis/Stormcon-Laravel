@@ -1,9 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Mail\newAccountCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
@@ -144,6 +146,9 @@ class userController extends Controller
                 }
 
                 $user->new_raw_password = $new_pass;
+
+                //Send email
+                Mail::to($user)->send(new newAccountCreated($user));
 
                 Session::flash('success', $user->username . ' has been created successfully.');
                 Log::info('User ' . $user->username . ' has been created successfully by ' . Auth::user()
@@ -430,7 +435,7 @@ class userController extends Controller
     {
 
         if (Auth::user()->can('users.changepass') or ($user->id == Auth::user()
-                    ->id))
+                    ->id) or Auth::user()->hasRole("Admin"))
         {
 
             return view('users.password', compact('user'));
@@ -459,20 +464,22 @@ class userController extends Controller
     {
 
         if (Auth::user()->can('users.changepass') or ($user->id == Auth::user()
-                    ->id))
+                    ->id) or Auth::user()->hasRole("Admin"))
         {
 
             Validator::make($request->all() , ['password' => 'required|confirmed']);
 
             $user->password = Hash::make($request->input('password'));
 
-            if (!$user->hasRole('Record'))
-            {
-                $user->notify(new PasswordChanged());
-            }
 
             if ($user->save())
             {
+
+                if (!$user->hasRole('Record'))
+                {
+                    $user->notify(new PasswordChanged());
+                }
+
                 Session::flash('success', $user->username . '\'s password has been updated successfully.');
                 Log::info('User ' . $user->username . '\'s password has been updated successfully by ' . Auth::user()
                         ->name);
@@ -484,7 +491,7 @@ class userController extends Controller
             }
 
             if (Auth::user()
-                ->can('users.changepass'))
+                ->can('users.changepass') or Auth::user()->hasRole("Admin"))
             {
 
                 return redirect()

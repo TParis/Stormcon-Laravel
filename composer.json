@@ -9,17 +9,22 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "algolia/algoliasearch-client-php": "^3.3",
         "barryvdh/laravel-ide-helper": "^2.9",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "krizalys/onedrive-php-sdk": "^3.1",
         "laravel/framework": "^8.12",
+        "laravel/scout": "^9.4",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.3",
         "laravelcollective/html": "^6.2",
-        "spatie/laravel-permission": "^4.0",
-        "ext-simplexml": "*",
-        "ext-json": "*"
+        "nicolasbeauvais/flysystem-onedrive": "^1.0",
+        "propaganistas/laravel-phone": "4.*",
+        "spatie/laravel-permission": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

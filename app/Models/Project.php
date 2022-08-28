@@ -188,6 +188,19 @@ class Project extends Model
         return $this->contractors->sum('not_signed') == $this->contractors->count();
     }
 
+    public function getAcresAttribute($value) {
+        return number_format($value, 2);
+    }
+    public function getAcresDisturbedAttribute($value) {
+        return number_format($value, 2);
+    }
+    public function getPreConstructionCoefficientAttribute($value) {
+        return number_format($value, 2);
+    }
+    public function getPostConstructionCoefficientAttribute($value) {
+        return number_format($value, 2);
+    }
+
 
 
 

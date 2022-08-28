@@ -33,7 +33,7 @@
         <div class="form-group row">
             {{ Form::label('proj_number', 'Project Number', array('class' => 'col-3 control-label required-field')) }}
             <div class="col-9">
-                {{ Form::text('proj_number', '', array('class' => 'form-control', 'required' => 'required')) }}
+                {{ Form::text('proj_number', $project_number, array('class' => 'form-control', 'required' => 'required')) }}
             </div>
         </div>
         <div class="form-group row">

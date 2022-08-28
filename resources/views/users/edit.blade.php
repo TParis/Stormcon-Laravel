@@ -51,6 +51,9 @@
             <a type="button" onClick="deleteUser({{ $user->id }}, '{{ $user->username }}')" class="btn btn-danger w-100">Delete</a>
         </div>
         <div class="col-4 p-2 text-center">
+            <a href="{{ route("users::changepass", $user->id) }}" class="btn btn-info w-100">Change Password</a>
+        </div>
+        <div class="col-4 p-2 text-center">
             <button type="button" class="btn btn-primary w-100" data-dismiss="modal">Close</button>
         </div>
         <div class="col-4 p-2 text-center">
