@@ -495,7 +495,7 @@ class userController extends Controller
             {
 
                 return redirect()
-                    ->route('users::view', $user->id);
+                    ->route('users::index');
 
             }
             else
