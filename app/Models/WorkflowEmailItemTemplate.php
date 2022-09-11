@@ -16,7 +16,5 @@ class WorkflowEmailItemTemplate extends WorkflowItemTemplate
         'role' => 'array'
     ];
 
-    public function getRoleAttribute($value) {
-        return (is_array($value)) ? $value : Array($value);
-    }
+
 }

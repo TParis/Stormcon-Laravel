@@ -357,6 +357,7 @@ class ProjectController extends Controller
             $project->inspection_cycle = $request->inspection_cycle;
             $project->inspection_format = $request->inspection_format;
             $project->inspection_start = $request->inspection_start;
+            $project->no_inspection = (isset($request->no_inspection)) ? 1 : 0;
             $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
 
             foreach ($project->contractors as $contractor) {

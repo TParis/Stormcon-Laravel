@@ -66,6 +66,7 @@ class InspectionController extends Controller
                     });
             })
             ->where('workflows.status', '=', ProjectController::STATUS_OPEN)
+            ->where('projects.no_inspection', '=', '0')
             ->whereRaw('workflows.step = workflow_inspection_items.[order] - 1')
             ->whereNull('r2.id')
             ->get();
@@ -73,7 +74,10 @@ class InspectionController extends Controller
 
             foreach ($projects as $project) {
                 echo "Processing project ( " . $project->project_id . " )\n";
-                if (!isset($project->last_inspection)) {
+                if (!isset($project->inspector_id)) {
+                    echo "No inspector set, skipping\n";
+                    continue;
+                } else if (!isset($project->last_inspection)) {
                     //No inspection has happened
                     $next_inspection = Carbon::parse($project->inspection_start);
                     echo "No inspection found, next inspection: " . $next_inspection . "\n";
@@ -88,6 +92,7 @@ class InspectionController extends Controller
                         continue;
                     }
                 }
+                flush();
 
                 $inspection = new Inspection();
                 $inspection->project_id = $project->project_id;
@@ -97,6 +102,7 @@ class InspectionController extends Controller
                 $inspection->save();
                 $updated++;
                 echo "Saved inspection for project ( " . $project->project_id . " ) on " . $next_inspection . "\n";
+                flush();
             }
 
             return $updated;

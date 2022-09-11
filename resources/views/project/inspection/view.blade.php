@@ -31,6 +31,13 @@
         {{ Form::checkbox('rdy_to_not', 'true', $project->rdy_to_not, array('class' => 'control-label', 'style' => 'margin-top: 7px;')) }}
     </div>
 </div>
+
+<div class="form-group row">
+    {{ Form::label('no_inspection', 'Do not inspect', array('class' => 'col-3 text-right control-label')) }}
+    <div class="col-9">
+        {{ Form::checkbox('no_inspection', 0, $project->no_inspection, array('class' => 'control-label', 'style' => 'margin-top: 7px;')) }}
+    </div>
+</div>
 <hr>
 <h2>Inspections</h2>
 <table class="table table-bordered table-primary">

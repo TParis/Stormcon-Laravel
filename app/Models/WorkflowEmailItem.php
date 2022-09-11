@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use App\Notifications\ProjectWorkflow;
+use App\Notifications\EmailItem;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
-use App\Notifications\ProjectAssigned;
 
 class WorkflowEmailItem extends WorkflowItem
 {
@@ -28,7 +26,7 @@ class WorkflowEmailItem extends WorkflowItem
         $roles->each(function ($role) use (&$already_emailed) {
             $role->users->each(function ($user) use (&$already_emailed) {
                 if (!in_array($user->id, $already_emailed)) {
-                    $user->notify(new ProjectWorkflow($this->workflow->project));
+                    $user->notify(new EmailItem($this->workflow->project));
                     array_push($already_emailed, $user->id);
                 }
             });

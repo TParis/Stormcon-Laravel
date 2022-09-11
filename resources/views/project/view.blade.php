@@ -87,6 +87,7 @@
                     @include("project.onedrive.view")
                 </div>
                 <div class="w-100 text-right"><a href="#">Upload File</a></div>
+                <div class="w-100 text-right"><a href="file:///%USERPROFILE%/Stormcon LLC/Stormcon Portal - Documents/Projects/{{ $project->id }} - {{ $project->name }}/">Open in File Explorer</a></div>
                 <h3 align="right" class="project-block-header">Notes</h3>
                 <div class="container-fluid border project-block h-25 p-0">
                     @include("project.notes.view")
@@ -400,7 +401,9 @@
     })
 
     $(".quick-fill-select select").change(function(e) {
-        $(lastdomobject).val($(".quick-fill-select select").val())
+        old_str = $(lastdomobject).val()
+
+        $(lastdomobject).val(old_str + $(".quick-fill-select select").val())
         $(".quick-fill-select").fadeOut(400, function() {
             $(".quick-fill-btn").fadeIn(400);
         })
