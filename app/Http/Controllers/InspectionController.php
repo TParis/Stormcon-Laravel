@@ -138,7 +138,8 @@ class InspectionController extends Controller
         $inspection->save();
         $inspection->project->rdy_to_not = 1;
         $inspection->project->save();
-        $inspection->project->workflow->next_step();
+        //$inspection->project->workflow->next_step();
+        //TODO: Notification to NOI tm
 
         Session::flash("Inspection has been completed and marked ready to NOT");
 

@@ -281,176 +281,155 @@ class ProjectController extends Controller
             ]
         );
 
-        if (Auth::user()->hasRole("Owner"))
+
+
+        //SET VALUES TO MODEL
+        $project->latitude = $request->latitude;
+        $project->longitude = $request->longitude;
+        $project->city = $request->city;
+        $project->state = $request->state;
+        $project->zipcode = $request->zipcode;
+        $project->county_name = $request->county_name;
+        $project->directions = $request->directions;
+        $project->nearest_city = $request->nearest_city;
+        $project->local_official_ms4 = $request->local_official_ms4;
+        $project->local_official_address = $request->local_official_address;
+        $project->local_official_city = $request->local_official_city;
+        $project->local_official_state = $request->local_official_state;
+        $project->local_official_zipcode = $request->local_official_zipcode;
+        $project->local_official_contact = $request->local_official_contact;
+        $project->mailing_address_street_number = $request->mailing_address_street_number;
+        $project->mailing_address_street_name = $request->mailing_address_street_name;
+
+        $project->classified_waters = $request->classified_waters;
+        $project->project_company = $request->project_company;
+        $project->swppp_preparrer = $request->swppp_preparrer;
+        $project->cust_proj_number = $request->cust_proj_number;
+        $project->cost_center = $request->cost_center;
+        $project->critical_areas = $request->critical_areas;
+        $project->sedi_pond = $request->sedi_pond;
+        $project->sedi_pond_design = $request->sedi_pond_design;
+        $project->sedi_pond_construction = $request->sedi_pond_construction;
+        $project->sedi_pond_maintenance = $request->sedi_pond_maintenance;
+        $project->sedi_pond_feasibility = $request->sedi_pond_feasibility;
+        $project->order_date = $request->order_date;
+        $project->preparation_date = $request->preparation_date;
+        $project->start_date = $request->start_date;
+        $project->completion_date = $request->completion_date;
+        $project->disturbed_areas_stabilization_date = $request->disturbed_areas_stabilization_date;
+        $project->bmp_removal_date = $request->bmp_removal_date;
+        $project->stabilization_description = $request->stabilization_description;
+        $project->stabilization_dates = $request->stabilization_dates;
+        $project->stabilization_schedule = $request->stabilization_schedule;
+        $project->stabilization_responsibility = $request->stabilization_responsibility;
+
+        $project->updated_at = $request->updated_at;
+        $project->researcher = $request->researcher;
+        $project->research_completed = $request->research_completed;
+        $project->edwards_aquifer = $request->edwards_aquifer;
+        $project->surrounding_project = $request->surrounding_project;
+        $project->receiving_waters = $request->receiving_waters;
+        $project->within_50ft = $request->within_50ft;
+        $project->huc = $request->huc;
+        $project->{"303d_id"} = $request->{"303d_id"};
+        $project->constituent_1 = $request->constituent_1;
+        $project->constituent_1_co_area = $request->constituent_1_co_area;
+        $project->constituent_1_tmdl = $request->constituent_1_tmdl;
+        $project->constituent_2 = $request->constituent_2;
+        $project->constituent_2_co_area = $request->constituent_2_co_area;
+        $project->constituent_2_tmdl = $request->constituent_2_tmdl;
+        $project->constituent_3 = $request->constituent_3;
+        $project->constituent_3_co_area = $request->constituent_3_co_area;
+        $project->constituent_3_tmdl = $request->constituent_3_tmdl;
+        $project->{"303d_epa"} = $request->{"303d_epa"};
+        $project->{"303d_tceq"} = $request->{"303d_tceq"};
+        $project->impaired_waters = $request->impaired_waters;
+        $project->endangered_species_website = $request->endangered_species_website;
+        $project->endangered_species_county = $request->endangered_species_county;
+        $project->indian_lands = $request->indian_lands;
+        $project->description = $request->description;
+        $project->acres = $request->acres;
+        $project->acres_disturbed = $request->acres_disturbed;
+        $project->existing_system = $request->existing_system;
+        $project->larger_plan = $request->larger_plan;
+        $project->bmps = $request->bmps;
+        for ($i = 1; $i <= 8; $i++) {
+            $project->{"soil_" . $i . "_type"}       = $request->{"soil_" . $i . "_type"};
+            $project->{"soil_" . $i . "_hsg"}        = $request->{"soil_" . $i . "_hsg"};
+            $project->{"soil_" . $i . "_k_factor"}   = $request->{"soil_" . $i . "_k_factor"};
+            $project->{"soil_" . $i . "_area"}       = $request->{"soil_" . $i . "_area"};
+        }
+        $project->erosivity = $request->erosivity;
+        $project->pre_construction_coefficient = $request->pre_construction_coefficient;
+        $project->post_construction_coefficient = $request->post_construction_coefficient;
+        $project->inspector_id = $request->inspector_id;
+        $project->inspection_cycle = $request->inspection_cycle;
+        $project->inspection_format = $request->inspection_format;
+        $project->inspection_start = $request->inspection_start;
+        $project->phase = $request->phase;
+        $project->no_inspection = (isset($request->no_inspection)) ? 1 : 0;
+        $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
+
+        foreach ($project->contractors as $contractor) {
+            if (isset($request->{"contractor_" . $contractor->id . "_name"}) && !blank($request->{"contractor_" . $contractor->id . "_name"})) {
+
+                $contractor->role              = $request->{"contractor_" . $contractor->id . "_role"};
+                $contractor->name              = $request->{"contractor_" . $contractor->id . "_name"};
+                $contractor->legal_name        = $request->{"contractor_" . $contractor->id . "_legal_name"};
+                $contractor->also_known_as     = $request->{"contractor_" . $contractor->id . "_also_known_as"};
+                $contractor->type              = $request->{"contractor_" . $contractor->id . "_type"};
+                $contractor->division          = $request->{"contractor_" . $contractor->id . "_division"};
+                $contractor->num_of_employees  = $request->{"contractor_" . $contractor->id . "_num_of_employees"};
+                $contractor->address           = $request->{"contractor_" . $contractor->id . "_address"};
+                $contractor->city              = $request->{"contractor_" . $contractor->id . "_city"};
+                $contractor->state             = $request->{"contractor_" . $contractor->id . "_state"};
+                $contractor->zipcode           = $request->{"contractor_" . $contractor->id . "_zipcode"};
+                $contractor->phone             = $request->{"contractor_" . $contractor->id . "_phone"};
+                $contractor->fax               = $request->{"contractor_" . $contractor->id . "_fax"};
+                $contractor->website           = $request->{"contractor_" . $contractor->id . "_website"};
+                $contractor->federal_tax_id    = $request->{"contractor_" . $contractor->id . "_federal_tax_id"};
+                $contractor->state_tax_id      = $request->{"contractor_" . $contractor->id . "_state_tax_id"};
+                $contractor->sos               = $request->{"contractor_" . $contractor->id . "_sos"};
+                $contractor->cn                = $request->{"contractor_" . $contractor->id . "_cn"};
+                $contractor->responsibilities  = $request->{"contractor_" . $contractor->id . "_responsibilities"};
+                $contractor->contact_name      = $request->{"contractor_" . $contractor->id . "_contact_name"};
+                $contractor->contact_title     = $request->{"contractor_" . $contractor->id . "_contact_title"};
+                $contractor->contact_phone     = $request->{"contractor_" . $contractor->id . "_contact_phone"};
+                $contractor->contact_fax       = $request->{"contractor_" . $contractor->id . "_contact_fax"};
+                $contractor->contact_email     = $request->{"contractor_" . $contractor->id . "_contact_email"};
+                $contractor->noi_signer_name   = $request->{"contractor_" . $contractor->id . "_noi_signer_name"};
+                $contractor->noi_signer_title  = $request->{"contractor_" . $contractor->id . "_noi_signer_title"};
+                $contractor->noi_signer_er  = $request->{"contractor_" . $contractor->id . "_noi_signer_er"};
+                $contractor->noi_signer_permit  = $request->{"contractor_" . $contractor->id . "_noi_signer_permit"};
+                $contractor->noi_signer_phone  = $request->{"contractor_" . $contractor->id . "_noi_signer_phone"};
+                $contractor->noi_signer_email  = $request->{"contractor_" . $contractor->id . "_noi_signer_email"};
+                $contractor->noi_signed        = (isset($request->{"contractor_" . $contractor->id . "_noi_signed"})) ? 1 : 0;
+                $contractor->not_signer_name   = $request->{"contractor_" . $contractor->id . "_not_signer_name"};
+                $contractor->not_signer_title  = $request->{"contractor_" . $contractor->id . "_not_signer_title"};
+                $contractor->not_signed        = (isset($request->{"contractor_" . $contractor->id . "_not_signed"})) ? 1 : 0;
+                $contractor->save();
+            }
+        }
+
+        //SAVE MODEL
+        if ($project->save())
         {
 
-
-            /*$this->validate($request,
-                [
-                    'name'              => ['required','string','min:5','max:255',Rule::unique("municipals")->ignore($municipal->id)],
-                    'phone'             => 'required|string',
-                    'address'           => 'required|string',
-                    'city'              => 'required|string',
-                    'state'             => 'required|string',
-                    'zipcode'           => 'required|string',
-                ]
-            );*/
-
-            //SET VALUES TO MODEL
-            $project->latitude = $request->latitude;
-            $project->longitude = $request->longitude;
-            $project->city = $request->city;
-            $project->state = $request->state;
-            $project->zipcode = $request->zipcode;
-            $project->county_name = $request->county_name;
-            $project->directions = $request->directions;
-            $project->nearest_city = $request->nearest_city;
-            $project->local_official_ms4 = $request->local_official_ms4;
-            $project->local_official_address = $request->local_official_address;
-            $project->local_official_city = $request->local_official_city;
-            $project->local_official_state = $request->local_official_state;
-            $project->local_official_zipcode = $request->local_official_zipcode;
-            $project->local_official_contact = $request->local_official_contact;
-            $project->mailing_address_street_number = $request->mailing_address_street_number;
-            $project->mailing_address_street_name = $request->mailing_address_street_name;
-
-            $project->classified_waters = $request->classified_waters;
-            $project->project_company = $request->project_company;
-            $project->swppp_preparrer = $request->swppp_preparrer;
-            $project->cust_proj_number = $request->cust_proj_number;
-            $project->cost_center = $request->cost_center;
-            $project->critical_areas = $request->critical_areas;
-            $project->sedi_pond = $request->sedi_pond;
-            $project->sedi_pond_design = $request->sedi_pond_design;
-            $project->sedi_pond_construction = $request->sedi_pond_construction;
-            $project->sedi_pond_maintenance = $request->sedi_pond_maintenance;
-            $project->sedi_pond_feasibility = $request->sedi_pond_feasibility;
-            $project->order_date = $request->order_date;
-            $project->preparation_date = $request->preparation_date;
-            $project->start_date = $request->start_date;
-            $project->completion_date = $request->completion_date;
-            $project->disturbed_areas_stabilization_date = $request->disturbed_areas_stabilization_date;
-            $project->bmp_removal_date = $request->bmp_removal_date;
-            $project->stabilization_description = $request->stabilization_description;
-            $project->stabilization_dates = $request->stabilization_dates;
-            $project->stabilization_schedule = $request->stabilization_schedule;
-            $project->stabilization_responsibility = $request->stabilization_responsibility;
-
-            $project->updated_at = $request->updated_at;
-            $project->researcher = $request->researcher;
-            $project->research_completed = $request->research_completed;
-            $project->edwards_aquifer = $request->edwards_aquifer;
-            $project->surrounding_project = $request->surrounding_project;
-            $project->receiving_waters = $request->receiving_waters;
-            $project->within_50ft = $request->within_50ft;
-            $project->huc = $request->huc;
-            $project->{"303d_id"} = $request->{"303d_id"};
-            $project->constituent_1 = $request->constituent_1;
-            $project->constituent_1_co_area = $request->constituent_1_co_area;
-            $project->constituent_1_tmdl = $request->constituent_1_tmdl;
-            $project->constituent_2 = $request->constituent_2;
-            $project->constituent_2_co_area = $request->constituent_2_co_area;
-            $project->constituent_2_tmdl = $request->constituent_2_tmdl;
-            $project->constituent_3 = $request->constituent_3;
-            $project->constituent_3_co_area = $request->constituent_3_co_area;
-            $project->constituent_3_tmdl = $request->constituent_3_tmdl;
-            $project->{"303d_epa"} = $request->{"303d_epa"};
-            $project->{"303d_tceq"} = $request->{"303d_tceq"};
-            $project->impaired_waters = $request->impaired_waters;
-            $project->endangered_species_website = $request->endangered_species_website;
-            $project->endangered_species_county = $request->endangered_species_county;
-            $project->indian_lands = $request->indian_lands;
-            $project->description = $request->description;
-            $project->acres = $request->acres;
-            $project->acres_disturbed = $request->acres_disturbed;
-            $project->existing_system = $request->existing_system;
-            $project->larger_plan = $request->larger_plan;
-            $project->bmps = $request->bmps;
-            for ($i = 1; $i <= 8; $i++) {
-                $project->{"soil_" . $i . "_type"}       = $request->{"soil_" . $i . "_type"};
-                $project->{"soil_" . $i . "_hsg"}        = $request->{"soil_" . $i . "_hsg"};
-                $project->{"soil_" . $i . "_k_factor"}   = $request->{"soil_" . $i . "_k_factor"};
-                $project->{"soil_" . $i . "_area"}       = $request->{"soil_" . $i . "_area"};
-            }
-            $project->erosivity = $request->erosivity;
-            $project->pre_construction_coefficient = $request->pre_construction_coefficient;
-            $project->post_construction_coefficient = $request->post_construction_coefficient;
-            $project->inspector_id = $request->inspector_id;
-            $project->inspection_cycle = $request->inspection_cycle;
-            $project->inspection_format = $request->inspection_format;
-            $project->inspection_start = $request->inspection_start;
-            $project->phase = $request->phase;
-            $project->no_inspection = (isset($request->no_inspection)) ? 1 : 0;
-            $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
-
-            foreach ($project->contractors as $contractor) {
-                if (isset($request->{"contractor_" . $contractor->id . "_name"}) && !blank($request->{"contractor_" . $contractor->id . "_name"})) {
-
-                    $contractor->role              = $request->{"contractor_" . $contractor->id . "_role"};
-                    $contractor->name              = $request->{"contractor_" . $contractor->id . "_name"};
-                    $contractor->legal_name        = $request->{"contractor_" . $contractor->id . "_legal_name"};
-                    $contractor->also_known_as     = $request->{"contractor_" . $contractor->id . "_also_known_as"};
-                    $contractor->type              = $request->{"contractor_" . $contractor->id . "_type"};
-                    $contractor->division          = $request->{"contractor_" . $contractor->id . "_division"};
-                    $contractor->num_of_employees  = $request->{"contractor_" . $contractor->id . "_num_of_employees"};
-                    $contractor->address           = $request->{"contractor_" . $contractor->id . "_address"};
-                    $contractor->city              = $request->{"contractor_" . $contractor->id . "_city"};
-                    $contractor->state             = $request->{"contractor_" . $contractor->id . "_state"};
-                    $contractor->zipcode           = $request->{"contractor_" . $contractor->id . "_zipcode"};
-                    $contractor->phone             = $request->{"contractor_" . $contractor->id . "_phone"};
-                    $contractor->fax               = $request->{"contractor_" . $contractor->id . "_fax"};
-                    $contractor->website           = $request->{"contractor_" . $contractor->id . "_website"};
-                    $contractor->federal_tax_id    = $request->{"contractor_" . $contractor->id . "_federal_tax_id"};
-                    $contractor->state_tax_id      = $request->{"contractor_" . $contractor->id . "_state_tax_id"};
-                    $contractor->sos               = $request->{"contractor_" . $contractor->id . "_sos"};
-                    $contractor->cn                = $request->{"contractor_" . $contractor->id . "_cn"};
-                    $contractor->responsibilities  = $request->{"contractor_" . $contractor->id . "_responsibilities"};
-                    $contractor->contact_name      = $request->{"contractor_" . $contractor->id . "_contact_name"};
-                    $contractor->contact_title     = $request->{"contractor_" . $contractor->id . "_contact_title"};
-                    $contractor->contact_phone     = $request->{"contractor_" . $contractor->id . "_contact_phone"};
-                    $contractor->contact_fax       = $request->{"contractor_" . $contractor->id . "_contact_fax"};
-                    $contractor->contact_email     = $request->{"contractor_" . $contractor->id . "_contact_email"};
-                    $contractor->noi_signer_name   = $request->{"contractor_" . $contractor->id . "_noi_signer_name"};
-                    $contractor->noi_signer_title  = $request->{"contractor_" . $contractor->id . "_noi_signer_title"};
-                    $contractor->noi_signer_er  = $request->{"contractor_" . $contractor->id . "_noi_signer_er"};
-                    $contractor->noi_signer_permit  = $request->{"contractor_" . $contractor->id . "_noi_signer_permit"};
-                    $contractor->noi_signer_phone  = $request->{"contractor_" . $contractor->id . "_noi_signer_phone"};
-                    $contractor->noi_signer_email  = $request->{"contractor_" . $contractor->id . "_noi_signer_email"};
-                    $contractor->noi_signed        = (isset($request->{"contractor_" . $contractor->id . "_noi_signed"})) ? 1 : 0;
-                    $contractor->not_signer_name   = $request->{"contractor_" . $contractor->id . "_not_signer_name"};
-                    $contractor->not_signer_title  = $request->{"contractor_" . $contractor->id . "_not_signer_title"};
-                    $contractor->not_signed        = (isset($request->{"contractor_" . $contractor->id . "_not_signed"})) ? 1 : 0;
-                    $contractor->save();
-                }
-            }
-
-            //SAVE MODEL
-            if ($project->save())
-            {
-
-                Session::flash('success', $project->name . ' has been updated successfully.');
-                Log::info('Project ' . $project->name . ' has been updated successfully by ' . Auth::user()->username);
-
-            }
-            else
-            {
-
-                Session::flash('error', 'There has been an error while trying to update project ' . $project->name . '.');
-                Log::info(Auth::user()->username . ' received an error while updating project ' . $project->name);
-
-            }
-
-            return redirect()
-                ->route('project::view', $project->id);
+            Session::flash('success', $project->name . ' has been updated successfully.');
+            Log::info('Project ' . $project->name . ' has been updated successfully by ' . Auth::user()->username);
 
         }
         else
         {
 
-            Log::info(Auth::user()->username . ' was denied access to edit project ' . $project->name);
-            throw new AuthorizationException;
+            Session::flash('error', 'There has been an error while trying to update project ' . $project->name . '.');
+            Log::info(Auth::user()->username . ' received an error while updating project ' . $project->name);
 
         }
+
+        return redirect()
+            ->route('project::view', $project->id);
+
 
     }
 
