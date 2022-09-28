@@ -12,7 +12,7 @@ class ProjectPolicy
 {
     use HandlesAuthorization;
 
-    private $research_phase = ['Admin', 'Sr Admin', 'Owner', 'Research', 'Maps', 'NOI', 'Publisher', 'Initiator'];
+    private $research_phase = ['Admin', 'Sr Admin', 'Owner', 'Research', 'Maps', 'NOIs', 'Publisher', 'Initiator'];
     private $inspection_phase = ['Admin', 'Sr Admin', 'Owner', 'Inspector', 'Inspector Supervisor'];
     private $closed_phase = ['Admin', 'Sr Admin', 'Owner'];
     private $initiation_phase = ['Initiator', 'Admin', 'Sr Admin', 'Owner'];
