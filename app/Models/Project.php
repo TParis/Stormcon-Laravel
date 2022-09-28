@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Scout\Searchable;
 
 class Project extends Model
@@ -203,5 +204,28 @@ class Project extends Model
 
 
 
+    /**
+     * @param Project $project
+     * @param string $path
+     * @param Boolean $personal
+     * @return string
+     */
+    public function getSharePointRoot() : string
+    {
+
+        $root = "https://stormcon.sharepoint.com/sites/StormconPortal2/Shared%20Documents/Forms/AllItems.aspx";
+
+        $dir = (isset($this->workflow->step()->user_id)) ?
+            "/sites/StormconPortal2/Shared Documents/Personal/" . $this->workflow->step()->assigned->fullName
+            :
+            "/sites/StormconPortal2/Shared Documents/Projects"
+        ;
+
+        $project = $this->id . " - " . $this->name;
+
+        $folder = urlencode($dir . "/" . $project . "/");
+
+        return $root . "?id=" . $folder;
+    }
 
 }

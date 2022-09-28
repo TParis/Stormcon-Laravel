@@ -59,7 +59,7 @@
                     <a href="#" class="w-100 d-block" id="save-unblock">Clear Blocker</a>
                     <hr>
                     <a href="{{ route("project::reverse-step", $project->id) }}" class="w-100 d-block">Return to Previous Step</a>
-                    <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="w-100 d-block invisible complete-btn">Complete Step</a>
+                    <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="w-100 d-block complete-btn">Complete Step</a>
                     @if (Auth::user()->can('skipWorkflow'))
                     <a href="#" data-toggle="modal" data-target="#skip-modal">Skip to...</a>
                     @endif
@@ -80,14 +80,14 @@
                     </div>
                     @endforeach
                 </div>
-                <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="btn btn-primary w-100 d-block invisible complete-btn">Complete Step</a>
+                <a href="{{ route('project::complete-step', $project->id) }}" id="complete-step" class="btn btn-primary w-100 d-block complete-btn">Complete Step</a>
                 @endif
                 <h3 align="right" class="project-block-header">Files</h3>
                 <div class="container-fluid border project-block onedrive-files" style="padding: 0px">
                     @include("project.onedrive.view")
                 </div>
                 <div class="w-100 text-right"><a href="#">Upload File</a></div>
-                <div class="w-100 text-right"><a href="file:///%USERPROFILE%/Stormcon LLC/Stormcon Portal - Documents/Projects/{{ $project->id }} - {{ $project->name }}/">Open in File Explorer</a></div>
+                <div class="w-100 text-right"><a href="{{ $project->getSharePointRoot() }}" target="_blank">Open in Sharepoint</a></div>
                 <h3 align="right" class="project-block-header">Notes</h3>
                 <div class="container-fluid border project-block h-25 p-0">
                     @include("project.notes.view")
@@ -338,8 +338,8 @@
            if (!subel.checked) anyUnchecked = true;
         })
 
-        if (!anyUnchecked) $(".complete-btn").removeClass("invisible");
-        if (anyUnchecked) $(".complete-btn").addClass("invisible");
+        //if (!anyUnchecked) $(".complete-btn").removeClass("invisible");
+        //if (anyUnchecked) $(".complete-btn").addClass("invisible");
 
     });
 

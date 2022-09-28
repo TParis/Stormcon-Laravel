@@ -48,7 +48,7 @@
             @endif
             <td class="d-none d-sm-none d-md-table-cell">{{ ($inspection->project->rdy_to_not) ? "Ready" : "Not Ready" }}</td>
             <td class="d-none d-sm-none d-md-table-cell">{{ ($inspection->project->not_complete()) ? "Ready" : "Not Ready" }}</td>
-            <td class="d-none d-sm-none d-md-table-cell">{{ $inspection->project->id }}</td>
+            <td class="d-none d-sm-none d-md-table-cell">{{ $inspection->project->proj_number }}</td>
             <td>{{ $inspection->project->name }}</td>
             @if ($inspection->project->latitude && $inspection->project->longitude)
                 <td><a href="https://www.google.com/maps/search/?api=1&query={{ $inspection->project->latitude }},{{ $inspection->project->longitude }}" target="_blank">{{ $inspection->project->mailing_address_street_number }} {{ $inspection->project->mailing_address_street_name }}<br \>{{ $inspection->project->city }}, {{ $inspection->project->state }}, {{ $inspection->project->zipcode }}</td>

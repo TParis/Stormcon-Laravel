@@ -11,6 +11,7 @@
             @endif
         </div>
     </div>
+    {{ Form::open(array('route' => array("inspection::complete", $inspection->id), 'method' => 'put', 'class'	=> 'form-horizontal')) }}
     <div class="row mb-3">
         <div class="col-6 font-weight-bold">
             Status
@@ -19,7 +20,7 @@
             @if ($inspection->status == 1)
                 Complete
             @elseif (Auth::user()->id == $inspection->inspector_id)
-                <a href="{{ route("inspection::complete", $inspection->id) }}" class="btn btn-primary">Mark Complete</a>
+                {{ Form::submit("Mark Complete", ['class' => 'btn btn-primary']) }}
             @else
                 Awaiting
             @endif
@@ -58,7 +59,7 @@
             Project #
         </div>
         <div class="col-6">
-            #{{ $inspection->project->id }}
+            #{{ $inspection->project->proj_number}}
         </div>
     </div>
     <div class="row mb-3">
@@ -69,6 +70,15 @@
             {{ $inspection->project->name }}
         </div>
     </div>
+    <div class="row mb-3">
+        <div class="col-6 font-weight-bold">
+            Phase
+        </div>
+        <div class="col-6">
+            {{ Form::select('phase', $inspection_phases, $inspection->project->phase, array('class' => 'text-right form-control')) }}
+        </div>
+    </div>
+    {{ Form::close() }}
     <div class="row mb-3">
         <div class="col-6 font-weight-bold">
             Address

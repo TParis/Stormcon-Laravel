@@ -590,7 +590,7 @@ Route::group(['prefix' => 'inspection', 'as' => 'inspection::'], function() {
         'as' => 'view',
         'uses' => 'InspectionController@viewInspection'
     ]);
-    Route::get('/complete/{inspection}', [
+    Route::put('/complete/{inspection}', [
         'as' => 'complete',
         'uses' => 'InspectionController@markComplete'
     ]);

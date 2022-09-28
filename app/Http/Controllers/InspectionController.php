@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\User;
 use Auth;
 use App\Models\Inspection;
@@ -21,6 +22,8 @@ class InspectionController extends Controller
     public function schedule()
     {
 
+        $inspection_phases = ProjectController::INSPECTION_PHASES;
+
         if (Auth::user()->can('viewInspections')) {
             $inspections = Inspection::where('inspection_date', '>', Carbon::today())->orderBy('inspection_date')->get();
         } else if (Auth::user()->can('viewOwnInspections')) {
@@ -34,7 +37,7 @@ class InspectionController extends Controller
 
 
 
-        return response()->view('inspection.schedule', compact('inspections'));
+        return response()->view('inspection.schedule', compact('inspections', "inspection_phases"));
     }
 
     public function getWeeklySchedule() {
@@ -113,12 +116,16 @@ class InspectionController extends Controller
 
         $inspectors = User::role('Inspector')->get()->pluck('fullName', 'id');
 
-        return response()->view('inspection.view', compact('inspection', 'inspectors'));
+        $inspection_phases = ProjectController::INSPECTION_PHASES;
+
+        return response()->view('inspection.view', compact('inspection', 'inspectors', 'inspection_phases'));
 
     }
 
     public function markComplete(Request $request, Inspection $inspection) {
         $inspection->status = 1;
+        $inspection->project->phase = $request->phase;
+        $inspection->project->save();
         $inspection->save();
 
         Session::flash("Inspection has been marked completed");

@@ -46,6 +46,24 @@ class ProjectController extends Controller
     const STATUS_HOLD = 2;
     const STATUS_BLOCKED = 3;
 
+    const INSPECTION_PHASES = [
+        'Initial',
+        'Inactive',
+        'Excavation',
+        'Wet Utilities',
+        'Dry Utilities',
+        'Paving',
+        'Selling of lots',
+        'Complete',
+        'Stabilize'
+    ];
+    const INSPECTION_FORMATS = [
+        'Buildpro',
+        'Stormpromax',
+        'Next sequence',
+        'Other'
+    ];
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -131,6 +149,8 @@ class ProjectController extends Controller
             $inspectors = $inspectors->put('', "Please select")->sortBy('fullName');
             $inspection_schedules = InspectionSchedule::all();
             $inspections = $project->inspections;
+            $inspection_phases = self::INSPECTION_PHASES;
+            $inspection_formats = self::INSPECTION_FORMATS;
             $researchers = User::role('Research')->get()->pluck("fullName", "id");
             $roles = Company::$roles;
             $states = Company::$states;
@@ -153,7 +173,9 @@ class ProjectController extends Controller
                 "states",
                 "contacts",
                 "endangered_status",
-                "quicktext"
+                "quicktext",
+                "inspection_phases",
+                "inspection_formats"
             ));
 
         }
@@ -357,6 +379,7 @@ class ProjectController extends Controller
             $project->inspection_cycle = $request->inspection_cycle;
             $project->inspection_format = $request->inspection_format;
             $project->inspection_start = $request->inspection_start;
+            $project->phase = $request->phase;
             $project->no_inspection = (isset($request->no_inspection)) ? 1 : 0;
             $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
 

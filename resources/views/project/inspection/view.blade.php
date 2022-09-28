@@ -21,7 +21,14 @@
 <div class="form-group row">
     {{ Form::label('inspection_cycle', 'Format', array('class' => 'col-3 text-right control-label required-field')) }}
     <div class="col-3">
-        {{ Form::select('inspection_format', ['Format A'], [], array('class' => 'text-right form-control')) }}
+        {{ Form::select('inspection_format', $inspection_formats, [], array('class' => 'text-right form-control')) }}
+    </div>
+</div>
+
+<div class="form-group row">
+    {{ Form::label('phase', 'Phase', array('class' => 'col-3 text-right control-label required-field')) }}
+    <div class="col-3">
+        {{ Form::select('phase', $inspection_phases, $project->phase, array('class' => 'text-right form-control')) }}
     </div>
 </div>
 

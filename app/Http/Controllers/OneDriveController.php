@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Krizalys\Onedrive\Onedrive;
 use League\Flysystem\Util;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class OneDriveController extends Controller
 {
@@ -94,4 +95,5 @@ class OneDriveController extends Controller
         }
 
     }
+
 }
