@@ -141,7 +141,8 @@ class ProjectPolicy
 
     public function progress(User $user, Project $project)
     {
-        $roles = (isset($project->workflow->step()->role)) ? array_push($this->admins, $project->workflow->step()->role) : $this->admins;
+        $roles = $this->admins;
+        (isset($project->workflow->step()->role)) ? array_push($roles, $project->workflow->step()->role) : $roles = $this->admins;
         if ($user->hasRole($roles)) return true;
         return false;
     }
