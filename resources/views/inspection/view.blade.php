@@ -34,7 +34,7 @@
             @if ($inspection->project->ready_to_not == 1)
                 Ready
             @elseif (Auth::user()->id == $inspection->inspector_id)
-                <a href="{{ route("inspection::not", $inspection->id) }}" class="btn btn-primary">Mark Ready</a>
+                {{ Form::checkbox('rdy_to_not', 1, $inspection->project->rdy_to_not, ['class' => 'form-control']) }}
             @else
                 Not Ready
             @endif

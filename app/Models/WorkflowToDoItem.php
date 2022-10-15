@@ -10,7 +10,7 @@ class WorkflowToDoItem extends WorkflowItem
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'workflow_id', 'name', 'checklist', 'days', 'role', 'order'];
+    protected $fillable = ['user_id', 'workflow_id', 'name', 'checklist', 'days', 'role', 'order', 'inspectable'];
     public $type = "todo";
     protected $casts = [
         'checklist' => 'array'

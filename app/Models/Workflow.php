@@ -21,6 +21,7 @@ class Workflow extends Model
 
     protected $fillable = ['name', 'priority', 'project_id', 'status'];
 
+
     public function email_items() {
         return $this->hasMany(WorkflowEmailItem::class);
     }

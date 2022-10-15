@@ -5,3 +5,5 @@
 {{ Form::select('role', $roles,'', array('class' => 'form-control', 'required' => 'required')) }}
 {{ Form::label('days', 'Est. Days', array('class' => 'control-label required-field')) }}
 {{ Form::text('days', '', array('class' => 'form-control', 'required' => 'required')) }}
+{{ Form::label('inspectable', 'Inspectable?', array('class' => 'control-label required-field')) }}
+{{ Form::checkbox('inspectable', 1, 0, array('class' => 'form-control')) }}

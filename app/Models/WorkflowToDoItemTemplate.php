@@ -10,7 +10,7 @@ class WorkflowToDoItemTemplate extends WorkflowItemTemplate
 
     const view = 'workflow.todo.';
 
-    protected $fillable = ['workflow_template_id', 'name', 'checklist', 'role', 'order', 'days'];
+    protected $fillable = ['workflow_template_id', 'name', 'checklist', 'role', 'order', 'days', 'inspectable'];
 
     protected $casts = [
         'checklist' => 'array'

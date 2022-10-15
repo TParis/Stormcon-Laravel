@@ -42,7 +42,14 @@ class WorkflowController extends Controller
         return response("Error", 500);
     }
 
-    public static function createWorkflow($workflow_template_id, $project_id, &$errors) {
+    /**
+     * @param $workflow_template_id
+     * @param $project_id
+     * @param $errors
+     * @return Workflow
+     */
+    public static function createWorkflow($workflow_template_id, $project_id, &$errors): Workflow
+    {
 
         $workflow_template = WorkflowTemplate::find($workflow_template_id);
         $workflow = new Workflow([
@@ -65,6 +72,6 @@ class WorkflowController extends Controller
             if (!$item->save()) $errors++;
         }
 
-        return $workflow_template;
+        return $workflow;
     }
 }

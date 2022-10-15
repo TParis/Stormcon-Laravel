@@ -128,7 +128,7 @@ class ImportLandDevelopmentProjects extends Migration
             $project = new Project($data_map);
             $project->save();
             //TODO: Create workflow for the project
-            $workflow_template = WorkflowController::createWorkflow(1, $project->id, $errors);
+            $workflow = WorkflowController::createWorkflow(1, $project->id, $errors);
             //TODO: Match it's status against the excel spreadsheet
             //TODO: Create each contractor
             $this->addContractor("Dry Utility", "dry", $old_project, $project);

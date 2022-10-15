@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Notifications\ProjectReadyToNOT;
 use Auth;
 use App\Models\Inspection;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Role;
 
 class InspectionController extends Controller
 {
@@ -56,9 +59,9 @@ class InspectionController extends Controller
         $updated = 0;
 
         $projects = DB::table('projects')
-            ->select('projects.id as project_id', 'projects.inspection_start', 'projects.inspection_format', 'projects.inspector_id', 'projects.inspection_cycle', 'workflows.*', 'workflow_inspection_items.*', 'r1.inspection_date as last_inspection')
+            ->select('projects.id as project_id', 'projects.inspection_start', 'projects.inspection_format', 'projects.inspector_id', 'projects.inspection_cycle', 'workflows.*', 'inspections_view.*', 'r1.inspection_date as last_inspection')
             ->join('workflows', 'projects.id', '=', 'workflows.project_id')
-            ->join('workflow_inspection_items', 'workflows.id', '=', 'workflow_inspection_items.workflow_id')
+            ->join('inspections_view', 'workflows.id', '=', 'inspections_view.workflow_id')
             ->leftJoin('inspections as r1', 'r1.project_id', '=', 'projects.id')
             ->leftJoin('inspections as r2', function ($join) {
                 $join->on('r2.project_id', '=', 'projects.id')
@@ -70,7 +73,7 @@ class InspectionController extends Controller
             })
             ->where('workflows.status', '=', ProjectController::STATUS_OPEN)
             ->where('projects.no_inspection', '=', '0')
-            ->whereRaw('workflows.step = workflow_inspection_items.[order] - 1')
+            ->whereRaw('workflows.step = inspections_view.[order] - 1')
             ->whereNull('r2.id')
             ->get();
             echo "Found " . $projects->count() . " projects.\n";
@@ -108,6 +111,8 @@ class InspectionController extends Controller
                 flush();
             }
 
+            //TODO: Inspector Daily Email
+
             return $updated;
 
     }
@@ -128,6 +133,15 @@ class InspectionController extends Controller
         $inspection->project->save();
         $inspection->save();
 
+        if ($request->rdy_to_not) {
+            $inspection->project->rdy_to_not = 1;
+            $inspection->project->save();
+            $inspection->project->workflow->next_step();
+            $noi_team = Role::where("name", "NOIs")->with("users")->get()[0]->users;
+            Notification::sendNow($noi_team, new ProjectReadyToNOT($inspection->project));
+
+        }
+
         Session::flash("Inspection has been marked completed");
 
         return response()->redirectToRoute("inspection::schedule");
@@ -136,10 +150,11 @@ class InspectionController extends Controller
     public function markReadyToNot(Request $request, Inspection $inspection) {
         $inspection->status = 1;
         $inspection->save();
-        $inspection->project->rdy_to_not = 1;
+        //Todo: Update  Phase
         $inspection->project->save();
         //$inspection->project->workflow->next_step();
-        //TODO: Notification to NOI tm
+        $noi_team = Role::where("name", "NOIs")->with("users")->get()[0]->users;
+        Notification::sendNow($noi_team, new ProjectReadyToNOT($inspection->project));
 
         Session::flash("Inspection has been completed and marked ready to NOT");
 

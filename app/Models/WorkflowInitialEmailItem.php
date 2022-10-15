@@ -4,8 +4,7 @@ namespace App\Models;
 
 use App\Notifications\ProjectWorkflow;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Notification;
 
 class WorkflowInitialEmailItem extends WorkflowEmailItem
 {
@@ -22,9 +21,7 @@ class WorkflowInitialEmailItem extends WorkflowEmailItem
                 ->orWhere("name", "Maps");
             })->get();
 
-        $users->each(function ($user) {
-            $user->notify(new ProjectWorkflow($this->workflow->project));
-        });
+        Notification::sendNow($users, new ProjectWorkflow($this->workflow->project));
 
         //Automatically increment steps
         $this->workflow->next_step();

@@ -238,12 +238,15 @@ class ProjectController extends Controller
 
         if (!$project->save()) $errors++;
 
-        $workflow_template = WorkflowController::createWorkflow($request->workflow_id, $project->id, $errors);
+        $workflow = WorkflowController::createWorkflow($request->workflow_id, $project->id, $errors);
 
         if (!$errors)
         {
 
+            $workflow_template = WorkflowTemplate::find($request->workflow_id);
             CreateInitialProjectSpace::dispatch(Auth::user(), $project, $workflow_template);
+
+            $workflow->sub_items()->sortBy("order")[0]->executeAutomatedTasks();
 
             Session::flash('success', $project->name . ' has been created successfully.');
             Log::info('Project ' . $project->name . ' has been created successfully by ' . Auth::user()->username);

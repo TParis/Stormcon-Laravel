@@ -24,6 +24,8 @@
                         <div class="pl-3">{{ $item->role }}</div>
                         <div>Est Hours:</div>
                         <div class="pl-3">{{ $item->day }}</div>
+                        <div>Inspectable:</div>
+                        <div class="pl-3">{{ ($item->inspectable) ? "Yes" : "No" }}</div>
                     </div>
                 </div>
                 <div class="col-3">
