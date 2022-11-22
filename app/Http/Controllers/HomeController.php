@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inspection;
+use App\Models\InspectionSchedule;
 use App\Models\Workflow;
 use App\Models\WorkflowTemplate;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Krizalys\Onedrive\Onedrive;
 use Spatie\Permission\Models\Role;
@@ -48,9 +51,13 @@ class HomeController extends Controller
                     return $workflow->status == ProjectController::STATUS_OPEN;
             })->load("project");
 
-            $inspection_projects = $all_projects->filter(function ($workflow) {
+            /*$inspection_projects = $all_projects->filter(function ($workflow) {
                 return $workflow->step() instanceof WorkflowTemplate
                     && $workflow->status != ProjectController::STATUS_OPEN;
+            });*/
+
+            $inspection_projects = Inspection::where("inspection_date", ">", Carbon::today()->subDays(7))->get()->map(function ($item, $key) {
+                return $item->project->workflow;
             });
 
             $blocked_projects = $all_projects->filter(function ($workflow) {
