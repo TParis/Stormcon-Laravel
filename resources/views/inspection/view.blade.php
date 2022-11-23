@@ -20,7 +20,7 @@
             @if ($inspection->status == 1)
                 Complete
             @elseif (Auth::user()->id == $inspection->inspector_id)
-                <button class="btn btn-primary">Open</button>
+                {{ Form::submit("Mark Complete", ['class' => 'btn btn-primary']) }}
             @else
                 Awaiting
             @endif

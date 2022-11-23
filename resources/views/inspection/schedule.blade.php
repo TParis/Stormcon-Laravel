@@ -43,7 +43,7 @@
                 @if ($inspection->status == 1)
                     <td>Complete</td>
                 @else
-                    <td><a href="{{ route("inspection::complete", $inspection->id) }}" class="btn btn-primary">Mark Complete</a></td>
+                    <td><button class="btn btn-primary">Open</button></td>
                 @endif
             @endif
             <td class="d-none d-sm-none d-md-table-cell">{{ ($inspection->project->rdy_to_not) ? "Ready" : "Not Ready" }}</td>
