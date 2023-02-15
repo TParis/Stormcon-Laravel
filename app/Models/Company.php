@@ -29,7 +29,8 @@ class Company extends Model
         "Dry Utility" => "Dry Utility",
         "Paving" => "Paving",
         "Engineer" => "Engineer",
-        "SWPPP Preparer" => "SWPPP Preparer"
+        "SWPPP Preparer" => "SWPPP Preparer",
+        "Controls plans and spec" => "Controls plans and spec"
     ];
 
     public static $states = [

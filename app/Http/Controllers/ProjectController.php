@@ -223,7 +223,7 @@ class ProjectController extends Controller
         $this->validate($request,
             [
                 'name'              => 'required|string|min:5|max:255',
-                'proj_number'          => 'required|numeric|unique:projects,proj_number'
+                'proj_number'          => 'required|string|unique:projects,proj_number'
             ]
         );
 

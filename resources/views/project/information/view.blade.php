@@ -1,27 +1,43 @@
+<style type="text/css">
+    .reallytiny {
+        font-size: 6px;
+        color: darkgray;
+        display: block;
+        text-align: right;
+        flex: 0 0 25%;
+        max-width: 25%;
+        margin-right: 97px;
+        padding-right: 15px;
+    }
+</style>
 <h3>Information</h3>
 <div class="form-group row">
     {{ Form::label('proj_number', 'Project Number', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('proj_number', $project->proj_number, array('required' => 'required', 'class' => 'form-control', 'readonly' => 'readonly')) }}
     </div>
+    <span class="reallytiny">${proj_number}</span>
 </div>
 <div class="form-group row">
     {{ Form::label('name', 'Project Name', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
         {{ Form::text('name', $project->name, array('required' => 'required', 'class' => 'form-control', 'readonly' => 'readonly')) }}
     </div>
+    <span class="reallytiny">${name}</span>
 </div>
 <div class="form-group row">
     {{ Form::label('latitude', 'Latitude', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('latitude', $project->latitude, array('class' => 'form-control',)) }}
+        {{ Form::number('latitude', $project->latitude, array('step'=>'any', 'class' => 'form-control',)) }}
     </div>
+    <span class="reallytiny">${latitude}</span>
 </div>
 <div class="form-group row">
     {{ Form::label('longitude', 'Longitude', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}
     <div class="col-sm-9">
-        {{ Form::text('longitude', $project->longitude, array('class' => 'form-control',)) }}
+        {{ Form::number('longitude', $project->longitude, array('step'=>'any', 'class' => 'form-control',)) }}
     </div>
+    <span class="reallytiny">${longitude}</span>
 </div>
 <div class="form-group row">
     {{ Form::label('mailing_address_street_number', 'Street Number', array('class' => 'text-right col-sm-3 col-form-label required-field')) }}

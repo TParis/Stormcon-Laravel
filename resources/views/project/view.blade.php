@@ -103,7 +103,7 @@
                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#information" role="tab" aria-controls="home" aria-selected="true">Information</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contractors" role="tab" aria-controls="contact" aria-selected="false">Contractors</a>
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contractors" role="tab" aria-controls="contact" aria-selected="false">Operators</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" id="contact-tab" data-toggle="tab" href="#site" role="tab" aria-controls="contact" aria-selected="false">Site</a>
