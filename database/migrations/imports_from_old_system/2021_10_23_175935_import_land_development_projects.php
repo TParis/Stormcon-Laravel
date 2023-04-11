@@ -18,11 +18,6 @@ class ImportLandDevelopmentProjects extends Migration
      */
     public function up()
     {
-
-        Schema::table('projects', function (Blueprint $table) {
-            $table->string("existing_system", 1024)->nullable()->change();
-        });
-
         $projects = DB::connection("old_sys")->table("view_land_development")->paginate(10);
 
         foreach ($projects->items() as $old_project) {
