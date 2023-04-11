@@ -172,9 +172,7 @@ class Project extends Model
         for ($i = 1; $i <= 6; $i++) {
             unset($export['pollutant_' . $i . '_name']);
             unset($export['pollutant_' . $i . '_bmp']);
-        }
 
-        for ($i = 1; $i <= 6; $i++) {
             $export['pollutant_' . $i . '_name'] = '';
             $export['pollutant_' . $i . '_source'] = '';
             $export['pollutant_' . $i . '_material'] = '';
