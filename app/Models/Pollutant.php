@@ -12,9 +12,13 @@ class Pollutant extends Model
     use SoftDeletes;
 
     const COLUMNS = [
-        'name' => 'name',
-        'source' => 'source',
+        'name'     => 'name',
+        'source'   => 'source',
         'material' => 'material',
-        'average' => 'average',
+        'average'  => 'average',
+    ];
+
+    protected $fillable = [
+        self::COLUMNS['name'],
     ];
 }
