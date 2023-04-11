@@ -682,3 +682,34 @@ Route::group(['prefix' => 'quicktext', 'as' => 'quicktext::'], function() {
         'uses'  => 'QuicktextController@undeleteQuicktext'
     ]);
 });
+
+Route::group(['prefix' => 'pollutants', 'as' => 'pollutants::'], function () {
+    Route::get('/', [
+        'as'   => 'index',
+        'uses' => 'PollutantController@index',
+    ]);
+    Route::get('/add/', [
+        'as'   => 'add',
+        'uses' => 'PollutantController@create',
+    ]);
+    Route::post('/add/', [
+        'as'   => 'create',
+        'uses' => 'PollutantController@store',
+    ]);
+    Route::get('/edit/{pollutant}', [
+        'as'   => 'edit',
+        'uses' => 'PollutantController@edit',
+    ]);
+    Route::put('/edit/{pollutant}', [
+        'as'   => 'update',
+        'uses' => 'PollutantController@update',
+    ]);
+    Route::delete('/delete/{pollutant}', [
+        'as'   => 'delete',
+        'uses' => 'PollutantController@delete',
+    ]);
+    Route::get('/restore/{$trashed_pollutant_id}', [
+        'as'   => 'restore',
+        'uses' => 'PollutantController@restore',
+    ]);
+});

@@ -80,6 +80,7 @@
                                 <a class="dropdown-item" href="{{ route("responsibilities::index") }}">Responsibilities</a>
                                 <a class="dropdown-item" href="{{ route("soils::index") }}">Soils</a>
                                 <a class="dropdown-item" href="{{ route("waterquality::index") }}">Water Quality</a>
+                                <a class="dropdown-item" href="{{ route("pollutants::index") }}">Pollutants</a>
 
                                 @endif
                                 <div class="dropdown-divider"></div>
