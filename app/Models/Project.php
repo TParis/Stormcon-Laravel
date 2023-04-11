@@ -169,6 +169,54 @@ class Project extends Model
             }
         }
 
+        for ($i = 1; $i <= 6; $i++) {
+            unset($export['pollutant_' . $i . '_name']);
+            unset($export['pollutant_' . $i . '_bmp']);
+        }
+
+        for ($i = 1; $i <= 6; $i++) {
+            $export['pollutant_' . $i . '_name'] = '';
+            $export['pollutant_' . $i . '_source'] = '';
+            $export['pollutant_' . $i . '_material'] = '';
+            $export['pollutant_' . $i . '_average'] = '';
+
+            $export['pollutant_' . $i . '_bmp_name'] = '';
+            $export['pollutant_' . $i . '_bmp_description'] = '';
+            $export['pollutant_' . $i . '_bmp_uses'] = '';
+            $export['pollutant_' . $i . '_bmp_inspection_schedule'] = '';
+            $export['pollutant_' . $i . '_bmp_maintenance'] = '';
+            $export['pollutant_' . $i . '_bmp_inspection_schedule'] = '';
+            $export['pollutant_' . $i . '_bmp_considerations'] = '';
+
+            if (!empty($this->{"pollutant_" . $i . "_name"})) {
+
+                /**
+                 * @var Pollutant $pollutant
+                 */
+                $pollutant = Pollutant::firstOrNew([Pollutant::COLUMNS['name'] => $this->{"pollutant_" . $i . "_name"}]);
+
+                $export['pollutant_' . $i . '_name'] = $pollutant->{$pollutant::COLUMNS['name']};
+                $export['pollutant_' . $i . '_source'] = $pollutant->{$pollutant::COLUMNS['source']};
+                $export['pollutant_' . $i . '_material'] = $pollutant->{$pollutant::COLUMNS['material']};
+                $export['pollutant_' . $i . '_average'] = $pollutant->{$pollutant::COLUMNS['average']};
+
+                if (!empty($this->{"pollutant_" . $i . "_bmp"})) {
+                    /**
+                     * @var bmp $bmp
+                     */
+                    $bmp = bmp::firstOrNew(['name' => $this->{"pollutant_" . $i . "_bmp"}]);
+
+                    $export['pollutant_' . $i . '_bmp_name'] = $bmp->name;
+                    $export['pollutant_' . $i . '_bmp_description'] = $bmp->description;
+                    $export['pollutant_' . $i . '_bmp_uses'] = $bmp->uses;
+                    $export['pollutant_' . $i . '_bmp_inspection_schedule'] = $bmp->inspection_schedule;
+                    $export['pollutant_' . $i . '_bmp_maintenance'] = $bmp->maintenance;
+                    $export['pollutant_' . $i . '_bmp_inspection_schedule'] = $bmp->installation_schedule;
+                    $export['pollutant_' . $i . '_bmp_considerations'] = $bmp->considerations;
+                }
+            }
+        }
+
         $export["researcher"] = User::findOrNew($this->researcher)->fullName;
 
         foreach ($export as $key => $value) {
