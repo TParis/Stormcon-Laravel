@@ -176,3 +176,23 @@
         {{ Form::text('erosivity', $project->erosivity, array('class' => 'form-control')) }}
     </div>
 </div>
+<h3>Pollutants</h3>
+@for ($i = 1; $i <= 6; $i++)
+    <div id="pollutant-{{ $i }}">
+        <div class="form-group row">
+            {{ Form::label('pollutant_' . $i . '_name', 'Pollutant ' . $i, ['class' => 'text-right col-sm-3 col-form-label']) }}
+            <div class="col-sm-9">
+                {{ Form::select('pollutant_' . $i . '_name', $pollutants, $project->{'pollutant_' . $i . '_name'} ?? '', ['class' => 'form-control', 'list' => 'pollutants_datalist']) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            {{ Form::label('pollutant_' . $i . '_bmp', 'BMP ' . $i, ['class' => 'text-right col-sm-3 col-form-label']) }}
+            <div class="col-sm-9">
+                {{ Form::select('pollutant_' . $i . '_bmp', $pollutants_bmps, $project->{'pollutant_' . $i . '_bmp'} ?? '', ['class' => 'form-control', 'list' => 'pollutants_bmps_datalist']) }}
+            </div>
+        </div>
+    </div>
+    @if ($i < 6)
+        <hr>
+    @endif
+@endfor

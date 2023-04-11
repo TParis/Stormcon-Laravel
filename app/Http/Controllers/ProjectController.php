@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pollutant;
 use App\Models\User;
 use App\Models\bmp;
 use App\Models\Company;
@@ -152,6 +153,11 @@ class ProjectController extends Controller
             $inspection_phases = self::INSPECTION_PHASES;
             $inspection_formats = self::INSPECTION_FORMATS;
             $researchers = User::role('Research')->get()->pluck("fullName", "id");
+            $pollutants = Pollutant::all()
+                ->prepend('name', '')
+                ->pluck(Pollutant::COLUMNS['name'], Pollutant::COLUMNS['name']);
+            $pollutants_bmps = clone $bmps;
+            $pollutants_bmps = $pollutants_bmps->prepend('name', '')->pluck('name', 'name');
             $roles = Company::$roles;
             $states = Company::$states;
             $endangered_status = EndangeredSpecies::ENDANGERED_STATUS;
@@ -160,6 +166,8 @@ class ProjectController extends Controller
             return view('project.view', compact(
                 'project',
                 "bmps",
+                "pollutants",
+                "pollutants_bmps",
                 "soils",
                 "responsibilities",
                 "water_qualities",
@@ -372,6 +380,11 @@ class ProjectController extends Controller
         $project->phase = $request->phase;
         $project->no_inspection = (isset($request->no_inspection)) ? 1 : 0;
         $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
+
+        for ($i = 1; $i <= 6; $i++) {
+            $project->{"pollutant_" . $i . "_name"} = $request->{"pollutant_" . $i . "_name"};
+            $project->{"pollutant_" . $i . "_bmp"} = $request->{"pollutant_" . $i . "_bmp"};
+        }
 
         foreach ($project->contractors as $contractor) {
             if (isset($request->{"contractor_" . $contractor->id . "_name"}) && !blank($request->{"contractor_" . $contractor->id . "_name"})) {
