@@ -14,7 +14,7 @@
      */
 @endphp
 <div class="container-fluid">
-    {{ Form::open(['route' => ['pollutants::update', $pollutant->id], 'method' => 'put', 'class'	=> 'form-horizontal']) }}
+    {{ Form::open(['route' => ['pollutants::update', $pollutant->id], 'method' => 'put', 'class' => 'form-horizontal']) }}
     <div class="form-group row">
         {{ Form::label('name', 'Name', ['class' => 'col-4 control-label required-field']) }}
         <div class="col-8">
