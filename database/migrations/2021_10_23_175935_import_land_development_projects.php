@@ -3,6 +3,8 @@
 use App\Http\Controllers\WorkflowController;
 use App\Models\Contractor;
 use App\Models\Project;
+use App\Models\Workflow;
+use App\Models\WorkflowTemplate;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,6 +20,18 @@ class ImportLandDevelopmentProjects extends Migration
      */
     public function up()
     {
+
+        $wkfl = new WorkflowTemplate();
+        $wkfl->name="Imported";
+        $wkfl->priority=1;
+        $wkfl->save();
+
+        $init = new \App\Models\WorkflowInitialEmailItemTemplate();
+        $init->workflow_template_id = $wkfl->id;
+        $init->name = "Initial Task";
+        $init->order = 0;
+        $init->save();
+
 
         Schema::table('projects', function (Blueprint $table) {
             $table->string("existing_system", 1024)->nullable()->change();
@@ -128,7 +142,7 @@ class ImportLandDevelopmentProjects extends Migration
             $project = new Project($data_map);
             $project->save();
             //TODO: Create workflow for the project
-            $workflow = WorkflowController::createWorkflow(1, $project->id, $errors);
+            $workflow = WorkflowController::createWorkflow($wkfl->id, $project->id, $errors);
             //TODO: Match it's status against the excel spreadsheet
             //TODO: Create each contractor
             $this->addContractor("Dry Utility", "dry", $old_project, $project);

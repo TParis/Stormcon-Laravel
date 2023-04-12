@@ -1854,6 +1854,11 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.dt = __webpack_require__(/*! datatables.net-bs4 */ "./node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js");
 window.dtselect = __webpack_require__(/*! datatables.net-select-dt */ "./node_modules/datatables.net-select-dt/js/select.dataTables.js");
 
+__webpack_require__(/*! datatables.net */ "./node_modules/datatables.net/js/jquery.dataTables.js");
+
+__webpack_require__(/*! datatables.net-bs4 */ "./node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js");
+
+
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.js");
 /**
  * The following block of code may be used to automatically register your

@@ -14,7 +14,7 @@ class AddSiteToProjects extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->text("description")->nullable();
+            $table->string("description")->nullable();
             $table->double("acres")->default(0)->nullable();
             $table->double("acres_disturbed")->default(0)->nullable();
             $table->string("existing_system")->nullable();
