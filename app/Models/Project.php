@@ -165,6 +165,7 @@ class Project extends Model
                 $export['bmp_' . $bmp_idx . "_maintenance"] = $bmp->maintenance;
                 $export['bmp_' . $bmp_idx . "_inspection_schedule"] = $bmp->installation_schedule;
                 $export['bmp_' . $bmp_idx . "_considerations"] = $bmp->considerations;
+                $export['bmp_' . $bmp_idx . "_interim_or_permanent"] = $bmp->interim_or_permanent;
                 $bmp_idx++;
             }
         }
@@ -185,6 +186,7 @@ class Project extends Model
             $export['pollutant_' . $i . '_bmp_maintenance'] = '';
             $export['pollutant_' . $i . '_bmp_inspection_schedule'] = '';
             $export['pollutant_' . $i . '_bmp_considerations'] = '';
+            $export['pollutant_' . $i . '_bmp_interim_or_permanent'] = '';
 
             if (!empty($this->{"pollutant_" . $i . "_name"})) {
 
@@ -211,6 +213,7 @@ class Project extends Model
                     $export['pollutant_' . $i . '_bmp_maintenance'] = $bmp->maintenance;
                     $export['pollutant_' . $i . '_bmp_inspection_schedule'] = $bmp->installation_schedule;
                     $export['pollutant_' . $i . '_bmp_considerations'] = $bmp->considerations;
+                    $export['pollutant_' . $i . '_bmp_interim_or_permanent'] = $bmp->interim_or_permanent;
                 }
             }
         }
