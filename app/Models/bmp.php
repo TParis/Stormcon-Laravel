@@ -17,8 +17,18 @@ class bmp extends Model
         'inspection_schedule',
         'maintenance',
         'installation_schedule',
-        'considerations'
+        'considerations',
+        'interim_or_permanent',
     ];
 
-
+    /**
+     * @return string[]
+     */
+    public static function getInterimOrPermanentChoices(): array
+    {
+        return [
+            'interim'   => 'Interim',
+            'permanent' => 'Permanent',
+        ];
+    }
 }

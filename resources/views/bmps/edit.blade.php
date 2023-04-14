@@ -53,6 +53,12 @@
         </div>
     </div>
     <div class="form-group row">
+        {{ Form::label('interim_or_permanent', 'Interim/Permanent', array('class' => 'col-4 control-label')) }}
+        <div class="col-8">
+            {{ Form::select('interim_or_permanent', $interim_or_permanent_choices ?? \App\Models\bmp::getInterimOrPermanentChoices(), $bmp->interim_or_permanent, array('class' => 'form-control')) }}
+        </div>
+    </div>
+    <div class="form-group row">
         <div class="col-4 p-2 text-center">
             <a type="button" onClick="deleteBMP({{ $bmp->id }}, '{{ $bmp->name }}')" class="btn btn-danger w-100">Delete</a>
         </div>

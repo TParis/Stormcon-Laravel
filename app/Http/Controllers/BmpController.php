@@ -56,9 +56,9 @@ class BmpController extends Controller
 
         if (Auth::user()->hasRole('Owner'))
         {
+            $interim_or_permanent_choices = bmp::getInterimOrPermanentChoices();
 
-            return view('bmps.add');
-
+            return view('bmps.add', compact('interim_or_permanent_choices'));
         }
         else
         {
@@ -91,6 +91,7 @@ class BmpController extends Controller
                     'maintenance'           => 'string',
                     'installation_schedule' => 'string',
                     'considerations'        => 'string',
+                    'interim_or_permanent'  => ['string', Rule::in(array_keys(bmp::getInterimOrPermanentChoices()))],
                 ]
             );
 
@@ -137,8 +138,9 @@ class BmpController extends Controller
 
         if (Auth::user()->hasRole("Owner"))
         {
-            return view('bmps.edit', compact('bmp'));
+            $interim_or_permanent_choices = bmp::getInterimOrPermanentChoices();
 
+            return view('bmps.edit', compact('bmp', 'interim_or_permanent_choices'));
         }
         else
         {
@@ -173,6 +175,7 @@ class BmpController extends Controller
                     'maintenance'           => 'string',
                     'installation_schedule' => 'string',
                     'considerations'        => 'string',
+                    'interim_or_permanent'  => ['string', Rule::in(array_keys(bmp::getInterimOrPermanentChoices()))],
                 ]
             );
 
@@ -184,6 +187,7 @@ class BmpController extends Controller
             $bmp->maintenance           = $request->maintenance;
             $bmp->installation_schedule = $request->installation_schedule;
             $bmp->considerations        = $request->considerations;
+            $bmp->interim_or_permanent  = $request->interim_or_permanent;
 
             //SAVE MODEL
             if ($bmp->save())
