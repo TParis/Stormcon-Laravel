@@ -284,11 +284,34 @@ class ProjectController extends Controller
     {
         $this->authorize('update', $project);
 
-
         $this->validate($request,
             [
-                'name'              => 'required|string|min:5|max:255',
-                'proj_number'          => ['required','numeric',Rule::unique('projects', 'proj_number')->ignore($project->id)]
+                'name'                                                 => 'required|string|min:5|max:255',
+                'proj_number'                                          => [
+                    'required',
+                    'numeric',
+                    Rule::unique('projects', 'proj_number')->ignore($project->id),
+                ],
+                'material_storage_off_site_materials_or_equipment'     => 'nullable|string|max:255',
+                'material_storage_off_site_acreage'                    => 'nullable|numeric|min:0',
+                'material_storage_off_site_location'                   => 'nullable|string|max:255',
+                'material_storage_on_site_materials_or_equipment'      => 'nullable|string|max:255',
+                'material_storage_on_site_acreage'                     => 'nullable|numeric|min:0',
+                'material_storage_on_site_location'                    => 'nullable|string|max:255',
+                'material_storage_overburden_materials_or_equipment'   => 'nullable|string|max:255',
+                'material_storage_overburden_acreage'                  => 'nullable|numeric|min:0',
+                'material_storage_overburden_location'                 => 'nullable|string|max:255',
+                'material_storage_borrow_areas_materials_or_equipment' => 'nullable|string|max:255',
+                'material_storage_borrow_areas_acreage'                => 'nullable|numeric|min:0',
+                'material_storage_borrow_areas_location'               => 'nullable|string|max:255',
+                'material_storage_other_areas_materials_or_equipment'  => 'nullable|string|max:255',
+                'material_storage_other_areas_acreage'                 => 'nullable|numeric|min:0',
+                'material_storage_other_areas_location'                => 'nullable|string|max:255',
+                'material_storage_activities_materials_or_equipment'   => 'nullable|string|max:255',
+                'material_storage_activities_acreage'                  => 'nullable|numeric|min:0',
+                'material_storage_activities_location'                 => 'nullable|string|max:255',
+                'acres'                                                => 'nullable|numeric|min:0',
+                'acres_disturbed'                                      => 'nullable|numeric|min:0',
             ]
         );
 
@@ -359,8 +382,28 @@ class ProjectController extends Controller
         $project->endangered_species_county = $request->endangered_species_county;
         $project->indian_lands = $request->indian_lands;
         $project->description = $request->description;
-        $project->acres = $request->acres;
-        $project->acres_disturbed = $request->acres_disturbed;
+
+        $project->material_storage_off_site_materials_or_equipment     = $request->material_storage_off_site_materials_or_equipment;
+        $project->material_storage_off_site_acreage                    = $request->material_storage_off_site_acreage;
+        $project->material_storage_off_site_location                   = $request->material_storage_off_site_location;
+        $project->material_storage_on_site_materials_or_equipment      = $request->material_storage_on_site_materials_or_equipment;
+        $project->material_storage_on_site_acreage                     = $request->material_storage_on_site_acreage;
+        $project->material_storage_on_site_location                    = $request->material_storage_on_site_location;
+        $project->material_storage_overburden_materials_or_equipment   = $request->material_storage_overburden_materials_or_equipment;
+        $project->material_storage_overburden_acreage                  = $request->material_storage_overburden_acreage;
+        $project->material_storage_overburden_location                 = $request->material_storage_overburden_location;
+        $project->material_storage_borrow_areas_materials_or_equipment = $request->material_storage_borrow_areas_materials_or_equipment;
+        $project->material_storage_borrow_areas_acreage                = $request->material_storage_borrow_areas_acreage;
+        $project->material_storage_borrow_areas_location               = $request->material_storage_borrow_areas_location;
+        $project->material_storage_other_areas_materials_or_equipment  = $request->material_storage_other_areas_materials_or_equipment;
+        $project->material_storage_other_areas_acreage                 = $request->material_storage_other_areas_acreage;
+        $project->material_storage_other_areas_location                = $request->material_storage_other_areas_location;
+        $project->material_storage_activities_materials_or_equipment   = $request->material_storage_activities_materials_or_equipment;
+        $project->material_storage_activities_acreage                  = $request->material_storage_activities_acreage;
+        $project->material_storage_activities_location                 = $request->material_storage_activities_location;
+        $project->acres                                                = $request->acres;
+        $project->acres_disturbed                                      = $request->acres_disturbed;
+
         $project->existing_system = $request->existing_system;
         $project->larger_plan = $request->larger_plan;
         $project->bmps = $request->bmps;

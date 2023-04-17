@@ -13,27 +13,33 @@ class Project extends Model
     use HasFactory, SoftDeletes, Searchable;
 
     protected $casts = [
-        'bmps' => 'array',
-        'longitude' => 'decimal:6',
-        'latitude' => 'decimal:6',
-        'acres' => 'decimal:6',
-        'acres_disturbed' => 'decimal:6',
-        'soil_1_k_factor' => 'decimal:2',
-        'soil_1_area' => 'decimal:6',
-        'soil_2_k_factor' => 'decimal:2',
-        'soil_2_area' => 'decimal:6',
-        'soil_3_k_factor' => 'decimal:2',
-        'soil_3_area' => 'decimal:6',
-        'soil_4_k_factor' => 'decimal:2',
-        'soil_4_area' => 'decimal:6',
-        'soil_5_k_factor' => 'decimal:2',
-        'soil_5_area' => 'decimal:6',
-        'soil_6_k_factor' => 'decimal:2',
-        'soil_6_area' => 'decimal:6',
-        'soil_7_k_factor' => 'decimal:2',
-        'soil_7_area' => 'decimal:6',
-        'pre_construction_coefficient' => 'decimal:6',
-        'post_construction_coefficient' => 'decimal:6',
+        'bmps'                                  => 'array',
+        'longitude'                             => 'decimal:6',
+        'latitude'                              => 'decimal:6',
+        'material_storage_off_site_acreage'     => 'decimal:2',
+        'material_storage_on_site_acreage'      => 'decimal:2',
+        'material_storage_overburden_acreage'   => 'decimal:2',
+        'material_storage_borrow_areas_acreage' => 'decimal:2',
+        'material_storage_other_areas_acreage'  => 'decimal:2',
+        'material_storage_activities_acreage'   => 'decimal:2',
+        'acres'                                 => 'decimal:2',
+        'acres_disturbed'                       => 'decimal:2',
+        'soil_1_k_factor'                       => 'decimal:2',
+        'soil_1_area'                           => 'decimal:6',
+        'soil_2_k_factor'                       => 'decimal:2',
+        'soil_2_area'                           => 'decimal:6',
+        'soil_3_k_factor'                       => 'decimal:2',
+        'soil_3_area'                           => 'decimal:6',
+        'soil_4_k_factor'                       => 'decimal:2',
+        'soil_4_area'                           => 'decimal:6',
+        'soil_5_k_factor'                       => 'decimal:2',
+        'soil_5_area'                           => 'decimal:6',
+        'soil_6_k_factor'                       => 'decimal:2',
+        'soil_6_area'                           => 'decimal:6',
+        'soil_7_k_factor'                       => 'decimal:2',
+        'soil_7_area'                           => 'decimal:6',
+        'pre_construction_coefficient'          => 'decimal:6',
+        'post_construction_coefficient'         => 'decimal:6',
     ];
 
     protected $fillable = [
@@ -238,12 +244,6 @@ class Project extends Model
         return $this->contractors->sum('not_signed') == $this->contractors->count();
     }
 
-    public function getAcresAttribute($value) {
-        return number_format($value, 2);
-    }
-    public function getAcresDisturbedAttribute($value) {
-        return number_format($value, 2);
-    }
     public function getPreConstructionCoefficientAttribute($value) {
         return number_format($value, 2);
     }
