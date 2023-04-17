@@ -82,11 +82,12 @@ class InspectionScheduleController extends Controller
         if (Auth::user()->hasRole("Owner"))
         {
 
-            $this->validate($request,
+            $this->validate(
+                $request,
                 [
-                    'Name'              => 'required|string|min:5|max:255|unique:inspection_schedules',
-                    'Description'       => 'required|string',
-
+                    'Name'        => 'required|string|min:5|max:255|unique:inspection_schedules',
+                    'Description' => 'required|string',
+                    'source'      => 'nullable|string|max:255',
                 ]
             );
 
@@ -164,16 +165,24 @@ class InspectionScheduleController extends Controller
 
             $this->validate($request,
                 [
-                    'Name'              => ['required','string','min:5','max:255',Rule::unique("inspection_schedules")->ignore($schedule->id)],
-                    'days'              => 'required|integer',
-                    'Description'       => 'required|string',
+                    'Name'        => [
+                        'required',
+                        'string',
+                        'min:5',
+                        'max:255',
+                        Rule::unique("inspection_schedules")->ignore($schedule->id),
+                    ],
+                    'days'        => 'required|integer',
+                    'Description' => 'required|string',
+                    'source'      => 'nullable|string|max:255',
                 ]
             );
 
             //SET VALUES TO MODEL
-            $schedule->Name              = $request->Name;
-            $schedule->days              = $request->days;
-            $schedule->Description       = $request->Description;
+            $schedule->Name        = $request->Name;
+            $schedule->days        = $request->days;
+            $schedule->Description = $request->Description;
+            $schedule->source      = $request->source;
 
             //SAVE MODEL
             if ($schedule->save())

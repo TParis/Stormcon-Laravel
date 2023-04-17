@@ -28,6 +28,12 @@
             </div>
         </div>
         <div class="form-group row">
+            {{ Form::label('source', 'Source', array('class' => 'col-4 control-label')) }}
+            <div class="col-8">
+                {{ Form::text('source', '', array('class' => 'form-control', 'maxlength' => 255)) }}
+            </div>
+        </div>
+        <div class="form-group row">
             <div class="col-6 p-2 text-center">
                 <button type="button" class="btn btn-primary w-100" data-dismiss="modal">Close</button>
             </div>

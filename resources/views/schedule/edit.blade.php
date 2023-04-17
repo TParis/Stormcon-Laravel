@@ -29,6 +29,12 @@
         </div>
     </div>
     <div class="form-group row">
+        {{ Form::label('source', 'Source', array('class' => 'col-4 control-label')) }}
+        <div class="col-8">
+            {{ Form::text('source', $schedule->source, array('class' => 'form-control', 'maxlength' => 255)) }}
+        </div>
+    </div>
+    <div class="form-group row">
         <div class="col-4 p-2 text-center">
             <a type="button" onClick="deleteSchedule({{ $schedule->id }}, '{{ $schedule->name }}')" class="btn btn-danger w-100">Delete</a>
         </div>

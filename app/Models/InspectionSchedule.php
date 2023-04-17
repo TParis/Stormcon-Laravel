@@ -10,5 +10,10 @@ class InspectionSchedule extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['Name', 'days', 'Description'];
+    protected $fillable = [
+        'Name',
+        'days',
+        'Description',
+        'source',
+    ];
 }
