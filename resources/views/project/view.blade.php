@@ -147,6 +147,7 @@
                         <div class="border border-top-0 p-5">
                             @include("project.site.view")
                             @include("project.stabilizations.view")
+                            @include('project.support_facilities.view')
                         </div>
                     </div>
                     <div class="tab-pane fade" id="research" role="tabpanel" aria-labelledby="research-tab">

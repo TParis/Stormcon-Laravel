@@ -284,38 +284,42 @@ class ProjectController extends Controller
     {
         $this->authorize('update', $project);
 
-        $this->validate($request,
-            [
-                'name'                                                 => 'required|string|min:5|max:255',
-                'proj_number'                                          => [
-                    'required',
-                    'numeric',
-                    Rule::unique('projects', 'proj_number')->ignore($project->id),
-                ],
-                'material_storage_off_site_materials_or_equipment'     => 'nullable|string|max:255',
-                'material_storage_off_site_acreage'                    => 'nullable|numeric|min:0',
-                'material_storage_off_site_location'                   => 'nullable|string|max:255',
-                'material_storage_on_site_materials_or_equipment'      => 'nullable|string|max:255',
-                'material_storage_on_site_acreage'                     => 'nullable|numeric|min:0',
-                'material_storage_on_site_location'                    => 'nullable|string|max:255',
-                'material_storage_overburden_materials_or_equipment'   => 'nullable|string|max:255',
-                'material_storage_overburden_acreage'                  => 'nullable|numeric|min:0',
-                'material_storage_overburden_location'                 => 'nullable|string|max:255',
-                'material_storage_borrow_areas_materials_or_equipment' => 'nullable|string|max:255',
-                'material_storage_borrow_areas_acreage'                => 'nullable|numeric|min:0',
-                'material_storage_borrow_areas_location'               => 'nullable|string|max:255',
-                'material_storage_other_areas_materials_or_equipment'  => 'nullable|string|max:255',
-                'material_storage_other_areas_acreage'                 => 'nullable|numeric|min:0',
-                'material_storage_other_areas_location'                => 'nullable|string|max:255',
-                'material_storage_activities_materials_or_equipment'   => 'nullable|string|max:255',
-                'material_storage_activities_acreage'                  => 'nullable|numeric|min:0',
-                'material_storage_activities_location'                 => 'nullable|string|max:255',
-                'acres'                                                => 'nullable|numeric|min:0',
-                'acres_disturbed'                                      => 'nullable|numeric|min:0',
-            ]
-        );
+        $validation_rules = [
+            'name'                                                 => 'required|string|min:5|max:255',
+            'proj_number'                                          => [
+                'required',
+                'numeric',
+                Rule::unique('projects', 'proj_number')->ignore($project->id),
+            ],
+            'material_storage_off_site_materials_or_equipment'     => 'nullable|string|max:255',
+            'material_storage_off_site_acreage'                    => 'nullable|numeric|min:0',
+            'material_storage_off_site_location'                   => 'nullable|string|max:255',
+            'material_storage_on_site_materials_or_equipment'      => 'nullable|string|max:255',
+            'material_storage_on_site_acreage'                     => 'nullable|numeric|min:0',
+            'material_storage_on_site_location'                    => 'nullable|string|max:255',
+            'material_storage_overburden_materials_or_equipment'   => 'nullable|string|max:255',
+            'material_storage_overburden_acreage'                  => 'nullable|numeric|min:0',
+            'material_storage_overburden_location'                 => 'nullable|string|max:255',
+            'material_storage_borrow_areas_materials_or_equipment' => 'nullable|string|max:255',
+            'material_storage_borrow_areas_acreage'                => 'nullable|numeric|min:0',
+            'material_storage_borrow_areas_location'               => 'nullable|string|max:255',
+            'material_storage_other_areas_materials_or_equipment'  => 'nullable|string|max:255',
+            'material_storage_other_areas_acreage'                 => 'nullable|numeric|min:0',
+            'material_storage_other_areas_location'                => 'nullable|string|max:255',
+            'material_storage_activities_materials_or_equipment'   => 'nullable|string|max:255',
+            'material_storage_activities_acreage'                  => 'nullable|numeric|min:0',
+            'material_storage_activities_location'                 => 'nullable|string|max:255',
+            'acres'                                                => 'nullable|numeric|min:0',
+            'acres_disturbed'                                      => 'nullable|numeric|min:0',
+        ];
 
+        for ($i = 1; $i <= 6; $i++) {
+            $validation_rules["support_facility_{$i}_name"]        = 'nullable|string|max:255';
+            $validation_rules["support_facility_{$i}_description"] = 'nullable|string|max:255';
+            $validation_rules["support_facility_{$i}_location"]    = 'nullable|string|max:255';
+        }
 
+        $this->validate($request, $validation_rules);
 
         //SET VALUES TO MODEL
         $project->latitude = $request->latitude;
@@ -427,6 +431,12 @@ class ProjectController extends Controller
         for ($i = 1; $i <= 6; $i++) {
             $project->{"pollutant_" . $i . "_name"} = $request->{"pollutant_" . $i . "_name"};
             $project->{"pollutant_" . $i . "_bmp"} = $request->{"pollutant_" . $i . "_bmp"};
+        }
+
+        for ($i = 1; $i <= 6; $i++) {
+            $project->{"support_facility_{$i}_name"}        = $request->{"support_facility_{$i}_name"};
+            $project->{"support_facility_{$i}_description"} = $request->{"support_facility_{$i}_description"};
+            $project->{"support_facility_{$i}_location"}    = $request->{"support_facility_{$i}_location"};
         }
 
         foreach ($project->contractors as $contractor) {
