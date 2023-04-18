@@ -61,6 +61,25 @@
     </div>
 </div>
 
+<table class="table table-bordered" id="receiving_waters_table">
+    <thead>
+    <tr>
+        <th scope="col">Name of Receiving</th>
+        <th scope="col">Will Receiving Water Be Disturbed?</th>
+        <th scope="col">Location of Receiving water</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for($i = 1; $i <= 6; $i++)
+        <tr>
+            <td>{{ Form::text("receiving_water_{$i}_name", $project->{"receiving_water_{$i}_name"} ?? '', ['class' => 'form-control', 'maxlength' => 255]) }}</td>
+            <td>{{ Form::select("receiving_water_{$i}_is_disturbed", ["" => "", "0" => "No", "1" => "Yes"], $project->{"receiving_water_{$i}_is_disturbed"} ?? '', ['class' => 'form-control']) }}</td>
+            <td>{{ Form::text("receiving_water_{$i}_location", $project->{"receiving_water_{$i}_location"} ?? '', ['class' => 'form-control', 'maxlength' => 255]) }}</td>
+        </tr>
+    @endfor
+    </tbody>
+</table>
+
 <h3>Soils</h3>
 @for ($i = 1; $i <= 8; $i++)
     <div id="soil-{{ $i }}">

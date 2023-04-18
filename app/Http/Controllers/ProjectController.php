@@ -319,6 +319,12 @@ class ProjectController extends Controller
             $validation_rules["support_facility_{$i}_location"]    = 'nullable|string|max:255';
         }
 
+        for ($i = 1; $i <= 6; $i++) {
+            $validation_rules["receiving_water_{$i}_name"]         = 'nullable|string|max:255';
+            $validation_rules["receiving_water_{$i}_is_disturbed"] = 'nullable|boolean';
+            $validation_rules["receiving_water_{$i}_location"]     = 'nullable|string|max:255';
+        }
+
         $this->validate($request, $validation_rules);
 
         //SET VALUES TO MODEL
@@ -437,6 +443,12 @@ class ProjectController extends Controller
             $project->{"support_facility_{$i}_name"}        = $request->{"support_facility_{$i}_name"};
             $project->{"support_facility_{$i}_description"} = $request->{"support_facility_{$i}_description"};
             $project->{"support_facility_{$i}_location"}    = $request->{"support_facility_{$i}_location"};
+        }
+
+        for ($i = 1; $i <= 6; $i++) {
+            $project->{"receiving_water_{$i}_name"}         = $request->{"receiving_water_{$i}_name"};
+            $project->{"receiving_water_{$i}_is_disturbed"} = $request->{"receiving_water_{$i}_is_disturbed"};
+            $project->{"receiving_water_{$i}_location"}     = $request->{"receiving_water_{$i}_location"};
         }
 
         foreach ($project->contractors as $contractor) {
