@@ -312,6 +312,9 @@ class ProjectController extends Controller
             'acres'                                                => 'nullable|numeric|min:0',
             'acres_disturbed'                                      => 'nullable|numeric|min:0',
             'have_sedimentation_bmps'                              => 'nullable|boolean',
+            'pipeline_size'                                        => 'nullable|numeric|min:0',
+            'pipeline_distance'                                    => 'nullable|numeric|min:0',
+            'construction_workspace_width'                         => 'nullable|numeric|min:0',
         ];
 
         for ($i = 1; $i <= 6; $i++) {
@@ -465,6 +468,10 @@ class ProjectController extends Controller
             $project->{"sedimentation_{$i}_location_on_site"}        = $request->{"sedimentation_{$i}_location_on_site"};
             $project->{"sedimentation_{$i}_bmp_implementation_date"} = $request->{"sedimentation_{$i}_bmp_implementation_date"};
         }
+
+        $project->pipeline_size                = $request->pipeline_size;
+        $project->pipeline_distance            = $request->pipeline_distance;
+        $project->construction_workspace_width = $request->construction_workspace_width;
 
         foreach ($project->contractors as $contractor) {
             if (isset($request->{"contractor_" . $contractor->id . "_name"}) && !blank($request->{"contractor_" . $contractor->id . "_name"})) {

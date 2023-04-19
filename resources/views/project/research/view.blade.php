@@ -243,3 +243,23 @@
         <hr>
     @endif
 @endfor
+
+<h3>Pipeline Descriptions</h3>
+<div class="form-group row">
+    {{ Form::label('pipeline_size', 'Size of pipeline/s', ['class' => 'text-right col-sm-3 col-form-label']) }}
+    <div class="col-sm-9">
+        {{ Form::number('pipeline_size', $project->pipeline_size ?? '', ['class' => 'form-control', 'min' => 0]) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('pipeline_distance', 'Pipeline Distance', ['class' => 'text-right col-sm-3 col-form-label']) }}
+    <div class="col-sm-9">
+        {{ Form::number('pipeline_distance', $project->pipeline_distance ?? '', ['class' => 'form-control', 'min' => 0]) }}
+    </div>
+</div>
+<div class="form-group row">
+    {{ Form::label('construction_workspace_width', 'Width of construction workspace', ['class' => 'text-right col-sm-3 col-form-label']) }}
+    <div class="col-sm-9">
+        {{ Form::number('construction_workspace_width', $project->construction_workspace_width ?? '', ['class' => 'form-control', 'min' => 0]) }}
+    </div>
+</div>
