@@ -156,8 +156,8 @@ class ProjectController extends Controller
             $pollutants = Pollutant::all()
                 ->prepend('name', '')
                 ->pluck(Pollutant::COLUMNS['name'], Pollutant::COLUMNS['name']);
-            $pollutants_bmps = clone $bmps;
-            $pollutants_bmps = $pollutants_bmps->prepend('name', '')->pluck('name', 'name');
+            $bmps_selection = clone $bmps;
+            $bmps_selection = $bmps_selection->prepend('name', '')->pluck('name', 'name');
             $roles = Company::$roles;
             $states = Company::$states;
             $endangered_status = EndangeredSpecies::ENDANGERED_STATUS;
@@ -167,7 +167,7 @@ class ProjectController extends Controller
                 'project',
                 "bmps",
                 "pollutants",
-                "pollutants_bmps",
+                "bmps_selection",
                 "soils",
                 "responsibilities",
                 "water_qualities",
@@ -311,6 +311,7 @@ class ProjectController extends Controller
             'material_storage_activities_location'                 => 'nullable|string|max:255',
             'acres'                                                => 'nullable|numeric|min:0',
             'acres_disturbed'                                      => 'nullable|numeric|min:0',
+            'have_sedimentation_bmps'                              => 'nullable|boolean',
         ];
 
         for ($i = 1; $i <= 6; $i++) {
@@ -323,6 +324,12 @@ class ProjectController extends Controller
             $validation_rules["receiving_water_{$i}_name"]         = 'nullable|string|max:255';
             $validation_rules["receiving_water_{$i}_is_disturbed"] = 'nullable|boolean';
             $validation_rules["receiving_water_{$i}_location"]     = 'nullable|string|max:255';
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $validation_rules["sedimentation_{$i}_bmp"]                     = 'nullable|exists:' . bmp::class . ',name';
+            $validation_rules["sedimentation_{$i}_location_on_site"]        = 'nullable|string|max:255';
+            $validation_rules["sedimentation_{$i}_bmp_implementation_date"] = 'nullable|date';
         }
 
         $this->validate($request, $validation_rules);
@@ -449,6 +456,14 @@ class ProjectController extends Controller
             $project->{"receiving_water_{$i}_name"}         = $request->{"receiving_water_{$i}_name"};
             $project->{"receiving_water_{$i}_is_disturbed"} = $request->{"receiving_water_{$i}_is_disturbed"};
             $project->{"receiving_water_{$i}_location"}     = $request->{"receiving_water_{$i}_location"};
+        }
+
+        $project->have_sedimentation_bmps = $request->have_sedimentation_bmps;
+
+        for ($i = 1; $i <= 4; $i++) {
+            $project->{"sedimentation_{$i}_bmp"}                     = $request->{"sedimentation_{$i}_bmp"};
+            $project->{"sedimentation_{$i}_location_on_site"}        = $request->{"sedimentation_{$i}_location_on_site"};
+            $project->{"sedimentation_{$i}_bmp_implementation_date"} = $request->{"sedimentation_{$i}_bmp_implementation_date"};
         }
 
         foreach ($project->contractors as $contractor) {

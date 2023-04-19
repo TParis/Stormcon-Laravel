@@ -224,6 +224,31 @@ class Project extends Model
             }
         }
 
+        for ($i = 1; $i <= 4; $i++) {
+            $export['sedimentation_' . $i . '_bmp_description']          = '';
+            $export['sedimentation_' . $i . '_bmp_uses']                 = '';
+            $export['sedimentation_' . $i . '_bmp_inspection_schedule']  = '';
+            $export['sedimentation_' . $i . '_bmp_maintenance']          = '';
+            $export['sedimentation_' . $i . '_bmp_inspection_schedule']  = '';
+            $export['sedimentation_' . $i . '_bmp_considerations']       = '';
+            $export['sedimentation_' . $i . '_bmp_interim_or_permanent'] = '';
+
+            if (!empty($this->{"sedimentation_" . $i . "_bmp"})) {
+                /**
+                 * @var bmp $bmp
+                 */
+                $bmp = bmp::firstOrNew(['name' => $this->{"sedimentation_" . $i . "_bmp"}]);
+
+                $export['sedimentation_' . $i . '_bmp_description']          = $bmp->description;
+                $export['sedimentation_' . $i . '_bmp_uses']                 = $bmp->uses;
+                $export['sedimentation_' . $i . '_bmp_inspection_schedule']  = $bmp->inspection_schedule;
+                $export['sedimentation_' . $i . '_bmp_maintenance']          = $bmp->maintenance;
+                $export['sedimentation_' . $i . '_bmp_inspection_schedule']  = $bmp->installation_schedule;
+                $export['sedimentation_' . $i . '_bmp_considerations']       = $bmp->considerations;
+                $export['sedimentation_' . $i . '_bmp_interim_or_permanent'] = $bmp->interim_or_permanent;
+            }
+        }
+
         $export["researcher"] = User::findOrNew($this->researcher)->fullName;
 
         foreach ($export as $key => $value) {

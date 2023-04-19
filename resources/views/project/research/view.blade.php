@@ -195,6 +195,34 @@
         {{ Form::text('erosivity', $project->erosivity, array('class' => 'form-control')) }}
     </div>
 </div>
+
+<h3>Sedimentation basins or traps</h3>
+<table class="table table-bordered" id="sedimentation_bmps_table">
+    <thead>
+    <tr>
+        <td><b>Are there sedimentation basins or traps?</b> If yes, list the measures taken to reduce the pollutants
+            transported off-site by pumping activities.
+        </td>
+        <th scope="col">{{ Form::label('have_sedimentation_bmps_yes', 'Yes') }} {{ Form::radio('have_sedimentation_bmps', 1, $project->{"have_sedimentation_bmps"} ?? false, ['id'=>'have_sedimentation_bmps_yes']) }}</th>
+        <th scope="col">{{ Form::label('have_sedimentation_bmps_no', 'No') }} {{ Form::radio('have_sedimentation_bmps', 0, isset($project->{"have_sedimentation_bmps"}) && !$project->{"have_sedimentation_bmps"}, ['id'=>'have_sedimentation_bmps_no']) }}</th>
+    </tr>
+    <tr>
+        <th scope="col">Prevention Measure</th>
+        <th scope="col">Location On-Site</th>
+        <th scope="col">Implementation Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for($i = 1; $i <= 4; $i++)
+        <tr>
+            <td>{{ Form::select("sedimentation_{$i}_bmp", $bmps_selection, $project->{"sedimentation_{$i}_bmp"} ?? '', ['class' => 'form-control', 'list' => 'sedimentation_bmps_datalist']) }}</td>
+            <td>{{ Form::text("sedimentation_{$i}_location_on_site", $project->{"sedimentation_{$i}_location_on_site"} ?? '', ['class' => 'form-control', 'maxlength' => 255]) }}</td>
+            <td>{{ Form::date("sedimentation_{$i}_bmp_implementation_date", $project->{"sedimentation_{$i}_bmp_implementation_date"} ? date('Y-m-d', strtotime($project->{"sedimentation_{$i}_bmp_implementation_date"})) : '', ['class' => 'form-control']) }}</td>
+        </tr>
+    @endfor
+    </tbody>
+</table>
+
 <h3>Pollutants</h3>
 @for ($i = 1; $i <= 6; $i++)
     <div id="pollutant-{{ $i }}">
@@ -207,7 +235,7 @@
         <div class="form-group row">
             {{ Form::label('pollutant_' . $i . '_bmp', 'BMP ' . $i, ['class' => 'text-right col-sm-3 col-form-label']) }}
             <div class="col-sm-9">
-                {{ Form::select('pollutant_' . $i . '_bmp', $pollutants_bmps, $project->{'pollutant_' . $i . '_bmp'} ?? '', ['class' => 'form-control', 'list' => 'pollutants_bmps_datalist']) }}
+                {{ Form::select('pollutant_' . $i . '_bmp', $bmps_selection, $project->{'pollutant_' . $i . '_bmp'} ?? '', ['class' => 'form-control', 'list' => 'pollutants_bmps_datalist']) }}
             </div>
         </div>
     </div>
