@@ -156,16 +156,16 @@
             $(this).val(parseFloat(number).toFixed(2));
         }
 
-        let acres_disturbed = $('#construction_site_details_table td input[name="acres"]').val();
+        if ($(this).attr('name') !== 'acres') {
+            let acres_disturbed = 0;
 
-        $('#construction_site_details_table td input.acreage-value').each(function () {
-            acres_disturbed -= $(this).val();
-        });
+            $('#construction_site_details_table td input.acreage-value').each(function () {
+                if ($(this).val()) {
+                    acres_disturbed += parseFloat($(this).val());
+                }
+            });
 
-        if (acres_disturbed < 0) {
-            acres_disturbed = 0;
+            $('#construction_site_details_table td input[name="acres_disturbed"]').val(acres_disturbed.toFixed(2));
         }
-
-        $('#construction_site_details_table td input[name="acres_disturbed"]').val(acres_disturbed.toFixed(2));
     });
 </script>
