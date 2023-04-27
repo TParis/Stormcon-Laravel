@@ -148,6 +148,7 @@
                             @include("project.site.view")
                             @include("project.stabilizations.view")
                             @include('project.support_facilities.view')
+                            @include('project.site.allowable_non_stormwater_discharges')
                         </div>
                     </div>
                     <div class="tab-pane fade" id="research" role="tabpanel" aria-labelledby="research-tab">

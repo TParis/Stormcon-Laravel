@@ -315,6 +315,18 @@ class ProjectController extends Controller
             'pipeline_size'                                        => 'nullable|numeric|min:0',
             'pipeline_distance'                                    => 'nullable|numeric|min:0',
             'construction_workspace_width'                         => 'nullable|numeric|min:0',
+
+            'has_allowable_discharge_fire_fighting'                            => 'nullable|boolean',
+            'has_allowable_discharge_fire_hydrant'                             => 'nullable|boolean',
+            'has_allowable_discharge_landscape_irrigation'                     => 'nullable|boolean',
+            'has_allowable_discharge_water_to_wash_vehicles_and_equipment'     => 'nullable|boolean',
+            'has_allowable_discharge_water_to_control_dust'                    => 'nullable|boolean',
+            'has_allowable_discharge_potable_water'                            => 'nullable|boolean',
+            'has_allowable_discharge_building_wash_down'                       => 'nullable|boolean',
+            'has_allowable_discharge_pavement_wash_waters'                     => 'nullable|boolean',
+            'has_allowable_discharge_compressor_or_air_conditioner_condensate' => 'nullable|boolean',
+            'has_allowable_discharge_non_turbid_ground_or_spring_water'        => 'nullable|boolean',
+            'has_allowable_discharge_foundation_or_footing_drains'             => 'nullable|boolean',
         ];
 
         for ($i = 1; $i <= 6; $i++) {
@@ -480,6 +492,18 @@ class ProjectController extends Controller
         $project->phase = $request->phase;
         $project->no_inspection = (isset($request->no_inspection)) ? 1 : 0;
         $project->rdy_to_not = (isset($request->rdy_to_not)) ? 1 : 0;
+
+        $project->has_allowable_discharge_fire_fighting                            = $request->has_allowable_discharge_fire_fighting;
+        $project->has_allowable_discharge_fire_hydrant                             = $request->has_allowable_discharge_fire_hydrant;
+        $project->has_allowable_discharge_landscape_irrigation                     = $request->has_allowable_discharge_landscape_irrigation;
+        $project->has_allowable_discharge_water_to_wash_vehicles_and_equipment     = $request->has_allowable_discharge_water_to_wash_vehicles_and_equipment;
+        $project->has_allowable_discharge_water_to_control_dust                    = $request->has_allowable_discharge_water_to_control_dust;
+        $project->has_allowable_discharge_potable_water                            = $request->has_allowable_discharge_potable_water;
+        $project->has_allowable_discharge_building_wash_down                       = $request->has_allowable_discharge_building_wash_down;
+        $project->has_allowable_discharge_pavement_wash_waters                     = $request->has_allowable_discharge_pavement_wash_waters;
+        $project->has_allowable_discharge_compressor_or_air_conditioner_condensate = $request->has_allowable_discharge_compressor_or_air_conditioner_condensate;
+        $project->has_allowable_discharge_non_turbid_ground_or_spring_water        = $request->has_allowable_discharge_non_turbid_ground_or_spring_water;
+        $project->has_allowable_discharge_foundation_or_footing_drains             = $request->has_allowable_discharge_foundation_or_footing_drains;
 
         for ($i = 1; $i <= 6; $i++) {
             $project->{"pollutant_" . $i . "_name"} = $request->{"pollutant_" . $i . "_name"};
