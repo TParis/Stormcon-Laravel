@@ -335,6 +335,21 @@ class ProjectController extends Controller
             $validation_rules["sedimentation_{$i}_bmp_implementation_date"] = 'nullable|date';
         }
 
+        for ($i = 1; $i <= 4; $i++) {
+            $validation_rules["off_site_transfer_pollutant_controls_litter_{$i}_bmp"]      = 'nullable|exists:' . bmp::class . ',name';
+            $validation_rules["off_site_transfer_pollutant_controls_litter_{$i}_location"] = 'nullable|string|max:255';
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $validation_rules["off_site_transfer_pollutant_controls_debris_{$i}_bmp"]      = 'nullable|exists:' . bmp::class . ',name';
+            $validation_rules["off_site_transfer_pollutant_controls_debris_{$i}_location"] = 'nullable|string|max:255';
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $validation_rules["off_site_transfer_pollutant_controls_materials_{$i}_bmp"]      = 'nullable|exists:' . bmp::class . ',name';
+            $validation_rules["off_site_transfer_pollutant_controls_materials_{$i}_location"] = 'nullable|string|max:255';
+        }
+
         $this->validate($request, $validation_rules);
 
         //SET VALUES TO MODEL
@@ -472,6 +487,21 @@ class ProjectController extends Controller
         $project->pipeline_size                = $request->pipeline_size;
         $project->pipeline_distance            = $request->pipeline_distance;
         $project->construction_workspace_width = $request->construction_workspace_width;
+
+        for ($i = 1; $i <= 4; $i++) {
+            $project->{"off_site_transfer_pollutant_controls_litter_{$i}_bmp"}      = $request->{"off_site_transfer_pollutant_controls_litter_{$i}_bmp"};
+            $project->{"off_site_transfer_pollutant_controls_litter_{$i}_location"} = $request->{"off_site_transfer_pollutant_controls_litter_{$i}_location"};
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $project->{"off_site_transfer_pollutant_controls_debris_{$i}_bmp"}      = $request->{"off_site_transfer_pollutant_controls_debris_{$i}_bmp"};
+            $project->{"off_site_transfer_pollutant_controls_debris_{$i}_location"} = $request->{"off_site_transfer_pollutant_controls_debris_{$i}_location"};
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $project->{"off_site_transfer_pollutant_controls_materials_{$i}_bmp"}      = $request->{"off_site_transfer_pollutant_controls_materials_{$i}_bmp"};
+            $project->{"off_site_transfer_pollutant_controls_materials_{$i}_location"} = $request->{"off_site_transfer_pollutant_controls_materials_{$i}_location"};
+        }
 
         foreach ($project->contractors as $contractor) {
             if (isset($request->{"contractor_" . $contractor->id . "_name"}) && !blank($request->{"contractor_" . $contractor->id . "_name"})) {

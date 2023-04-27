@@ -263,3 +263,5 @@
         {{ Form::number('construction_workspace_width', $project->construction_workspace_width ?? '', ['class' => 'form-control', 'min' => 0]) }}
     </div>
 </div>
+
+@include('project.research.bmps_off_site_transfer_of_pollutant_controls')
