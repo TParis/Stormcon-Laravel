@@ -347,6 +347,31 @@ class Project extends Model
             }
         }
 
+        for ($i = 1; $i <= 4; $i++) {
+            $export["permanent_stormwater_control_{$i}_bmp_description"]          = '';
+            $export["permanent_stormwater_control_{$i}_bmp_uses"]                 = '';
+            $export["permanent_stormwater_control_{$i}_bmp_inspection_schedule"]  = '';
+            $export["permanent_stormwater_control_{$i}_bmp_maintenance"]          = '';
+            $export["permanent_stormwater_control_{$i}_bmp_inspection_schedule"]  = '';
+            $export["permanent_stormwater_control_{$i}_bmp_considerations"]       = '';
+            $export["permanent_stormwater_control_{$i}_bmp_interim_or_permanent"] = '';
+
+            if (!empty($this->{"permanent_stormwater_control_{$i}_bmp"})) {
+                /**
+                 * @var bmp $bmp
+                 */
+                $bmp = bmp::firstOrNew(['name' => $this->{"permanent_stormwater_control_{$i}_bmp"}]);
+
+                $export["permanent_stormwater_control_{$i}_bmp_description"]          = $bmp->description;
+                $export["permanent_stormwater_control_{$i}_bmp_uses"]                 = $bmp->uses;
+                $export["permanent_stormwater_control_{$i}_bmp_inspection_schedule"]  = $bmp->inspection_schedule;
+                $export["permanent_stormwater_control_{$i}_bmp_maintenance"]          = $bmp->maintenance;
+                $export["permanent_stormwater_control_{$i}_bmp_inspection_schedule"]  = $bmp->installation_schedule;
+                $export["permanent_stormwater_control_{$i}_bmp_considerations"]       = $bmp->considerations;
+                $export["permanent_stormwater_control_{$i}_bmp_interim_or_permanent"] = $bmp->interim_or_permanent;
+            }
+        }
+
         $export["researcher"] = User::findOrNew($this->researcher)->fullName;
 
         foreach ($export as $key => $value) {

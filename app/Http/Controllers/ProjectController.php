@@ -361,6 +361,12 @@ class ProjectController extends Controller
             ];
         }
 
+        for ($i = 1; $i <= 4; $i++) {
+            $validation_rules["permanent_stormwater_control_{$i}_bmp"]          = 'nullable|exists:' . bmp::class . ',name';
+            $validation_rules["permanent_stormwater_control_{$i}_location"]     = 'nullable|string|max:255';
+            $validation_rules["permanent_stormwater_control_{$i}_runoff_areas"] = 'nullable|string|max:255';
+        }
+
         $this->validate($request, $validation_rules);
 
         //SET VALUES TO MODEL
@@ -519,6 +525,12 @@ class ProjectController extends Controller
             $project->{"control_practice_{$i}_location"}                = $request->{"control_practice_{$i}_location"};
             $project->{"control_practice_{$i}_bmp_implementation_date"} = $request->{"control_practice_{$i}_bmp_implementation_date"};
             $project->{"control_practice_{$i}_interim_or_permanent"}    = $request->{"control_practice_{$i}_interim_or_permanent"};
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $project->{"permanent_stormwater_control_{$i}_bmp"}          = $request->{"permanent_stormwater_control_{$i}_bmp"};
+            $project->{"permanent_stormwater_control_{$i}_location"}     = $request->{"permanent_stormwater_control_{$i}_location"};
+            $project->{"permanent_stormwater_control_{$i}_runoff_areas"} = $request->{"permanent_stormwater_control_{$i}_runoff_areas"};
         }
 
         foreach ($project->contractors as $contractor) {
