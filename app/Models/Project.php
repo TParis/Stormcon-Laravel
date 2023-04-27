@@ -324,6 +324,29 @@ class Project extends Model
             }
         }
 
+        for ($i = 1; $i <= 4; $i++) {
+            $export["control_practice_{$i}_bmp_description"]         = '';
+            $export["control_practice_{$i}_bmp_uses"]                = '';
+            $export["control_practice_{$i}_bmp_inspection_schedule"] = '';
+            $export["control_practice_{$i}_bmp_maintenance"]         = '';
+            $export["control_practice_{$i}_bmp_inspection_schedule"] = '';
+            $export["control_practice_{$i}_bmp_considerations"]      = '';
+
+            if (!empty($this->{"control_practice_{$i}_bmp"})) {
+                /**
+                 * @var bmp $bmp
+                 */
+                $bmp = bmp::firstOrNew(['name' => $this->{"control_practice_{$i}_bmp"}]);
+
+                $export["control_practice_{$i}_bmp_description"]         = $bmp->description;
+                $export["control_practice_{$i}_bmp_uses"]                = $bmp->uses;
+                $export["control_practice_{$i}_bmp_inspection_schedule"] = $bmp->inspection_schedule;
+                $export["control_practice_{$i}_bmp_maintenance"]         = $bmp->maintenance;
+                $export["control_practice_{$i}_bmp_inspection_schedule"] = $bmp->installation_schedule;
+                $export["control_practice_{$i}_bmp_considerations"]      = $bmp->considerations;
+            }
+        }
+
         $export["researcher"] = User::findOrNew($this->researcher)->fullName;
 
         foreach ($export as $key => $value) {

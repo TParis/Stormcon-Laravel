@@ -350,6 +350,17 @@ class ProjectController extends Controller
             $validation_rules["off_site_transfer_pollutant_controls_materials_{$i}_location"] = 'nullable|string|max:255';
         }
 
+        for ($i = 1; $i <= 4; $i++) {
+            $validation_rules["control_practice_{$i}_bmp"]                     = 'nullable|exists:' . bmp::class . ',name';
+            $validation_rules["control_practice_{$i}_location"]                = 'nullable|string|max:255';
+            $validation_rules["control_practice_{$i}_bmp_implementation_date"] = 'nullable|date';
+            $validation_rules["control_practice_{$i}_interim_or_permanent"]    = [
+                'nullable',
+                'string',
+                Rule::in(array_keys(bmp::getInterimOrPermanentChoices())),
+            ];
+        }
+
         $this->validate($request, $validation_rules);
 
         //SET VALUES TO MODEL
@@ -501,6 +512,13 @@ class ProjectController extends Controller
         for ($i = 1; $i <= 4; $i++) {
             $project->{"off_site_transfer_pollutant_controls_materials_{$i}_bmp"}      = $request->{"off_site_transfer_pollutant_controls_materials_{$i}_bmp"};
             $project->{"off_site_transfer_pollutant_controls_materials_{$i}_location"} = $request->{"off_site_transfer_pollutant_controls_materials_{$i}_location"};
+        }
+
+        for ($i = 1; $i <= 4; $i++) {
+            $project->{"control_practice_{$i}_bmp"}                     = $request->{"control_practice_{$i}_bmp"};
+            $project->{"control_practice_{$i}_location"}                = $request->{"control_practice_{$i}_location"};
+            $project->{"control_practice_{$i}_bmp_implementation_date"} = $request->{"control_practice_{$i}_bmp_implementation_date"};
+            $project->{"control_practice_{$i}_interim_or_permanent"}    = $request->{"control_practice_{$i}_interim_or_permanent"};
         }
 
         foreach ($project->contractors as $contractor) {
