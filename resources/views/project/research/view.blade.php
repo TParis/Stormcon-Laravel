@@ -267,3 +267,4 @@
 @include('project.research.bmps_off_site_transfer_of_pollutant_controls')
 @include('project.research.control_practises')
 @include('project.research.permanent_stormwater_controls')
+@include('project.research.other_controls')
