@@ -316,17 +316,17 @@ class ProjectController extends Controller
             'pipeline_distance'                                    => 'nullable|numeric|min:0',
             'construction_workspace_width'                         => 'nullable|numeric|min:0',
 
-            'has_allowable_discharge_fire_fighting'                            => 'nullable|boolean',
-            'has_allowable_discharge_fire_hydrant'                             => 'nullable|boolean',
-            'has_allowable_discharge_landscape_irrigation'                     => 'nullable|boolean',
-            'has_allowable_discharge_water_to_wash_vehicles_and_equipment'     => 'nullable|boolean',
-            'has_allowable_discharge_water_to_control_dust'                    => 'nullable|boolean',
-            'has_allowable_discharge_potable_water'                            => 'nullable|boolean',
-            'has_allowable_discharge_building_wash_down'                       => 'nullable|boolean',
-            'has_allowable_discharge_pavement_wash_waters'                     => 'nullable|boolean',
-            'has_allowable_discharge_compressor_or_air_conditioner_condensate' => 'nullable|boolean',
-            'has_allowable_discharge_non_turbid_ground_or_spring_water'        => 'nullable|boolean',
-            'has_allowable_discharge_foundation_or_footing_drains'             => 'nullable|boolean',
+            'has_allowable_discharge_fire_fighting'                            => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_fire_hydrant'                             => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_landscape_irrigation'                     => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_water_to_wash_vehicles_and_equipment'     => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_water_to_control_dust'                    => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_potable_water'                            => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_building_wash_down'                       => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_pavement_wash_waters'                     => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_compressor_or_air_conditioner_condensate' => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_non_turbid_ground_or_spring_water'        => 'nullable|string|in:Yes,No',
+            'has_allowable_discharge_foundation_or_footing_drains'             => 'nullable|string|in:Yes,No',
         ];
 
         for ($i = 1; $i <= 6; $i++) {

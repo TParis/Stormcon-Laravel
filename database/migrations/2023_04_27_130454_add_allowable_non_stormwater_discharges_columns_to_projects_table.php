@@ -14,17 +14,17 @@ class AddAllowableNonStormwaterDischargesColumnsToProjectsTable extends Migratio
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->boolean('has_allowable_discharge_fire_fighting')->nullable();
-            $table->boolean('has_allowable_discharge_fire_hydrant')->nullable();
-            $table->boolean('has_allowable_discharge_landscape_irrigation')->nullable();
-            $table->boolean('has_allowable_discharge_water_to_wash_vehicles_and_equipment')->nullable();
-            $table->boolean('has_allowable_discharge_water_to_control_dust')->nullable();
-            $table->boolean('has_allowable_discharge_potable_water')->nullable();
-            $table->boolean('has_allowable_discharge_building_wash_down')->nullable();
-            $table->boolean('has_allowable_discharge_pavement_wash_waters')->nullable();
-            $table->boolean('has_allowable_discharge_compressor_or_air_conditioner_condensate')->nullable();
-            $table->boolean('has_allowable_discharge_non_turbid_ground_or_spring_water')->nullable();
-            $table->boolean('has_allowable_discharge_foundation_or_footing_drains')->nullable();
+            $table->string('has_allowable_discharge_fire_fighting', 3)->nullable();
+            $table->string('has_allowable_discharge_fire_hydrant', 3)->nullable();
+            $table->string('has_allowable_discharge_landscape_irrigation', 3)->nullable();
+            $table->string('has_allowable_discharge_water_to_wash_vehicles_and_equipment', 3)->nullable();
+            $table->string('has_allowable_discharge_water_to_control_dust', 3)->nullable();
+            $table->string('has_allowable_discharge_potable_water', 3)->nullable();
+            $table->string('has_allowable_discharge_building_wash_down', 3)->nullable();
+            $table->string('has_allowable_discharge_pavement_wash_waters', 3)->nullable();
+            $table->string('has_allowable_discharge_compressor_or_air_conditioner_condensate', 3)->nullable();
+            $table->string('has_allowable_discharge_non_turbid_ground_or_spring_water', 3)->nullable();
+            $table->string('has_allowable_discharge_foundation_or_footing_drains', 3)->nullable();
         });
     }
 
