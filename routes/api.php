@@ -89,6 +89,15 @@ Route::middleware('auth:api')
             'as'    => 'unblock',
             'uses'  => 'WorkflowController@unblock'
         ]);
+        Route::get('/{workflow}/open',[
+            'as'    => 'status-open',
+            'uses'  => 'WorkflowController@changeStatusOpen'
+        ]);
+        Route::get('/{workflow}/hold',[
+            'as'    => 'status-hold',
+            'uses'  => 'WorkflowController@changeStatusHold'
+        ]);
+//Test
 });
 
 

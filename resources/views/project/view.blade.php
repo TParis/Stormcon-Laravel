@@ -64,8 +64,10 @@
                     <a href="#" data-toggle="modal" data-target="#skip-modal">Skip to...</a>
                     @endif
                     <hr>
-                    <a href="#" class="w-100 d-block">Add Hold</a>
-                    <a href="#" class="w-100 d-block">Remove Hold</a>
+                    <a href="#" class="w-100 d-block add-hold">Add Hold</a>
+                    <a href="#" class="w-100 d-block remove-hold">Remove Hold</a>
+                    <hr>
+                    <a href="#" class="w-100 d-block open-project">Open Project</a>
                 </div>
                 @endif
                 @if (($project->workflow->step()->role && Auth::user()->hasRole($project->workflow->step()->role)))
@@ -195,7 +197,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Block Project</h5>
+                    <h5 class="modal-title">Skip Workflow Steps</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -385,6 +387,52 @@
 
         })
     })
+
+    //STATUS CHANGES (BLOCK CHANGES ARE IN BLOCk/VIEW.BLADE.PHP)
+    $(".add-hold").on("click", function() {
+
+        $.ajax({
+            url: '/api/workflow/{{ $project->workflow->id }}/hold',
+            headers: {'Authorization': 'Bearer {{ Auth::user()->api_token }}'},
+            success: function (assignee) {
+                $("#status").html("Hold");
+                alert("Project Held");
+            },
+            error: function(assignee) {
+                alert("Error")
+            }
+        });
+    })
+
+    $(".remove-hold").on("click", function() {
+
+        $.ajax({
+            url: '/api/workflow/{{ $project->workflow->id }}/open',
+            headers: {'Authorization': 'Bearer {{ Auth::user()->api_token }}'},
+            success: function (assignee) {
+                $("#status").html("Open");
+                alert("Project Hold Removed");
+            },
+            error: function(assignee) {
+                alert("Error")
+            }
+        });
+    });
+
+    $(".open-project").on("click", function() {
+
+        $.ajax({
+            url: '/api/workflow/{{ $project->workflow->id }}/open',
+            headers: {'Authorization': 'Bearer {{ Auth::user()->api_token }}'},
+            success: function (assignee) {
+                $("#status").html("Open");
+                alert("Project Opened");
+            },
+            error: function(assignee) {
+                alert("Error")
+            }
+        });
+    });
 
     var lastdomobject;
 

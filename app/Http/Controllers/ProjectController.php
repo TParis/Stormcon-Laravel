@@ -208,7 +208,7 @@ class ProjectController extends Controller
 
         $this->authorize('create', Project::class);
 
-        $project_number = Project::max('proj_number') + 1;
+        $project_number = ""; //Project::max('proj_number') + 1;
         $workflow_templates = WorkflowTemplate::select("id", "name")->get()->pluck("name", "id");
         return response()->view("project.add", compact("workflow_templates", 'project_number'));
 
