@@ -237,6 +237,7 @@
                 <a href="{{ route("bmps::index") }}" class="w-100 d-block">Create BMP</a>
                 <a href="{{ route("species::add") }}" class="w-100 d-block">Create Endangered Species</a>
                 <a href="{{ route("schedule::index") }}" class="w-100 d-block">Create Inspection Schedule</a>
+                <a href="{{ route("pollutants::index") }}" class="w-100 d-block">Create Pollutant</a>
                 <a href="{{ route("responsibilities::index") }}" class="w-100 d-block">Create Responsibility</a>
                 <a href="{{ route("soils::index") }}" class="w-100 d-block">Create Soil</a>
                 <a href="{{ route("waterquality::index") }}" class="w-100 d-block">Create Water Quality</a>

@@ -64,9 +64,9 @@
 <table class="table table-bordered" id="receiving_waters_table">
     <thead>
     <tr>
-        <th scope="col">Name of Receiving</th>
-        <th scope="col">Will Receiving Water Be Disturbed?</th>
-        <th scope="col">Location of Receiving water</th>
+        <th scope="col">Name of Receiving Water</th>
+        <th scope="col">Is this water impaired<br>for any pollutants?</th>
+        <th scope="col">Location of Receiving Water<br>(In Relation to the Project)"</th>
     </tr>
     </thead>
     <tbody>
