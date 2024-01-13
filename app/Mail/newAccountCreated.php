@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -31,6 +32,6 @@ class newAccountCreated extends Mailable
     public function build()
     {
         $user = $this->user;
-        return $this->subject("Account Created")->view('view.name', compact('user'));
+        return $this->subject("Account Created")->view('view.users.accountCreatedEmail', compact('user'));
     }
 }
