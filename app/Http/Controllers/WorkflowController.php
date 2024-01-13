@@ -42,6 +42,17 @@ class WorkflowController extends Controller
         return response("Error", 500);
     }
 
+    public function changeStatusOpen(Workflow $workflow) {
+        $workflow->status = ProjectController::STATUS_OPEN;
+        if ($workflow->save()) return response()->json($workflow);
+        return response("Error", 500);
+    }
+    public function changeStatusHold(Workflow $workflow) {
+        $workflow->status = ProjectController::STATUS_HOLD;
+        if ($workflow->save()) return response()->json($workflow);
+        return response("Error", 500);
+    }
+
     /**
      * @param $workflow_template_id
      * @param $project_id
