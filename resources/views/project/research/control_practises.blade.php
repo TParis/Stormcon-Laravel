@@ -14,7 +14,7 @@
             <td>{{ Form::select("control_practice_{$i}_bmp", $bmps_selection, $project->{"control_practice_{$i}_bmp"} ?? '', ['class' => 'form-control control-practice-bmp', 'data-index' => $i, 'list' => 'control_practices_bmps']) }}</td>
             <td>{{ Form::text("control_practice_{$i}_location", $project->{"control_practice_{$i}_location"} ?? '', ['class' => 'form-control', 'maxlength' => 255]) }}</td>
             <td>{{ Form::date("control_practice_{$i}_bmp_implementation_date", $project->{"control_practice_{$i}_bmp_implementation_date"} ? date('Y-m-d', strtotime($project->{"control_practice_{$i}_bmp_implementation_date"})) : '', ['class' => 'form-control']) }}</td>
-            <td>{{ Form::select("control_practice_{$i}_interim_or_permanent",["","Interim", "Permenant"], $project->{"control_practice_{$i}_interim_or_permanent"} ?? '', ['class' => 'form-control', 'maxlength' => 9]) }}</td>
+            <td>{{ Form::select("control_practice_{$i}_interim_or_permanent",[""=>"","interim"=>"Interim", "permenant"=>"Permenant"], $project->{"control_practice_{$i}_interim_or_permanent"} ?? '', ['class' => 'form-control', 'maxlength' => 9]) }}</td>
         </tr>
     @endfor
     </tbody>
