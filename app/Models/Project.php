@@ -402,6 +402,9 @@ class Project extends Model
         foreach ($export as $key => $value) {
             if (is_array($value)) {
                 unset($export[$key]);
+            } else if ($value == 0 || $value == 1) {
+                $export["checklist_" + $key] = $value;
+                unset($export[$key]);
             } else {
                 $export[$key] = e($value);
             }
