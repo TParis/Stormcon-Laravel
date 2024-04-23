@@ -751,8 +751,14 @@ class ProjectController extends Controller
             $phpword = new \PhpOffice\PhpWord\TemplateProcessor($local_storage_path);
             Log::debug('Loaded template into PHPOffice');
 
-            //Update values
-            $phpword->setValues($project->export());
+            foreach ($project->export() as $key => $value) {
+                if (str_starts_with($key, "checkbox_")) {
+                    $phpword->setCheckbox($key, ($value == 1) ? true : false);
+                } else {
+                    //Update values
+                    $phpword->setValue($key, $value);
+                }
+            }
             Log::debug('Merged Data');
 
             //Save updated template
