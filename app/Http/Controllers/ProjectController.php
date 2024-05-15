@@ -288,7 +288,7 @@ class ProjectController extends Controller
             'name'                                                 => 'required|string|min:5|max:255',
             'proj_number'                                          => [
                 'required',
-                'numeric',
+                'string',
                 Rule::unique('projects', 'proj_number')->ignore($project->id),
             ],
             'material_storage_off_site_materials_or_equipment'     => 'nullable|string|max:255',
